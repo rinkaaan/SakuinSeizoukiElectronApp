@@ -1,6 +1,6 @@
 import { BrowserWindow } from "electron"
 import portFinder from "portfinder"
-import { Channels } from "../electron-renderer/types"
+import { Channels } from "../renderer/types"
 
 export async function initWindow(window: BrowserWindow) {
   let flaskPort: number

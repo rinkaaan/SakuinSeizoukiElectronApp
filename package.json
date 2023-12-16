@@ -37,6 +37,9 @@
     "typescript": "~4.5.4"
   },
   "dependencies": {
+    "@cloudscape-design/components": "^3.0.463",
+    "@cloudscape-design/global-styles": "^1.0.19",
+    "@vitejs/plugin-react": "^4.2.1",
     "electron-squirrel-startup": "^1.0.0",
     "portfinder": "^1.0.32",
     "react": "^18.2.0",

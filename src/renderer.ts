@@ -1,5 +1,5 @@
-import { initElectron } from "./electron-renderer/renderer"
-import { RendererElectron } from "./electron-renderer/preload"
+import { initElectron } from "./electron/renderer/renderer"
+import { RendererElectron } from "./electron/renderer/preload"
 
 declare global {
   interface Window {
