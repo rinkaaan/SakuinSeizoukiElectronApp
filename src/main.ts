@@ -1,6 +1,8 @@
 import { app, BrowserWindow } from "electron"
 import path from "path"
-import { initWindow } from "./electron/main"
+
+import { initWindow } from "./electron-main/utils"
+import { initMain } from "./electron-main/main"
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -26,6 +28,7 @@ async function createWindow() {
   }
 
   await initWindow(mainWindow)
+  await initMain()
 }
 
 // This method will be called when Electron has finished

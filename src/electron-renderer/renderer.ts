@@ -1,4 +1,4 @@
-import { RendererElectron } from "./types"
+import { RendererElectron } from "./preload"
 
 export async function initElectron(electron: RendererElectron) {
   electron.onEnginePort(port => {
