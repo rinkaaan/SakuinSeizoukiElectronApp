@@ -1,6 +1,5 @@
 import { Alert, Container, ContentLayout, Header, SpaceBetween, TextContent } from "@cloudscape-design/components"
 import { ActionFunctionArgs, Form } from "react-router-dom"
-import * as electron from "electron"
 import React from "react"
 import CloudButton from "../components/CloudButton"
 import { commonSlice } from "../slices/commonSlice"
@@ -9,9 +8,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData()
   const action = formData.get("action")
   if (action === "setup-dir") {
-    // await SettingsService.postSettingsAppDataDirectory()
-    // ipcRenderer.sendMessage('ipc-example', ['ping']);
-    // electron.ipcRenderer.send("ipc-example", ["ping"])
+    const path = await window.electron.selectDir()
+    console.log(path)
   }
   return null
 }

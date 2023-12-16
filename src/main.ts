@@ -27,7 +27,7 @@ async function createWindow() {
     await mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`))
   }
 
-  await initWindow(mainWindow)
+  // await initWindow(mainWindow)
   await initMain()
 }
 
