@@ -6,11 +6,12 @@
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
-    "package": "rm -rf out && electron-forge package",
+    "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "lint:fix": "eslint --fix --ext .ts,.tsx ."
+    "lint:fix": "eslint --fix --ext .ts,.tsx .",
+    "open": "open out/sakuinseizoukielectronapp-darwin-arm64/sakuinseizoukielectronapp.app"
   },
   "keywords": [],
   "author": {

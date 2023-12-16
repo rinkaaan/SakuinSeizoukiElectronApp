@@ -1,5 +1,5 @@
 import { FlashbarProps } from "@cloudscape-design/components"
-import { SettingsService } from "../../openapi-client"
+import { OpenAPI, SettingsService } from "../../openapi-client"
 
 export interface CommonSlice {
   navigationOpen: boolean;
@@ -20,7 +20,12 @@ export const commonSlice: CommonSlice = {
 
   async initAppDataDirectory() {
     const dir = localStorage.getItem("app-data-directory")
+    const port = localStorage.getItem("engine-port")
     if (!dir) return
+    if (port) {
+      OpenAPI.BASE = `http://127.0.0.1:${port}`
+    }
+    console.log("OPENAPI BASE:", OpenAPI.BASE)
     const { valid } = await SettingsService.postSettingsAppDataDirectoryValidate({ app_data_directory: dir })
     if (valid) {
       this.appDataDirectory = dir

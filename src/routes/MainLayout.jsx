@@ -84,7 +84,8 @@ export default function MainLayout() {
     )
   } else if (["/", "/projects"].includes(location.pathname)) {
     return <Navigate
-      to="/projects/all"
+      // to="/projects/all"
+      to="/settings"
       replace={true}
     />
   } else {

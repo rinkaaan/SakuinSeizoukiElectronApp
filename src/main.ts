@@ -1,7 +1,5 @@
 import { app, BrowserWindow } from "electron"
 import path from "path"
-
-import { initWindow } from "./electron/main/utils"
 import { initMain } from "./electron/main/main"
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.

@@ -1,32 +1,34 @@
 import { Alert, Container, ContentLayout, Header, SpaceBetween, TextContent } from "@cloudscape-design/components"
-import { ActionFunctionArgs, Form } from "react-router-dom"
+import { ActionFunctionArgs, Form, useActionData, useRevalidator } from "react-router-dom"
 import React from "react"
 import CloudButton from "../components/CloudButton"
 import { commonSlice } from "../slices/commonSlice"
 
-export async function action({ request }: ActionFunctionArgs) {
+interface ActionData {
+  revalidate: boolean
+}
+
+export async function action({ request }: ActionFunctionArgs): Promise<ActionData | null> {
   const formData = await request.formData()
   const action = formData.get("action")
   if (action === "setup-dir") {
     const path = await window.electron.selectDir()
-    console.log(path)
+    if (!path) return null
+    commonSlice.setAppDataDirectory(path)
+    return {
+      revalidate: true,
+    }
   }
   return null
 }
 
 export function Component() {
-  // const revalidator = useRevalidator()
+  const revalidator = useRevalidator()
+  const { revalidate } = useActionData() as ActionData || {}
 
-  // useEffect(() => {
-  //   socket.on("app-data-directory", (data: string) => {
-  //     commonSlice.setAppDataDirectory(data)
-  //     revalidator.revalidate()
-  //   })
-  //
-  //   return () => {
-  //     socket.off("app-data-directory")
-  //   }
-  // }, [revalidator])
+  React.useEffect(() => {
+    if (revalidate) revalidator.revalidate()
+  }, [revalidate])
 
   return (
     <ContentLayout

@@ -6,7 +6,7 @@ import { Channels } from "./types"
 export interface RendererElectron {
   onEnginePort: (callback: (port: number) => void) => void;
   sendAppDataDir: (dir: string) => void;
-  selectDir: () => Promise<string>;
+  selectDir: () => Promise<string | null>;
 }
 
 export const rendererElectron: RendererElectron = {
@@ -23,6 +23,6 @@ function sendAppDataDir(dir: string) {
   ipcRenderer.send(Channels.sendAppDataDir, dir)
 }
 
-async function selectDir(): Promise<string> {
+async function selectDir(): Promise<string | null> {
   return ipcRenderer.invoke(Channels.selectDir)
 }

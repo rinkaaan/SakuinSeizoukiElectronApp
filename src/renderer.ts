@@ -7,6 +7,9 @@ declare global {
   }
 }
 
-initElectron(window.electron)
+async function main() {
+  await initElectron(window.electron)
+  import("./Main")
+}
 
-import "./Main"
+main()

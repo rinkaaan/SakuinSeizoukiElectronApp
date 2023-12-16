@@ -1,10 +1,12 @@
 import { ipcMain, dialog } from "electron"
 
 import { Channels } from "../renderer/types"
+import { sendFreePort } from "./utils"
 
 export async function initMain() {
   ipcMain.on(Channels.sendAppDataDir, onSendAppDataDir)
   ipcMain.handle(Channels.selectDir, handleSelectDir)
+  await sendFreePort()
 }
 
 function onSendAppDataDir(_event: Electron.IpcMainEvent, appDataDir: string) {
@@ -19,4 +21,5 @@ async function handleSelectDir() {
     console.log(`onSelectDir: ${filePaths[0]}`)
     return filePaths[0]
   }
+  return null
 }
