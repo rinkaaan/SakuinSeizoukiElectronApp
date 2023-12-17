@@ -9,7 +9,7 @@ declare global {
 
 async function main() {
   await initElectron(window.electron)
-  import("./Main")
+  import("./Root")
 }
 
 main()
