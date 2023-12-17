@@ -1,8 +1,8 @@
 import { Alert, Container, ContentLayout, Header, SpaceBetween, TextContent } from "@cloudscape-design/components"
 import { ActionFunctionArgs, Form, useActionData, useRevalidator } from "react-router-dom"
-import React from "react"
-import CloudButton from "../components/CloudButton"
-import { commonSlice } from "../slices/commonSlice"
+import { useEffect } from "react"
+import CloudButton from "../../components/CloudButton"
+import { commonSlice } from "../../slices/commonSlice"
 
 interface ActionData {
   revalidate: boolean
@@ -26,7 +26,7 @@ export function Component() {
   const revalidator = useRevalidator()
   const { revalidate } = useActionData() as ActionData || {}
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (revalidate) revalidator.revalidate()
   }, [revalidate])
 

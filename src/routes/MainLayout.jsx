@@ -1,8 +1,9 @@
 import { AppLayout, Flashbar, SideNavigation } from "@cloudscape-design/components"
-import { Navigate, Outlet, useLocation, useMatches, useNavigate } from "react-router-dom"
+import { Navigate, Outlet, useLocation, useMatches, useNavigate, useRevalidator } from "react-router-dom"
 import { useEffect, useState } from "react"
 import CloudBreadcrumbGroup from "../components/CloudBreadcrumbGroup"
 import { commonSlice } from "../slices/commonSlice.ts"
+import { socket } from "../common/clients"
 
 const items = [
   {
@@ -45,8 +46,10 @@ export default function MainLayout() {
   const navigate = useNavigate()
   const matches = useMatches()
   const crumbs = getCrumbs(matches)
+  const revalidator = useRevalidator()
   const [activeHref, setActiveHref] = useState()
   const [navigationOpen, setNavigationOpen] = useState(commonSlice.navigationOpen)
+  const { engineReady, appDataDirectory } = commonSlice
 
   // useEffect(() => {
   //   const id = uuid()
@@ -75,7 +78,32 @@ export default function MainLayout() {
     }
   }, [crumbs])
 
-  if (!commonSlice.appDataDirectory && location.pathname !== "/settings") {
+  useEffect(() => {
+    if (socket.connected) {
+      console.log("connected")
+      commonSlice.engineReady = true
+    } else {
+      console.log("disconnected")
+      commonSlice.engineReady = false
+    }
+
+    socket.on("connect", () => {
+      console.log("connected")
+      commonSlice.engineReady = true
+    })
+
+    revalidator.revalidate()
+
+    return () => {
+      socket.off("connect")
+    }
+  }, [])
+
+  if (!engineReady) {
+    return (
+      <h1>Insert Splash Screen Here</h1>
+    )
+  } else if (!appDataDirectory && location.pathname !== "/settings") {
     return (
       <Navigate
         to="/settings"
@@ -84,8 +112,7 @@ export default function MainLayout() {
     )
   } else if (["/", "/projects"].includes(location.pathname)) {
     return <Navigate
-      // to="/projects/all"
-      to="/settings"
+      to="/projects/all"
       replace={true}
     />
   } else {
@@ -119,6 +146,5 @@ export default function MainLayout() {
         toolsHide
       />
     )
-
   }
 }

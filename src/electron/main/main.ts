@@ -1,9 +1,13 @@
-import { ipcMain, dialog } from "electron"
+import { ipcMain, dialog, app, BrowserWindow } from "electron"
 
 import { Channels } from "../renderer/types"
-import { sendFreePort } from "./utils"
+import { EngineManager, sendFreePort } from "./utils"
+
+export const engineManager = new EngineManager(app)
 
 export async function initMain() {
+  const window = BrowserWindow.getFocusedWindow()
+  window.webContents.openDevTools()
   ipcMain.on(Channels.sendAppDataDir, onSendAppDataDir)
   ipcMain.handle(Channels.selectDir, handleSelectDir)
   await sendFreePort()

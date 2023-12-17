@@ -5,6 +5,7 @@ export interface CommonSlice {
   navigationOpen: boolean;
   appDataDirectory: string | null;
   notifications: Array<FlashbarProps.MessageDefinition>;
+  engineReady: boolean;
 
   initAppDataDirectory(): Promise<void>;
   setAppDataDirectory(directory: string): void;
@@ -17,6 +18,7 @@ export const commonSlice: CommonSlice = {
   navigationOpen: true,
   appDataDirectory: null,
   notifications: [],
+  engineReady: false,
 
   async initAppDataDirectory() {
     const dir = localStorage.getItem("app-data-directory")
