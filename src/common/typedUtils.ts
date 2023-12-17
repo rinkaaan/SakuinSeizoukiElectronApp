@@ -1,5 +1,6 @@
 import { format, isToday, isYesterday, parseISO } from "date-fns"
 import { v4 } from "uuid"
+import { io, Socket } from "socket.io-client"
 
 export function formatDate(inputDate?: string) {
   if (!inputDate) return null
@@ -20,4 +21,23 @@ export function sleep(ms: number) {
 
 export function uuid() {
   return v4()
+}
+
+export class SocketManager {
+  private socket: Socket | null = null
+
+  connect(port: number) {
+    if (this.socket !== null) {
+      this.socket.disconnect()
+    }
+
+    this.socket = io(`http://127.0.0.1:${port}`)
+  }
+
+  get() {
+    if (this.socket === null) {
+      throw new Error("Socket is not connected")
+    }
+    return this.socket
+  }
 }

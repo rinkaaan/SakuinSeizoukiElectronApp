@@ -3,7 +3,7 @@ import { Navigate, Outlet, useLocation, useMatches, useNavigate, useRevalidator 
 import { useEffect, useState } from "react"
 import CloudBreadcrumbGroup from "../components/CloudBreadcrumbGroup"
 import { commonSlice } from "../slices/commonSlice.ts"
-import { socket } from "../common/clients"
+import { socketManager } from "../common/clients"
 
 const items = [
   {
@@ -50,6 +50,7 @@ export default function MainLayout() {
   const [activeHref, setActiveHref] = useState()
   const [navigationOpen, setNavigationOpen] = useState(commonSlice.navigationOpen)
   const { engineReady, appDataDirectory } = commonSlice
+  const socket = socketManager.get()
 
   // useEffect(() => {
   //   const id = uuid()

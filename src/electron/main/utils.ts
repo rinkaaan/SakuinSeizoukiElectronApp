@@ -12,7 +12,7 @@ export async function sendFreePort() {
     flaskPort = 34200
   } else {
     flaskPort = await portFinder.getPortPromise()
-    flaskPort = 34200
+    // flaskPort = 34200
     engineManager.initEngine(flaskPort)
   }
   window.webContents.send(Channels.onEnginePort, flaskPort)

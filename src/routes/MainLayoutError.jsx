@@ -1,10 +1,11 @@
 import { commonSlice } from "../slices/commonSlice"
 import { useEffect } from "react"
-import { socket } from "../common/clients"
 import { useNavigate } from "react-router-dom"
+import { socketManager } from "../common/clients"
 
 export default function MainLayoutError() {
   const navigate = useNavigate()
+  const socket = socketManager.get()
 
   useEffect(() => {
     socket.on("connect", () => {
