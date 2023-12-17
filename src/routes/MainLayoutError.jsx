@@ -2,6 +2,8 @@ import { commonSlice } from "../slices/commonSlice"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { socketManager } from "../common/clients"
+import logo from "../assets/icon.png"
+import { SpaceBetween, Spinner } from "@cloudscape-design/components"
 
 export default function MainLayoutError() {
   const navigate = useNavigate()
@@ -21,6 +23,15 @@ export default function MainLayoutError() {
   }, [])
 
   return (
-    <h1>Loading...</h1>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+      <SpaceBetween size="l" alignItems="center">
+        <img
+          src={logo}
+          alt="logo"
+          style={{ width: "130px", height: "130px" }}
+        />
+        <Spinner size="big" />
+      </SpaceBetween>
+    </div>
   )
 }

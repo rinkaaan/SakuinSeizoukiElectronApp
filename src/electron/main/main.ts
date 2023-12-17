@@ -6,8 +6,10 @@ import { EngineManager, sendFreePort } from "./utils"
 export const engineManager = new EngineManager(app)
 
 export async function initMain() {
-  const window = BrowserWindow.getFocusedWindow()
-  window.webContents.openDevTools()
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    const window = BrowserWindow.getFocusedWindow()
+    window.webContents.openDevTools()
+  }
   ipcMain.on(Channels.sendAppDataDir, onSendAppDataDir)
   ipcMain.handle(Channels.selectDir, handleSelectDir)
   await sendFreePort()

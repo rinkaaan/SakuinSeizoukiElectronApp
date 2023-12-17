@@ -31,7 +31,9 @@ export class SocketManager {
       this.socket.disconnect()
     }
 
-    this.socket = io(`http://127.0.0.1:${port}`)
+    this.socket = io(`http://127.0.0.1:${port}`, {
+      reconnectionDelayMax: 100,
+    })
   }
 
   get() {
