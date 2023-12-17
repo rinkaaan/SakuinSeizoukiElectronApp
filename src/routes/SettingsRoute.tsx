@@ -51,12 +51,19 @@ export function Component() {
             <Form method="POST">
               <CloudButton formAction="submit">{commonSlice.appDataDirectory ? "Change" : "Set"} app data directory</CloudButton>
               <input type="hidden" name="action" value="setup-dir"/>
+              <TextContent>
+                <p>
+                  <small>
+                    You can {commonSlice.appDataDirectory ? "change" : "set"} the app data directory by clicking the button above and selecting an empty folder or use an existing app data folder.
+                  </small>
+                </p>
+              </TextContent>
             </Form>
           </SpaceBetween>
         </Container>
         <Container header={<Header variant="h2">About</Header>}>
           <TextContent>
-            <p>Version 0.1.0</p>
+          <p>Version 0.1.0</p>
           </TextContent>
         </Container>
       </SpaceBetween>

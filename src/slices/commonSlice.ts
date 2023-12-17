@@ -26,7 +26,7 @@ export const commonSlice: CommonSlice = {
       OpenAPI.BASE = `http://127.0.0.1:${port}`
     }
     console.log("OPENAPI BASE:", OpenAPI.BASE)
-    const { valid } = await SettingsService.postSettingsAppDataDirectoryValidate({ app_data_directory: dir })
+    const { valid } = await SettingsService.postSettingsAppDataDirectory({ app_data_directory: dir })
     if (valid) {
       this.appDataDirectory = dir
     } else {
