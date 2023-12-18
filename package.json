@@ -1,6 +1,6 @@
 {
   "name": "sakuinseizoukielectronapp",
-  "productName": "sakuinseizoukielectronapp",
+  "productName": "索引製造機",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
@@ -11,8 +11,9 @@
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "lint:fix": "eslint --fix --ext .ts,.tsx .",
-    "open:app": "open out/sakuinseizoukielectronapp-darwin-arm64/sakuinseizoukielectronapp.app",
-    "open:shell": "open out/sakuinseizoukielectronapp-darwin-arm64/sakuinseizoukielectronapp.app/Contents/MacOS/sakuinseizoukielectronapp"
+    "open:app": "open out/索引製造機-darwin-arm64/索引製造機.app",
+    "open:shell": "open out/索引製造機-darwin-arm64/索引製造機.app/Contents/MacOS/sakuinseizoukielectronapp",
+    "open:explorer": "open out/索引製造機-darwin-arm64"
   },
   "keywords": [],
   "author": {
@@ -34,6 +35,7 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "electron": "28.0.0",
+    "electron-devtools-installer": "^3.2.0",
     "eslint": "^8.0.1",
     "eslint-plugin-import": "^2.25.0",
     "ts-node": "^10.0.0",
@@ -42,11 +44,13 @@
   "dependencies": {
     "@cloudscape-design/components": "^3.0.463",
     "@cloudscape-design/global-styles": "^1.0.19",
+    "@reduxjs/toolkit": "^2.0.1",
     "@vitejs/plugin-react": "^4.2.1",
     "electron-squirrel-startup": "^1.0.0",
     "portfinder": "^1.0.32",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^9.0.4",
     "react-router-dom": "^6.21.0",
     "socket.io-client": "^4.7.2",
     "uuid": "^9.0.1"

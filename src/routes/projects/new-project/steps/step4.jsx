@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Button, ColumnLayout, Container, ExpandableSection, Header, SpaceBetween } from "@cloudscape-design/components"
 
-const Review = ({ info: { uploadPdf, engine, details, advanced }, setActiveStepIndex }) => {
+const Review = ({ info: { selectPdf, engine, details, advanced }, setActiveStepIndex }) => {
   return (
     <Box margin={{ bottom: "l" }}>
       <SpaceBetween size="xxl">
@@ -27,7 +27,7 @@ const Review = ({ info: { uploadPdf, engine, details, advanced }, setActiveStepI
             <ColumnLayout columns={2} variant="text-grid">
               <div>
                 <Box variant='awsui-key-label'>PDF</Box>
-                <div>{uploadPdf.pdfName}</div>
+                <div>{selectPdf.pdfName}</div>
               </div>
 
               {engine.engineOption === "aurora" ? (

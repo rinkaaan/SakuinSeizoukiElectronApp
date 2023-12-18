@@ -6,7 +6,7 @@ import { ActionFunctionArgs } from "react-router-dom"
 export async function action({ request }: ActionFunctionArgs) {
   const data = await request.formData()
   const action = data.get("action")
-  if (action === "upload-pdf") {
+  if (action === "select-pdf") {
     // PdfService.postPdf()
   }
   return null

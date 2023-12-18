@@ -632,7 +632,7 @@ export const DEFAULT_STEP_INFO = {
     edition: ENGINE_EDITIONS[ENGINES[0].value][0].value,
     usecase: ENGINE_USECASES[0].value,
   },
-  uploadPdf: {
+  selectPdf: {
     pdf: null,
     pdfName: "",
   },

@@ -1,7 +1,8 @@
 import { createHashRouter, Outlet, RouterProvider } from "react-router-dom"
-import { commonSlice } from "./slices/commonSlice"
 import MainLayout from "./routes/MainLayout"
 import MainLayoutError from "./routes/MainLayoutError.jsx"
+import { appDispatch } from "./common/store"
+import { initApp } from "./slices/commonSlice"
 
 const router = createHashRouter([
   {
@@ -9,7 +10,7 @@ const router = createHashRouter([
     Component: MainLayout,
     errorElement: <MainLayoutError/>,
     loader: async () => {
-      await commonSlice.initAppDataDirectory()
+      await appDispatch(initApp())
       return null
     },
     children: [

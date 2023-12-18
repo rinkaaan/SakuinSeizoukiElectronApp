@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from "electron"
 import path from "path"
 import { initMain } from "./electron/main/main"
+import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from "electron-devtools-installer"
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -8,15 +9,24 @@ if (require("electron-squirrel-startup")) {
 }
 
 async function createWindow() {
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    await installExtension(
+      [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS],
+      { loadExtensionOptions: { allowFileAccess: true } }
+    )
+  }
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     minWidth: 500,
     minHeight: 800,
+    show: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
   })
   mainWindow.maximize()
+  mainWindow.show()
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -49,6 +59,3 @@ app.on("activate", async () => {
     await createWindow()
   }
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.

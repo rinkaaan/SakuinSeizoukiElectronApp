@@ -36,15 +36,15 @@ import { Form } from "react-router-dom"
 //   )
 // }
 
-const UploadPdf = ({ info: { uploadPdf }, onChange }) => {
-  const { pdf } = uploadPdf
+const SelectPdf = ({ info: { selectPdf }, onChange }) => {
+  const { pdf } = selectPdf
   // const onEngineOptionChange = getFieldOnChange('tile', 'engineOption', onChange)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
   const childProps = { pdf, onChange }
   return (
     <Box margin={{ bottom: "l" }}>
       <SpaceBetween size='l'>
-        <Container header={<Header variant='h2'>Upload file</Header>}>
+        <Container>
           {/*<Pdf/>*/}
           <Form method='POST'>
             <CloudButton formAction='submit'>Choose file</CloudButton>
@@ -61,4 +61,4 @@ const UploadPdf = ({ info: { uploadPdf }, onChange }) => {
   )
 }
 
-export default UploadPdf
+export default SelectPdf

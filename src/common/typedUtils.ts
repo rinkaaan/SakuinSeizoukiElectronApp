@@ -1,6 +1,8 @@
 import { format, isToday, isYesterday, parseISO } from "date-fns"
 import { v4 } from "uuid"
 import { io, Socket } from "socket.io-client"
+import { appDispatch } from "./store"
+import { commonActions } from "../slices/commonSlice"
 
 export function formatDate(inputDate?: string) {
   if (!inputDate) return null
@@ -24,22 +26,20 @@ export function uuid() {
 }
 
 export class SocketManager {
-  private socket: Socket | null = null
+  socket: Socket | null = null
 
   connect(port: number) {
-    if (this.socket !== null) {
-      this.socket.disconnect()
+    if (this.socket == null) {
+      this.socket = io(`http://127.0.0.1:${port}`, {
+        reconnectionDelayMax: 100,
+      })
+      this.socket.on("connect", () => {
+        appDispatch(commonActions.updateSlice({ engineReady: true }))
+      })
     }
-
-    this.socket = io(`http://127.0.0.1:${port}`, {
-      reconnectionDelayMax: 100,
-    })
   }
 
-  get() {
-    if (this.socket === null) {
-      throw new Error("Socket is not connected")
-    }
-    return this.socket
+  isConnected() {
+    return this.socket?.connected
   }
 }

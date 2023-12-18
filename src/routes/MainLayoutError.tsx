@@ -1,26 +1,19 @@
-import { commonSlice } from "../slices/commonSlice"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { socketManager } from "../common/clients"
 import logo from "../assets/icon.png"
 import { SpaceBetween, Spinner } from "@cloudscape-design/components"
+import { useSelector } from "react-redux"
+import { commonSelector } from "../slices/commonSlice"
 
 export default function MainLayoutError() {
   const navigate = useNavigate()
-  const socket = socketManager.get()
+  const { engineReady } = useSelector(commonSelector)
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("connected")
-      commonSlice.engineReady = true
-
+    if (engineReady) {
       navigate("/", { replace: true })
-    })
-
-    return () => {
-      socket.off("connect")
     }
-  }, [])
+  }, [engineReady])
 
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>

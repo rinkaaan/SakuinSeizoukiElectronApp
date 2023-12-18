@@ -1,34 +1,23 @@
 import { Alert, Container, ContentLayout, Header, SpaceBetween, TextContent } from "@cloudscape-design/components"
-import { ActionFunctionArgs, Form, useActionData, useRevalidator } from "react-router-dom"
-import { useEffect } from "react"
+import { ActionFunctionArgs, Form } from "react-router-dom"
 import CloudButton from "../../components/CloudButton"
-import { commonSlice } from "../../slices/commonSlice"
+import { appDispatch } from "../../common/store"
+import { commonSelector, setAppDataDirectory } from "../../slices/commonSlice"
+import { useSelector } from "react-redux"
 
-interface ActionData {
-  revalidate: boolean
-}
-
-export async function action({ request }: ActionFunctionArgs): Promise<ActionData | null> {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData()
   const action = formData.get("action")
   if (action === "setup-dir") {
     const path = await window.electron.selectDir()
     if (!path) return null
-    commonSlice.setAppDataDirectory(path)
-    return {
-      revalidate: true,
-    }
+    await appDispatch(setAppDataDirectory(path))
   }
   return null
 }
 
 export function Component() {
-  const revalidator = useRevalidator()
-  const { revalidate } = useActionData() as ActionData || {}
-
-  useEffect(() => {
-    if (revalidate) revalidator.revalidate()
-  }, [revalidate])
+  const { appDataDirectory } = useSelector(commonSelector)
 
   return (
     <ContentLayout
@@ -39,9 +28,9 @@ export function Component() {
       <SpaceBetween size="l">
         <Container header={<Header variant="h2">App Data Directory</Header>}>
           <SpaceBetween size="s">
-            {commonSlice.appDataDirectory ? (
+            {appDataDirectory ? (
               <Alert type="success">
-                App data directory is set to <b>{commonSlice.appDataDirectory}</b>.
+                App data directory is set to <b>{appDataDirectory}</b>.
               </Alert>
             ) : (
               <Alert type="warning">
@@ -49,12 +38,12 @@ export function Component() {
               </Alert>
             )}
             <Form method="POST">
-              <CloudButton formAction="submit">{commonSlice.appDataDirectory ? "Change" : "Set"} app data directory</CloudButton>
+              <CloudButton formAction="submit">{appDataDirectory ? "Change" : "Set"} app data directory</CloudButton>
               <input type="hidden" name="action" value="setup-dir"/>
               <TextContent>
                 <p>
                   <small>
-                    You can {commonSlice.appDataDirectory ? "change" : "set"} the app data directory by clicking the button above and selecting an empty folder or use an existing app data folder.
+                    You can {appDataDirectory ? "change" : "set"} the app data directory by clicking the button above and selecting an empty folder or use an existing app data folder.
                   </small>
                 </p>
               </TextContent>

@@ -1,11 +1,14 @@
-import { AppLayout, Flashbar, SideNavigation } from "@cloudscape-design/components"
-import { Navigate, Outlet, useLocation, useMatches, useNavigate, useRevalidator } from "react-router-dom"
+import { AppLayout, Flashbar, SideNavigation, SideNavigationProps, SpaceBetween, Spinner } from "@cloudscape-design/components"
+import { Navigate, Outlet, useLocation, useMatches, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import CloudBreadcrumbGroup from "../components/CloudBreadcrumbGroup"
-import { commonSlice } from "../slices/commonSlice.ts"
-import { socketManager } from "../common/clients"
+import logo from "../assets/icon.png"
+import { useSelector } from "react-redux"
+import { commonActions, commonSelector, prepareNotifications, setAppDataDirectory } from "../slices/commonSlice"
+import { appDispatch } from "../common/store"
+import { OpenAPI } from "../../openapi-client"
 
-const items = [
+const items: SideNavigationProps.Item[] = [
   {
     type: "link",
     text: "Projects",
@@ -46,33 +49,14 @@ export default function MainLayout() {
   const navigate = useNavigate()
   const matches = useMatches()
   const crumbs = getCrumbs(matches)
-  const revalidator = useRevalidator()
   const [activeHref, setActiveHref] = useState()
-  const [navigationOpen, setNavigationOpen] = useState(commonSlice.navigationOpen)
-  const { engineReady, appDataDirectory } = commonSlice
-  const socket = socketManager.get()
-
-  // useEffect(() => {
-  //   const id = uuid()
-  //   commonSlice.addNotification({
-  //     type: "success",
-  //     content: "Resource created successfully",
-  //     statusIconAriaLabel: "success",
-  //     dismissLabel: "Dismiss message",
-  //     dismissible: true,
-  //     id,
-  //     onDismiss: () => {
-  //       commonSlice.removeNotification(id)
-  //       revalidator.revalidate()
-  //     }
-  //   })
-  // }, [])
+  const { engineReady, navigationOpen, appDataDirectory, notifications } = useSelector(commonSelector)
 
   useEffect(() => {
     // Go from last to first crumb, set activeHref to the first one that matches items
     for (const crumb of crumbs.reverse()) {
       if (crumb.path == null) continue
-      if (items.find(item => item.href === crumb.path)) {
+      if (items.find(item => item["href"] === crumb.path)) {
         setActiveHref(crumb.path)
         break
       }
@@ -80,31 +64,32 @@ export default function MainLayout() {
   }, [crumbs])
 
   useEffect(() => {
-    if (socket.connected) {
-      console.log("connected")
-      commonSlice.engineReady = true
-    } else {
-      console.log("disconnected")
-      commonSlice.engineReady = false
+    if (engineReady) {
+      console.log(`Connected to engine at ${OpenAPI.BASE}`)
+      const appDataDirectory = localStorage.getItem("app-data-directory")
+      if (appDataDirectory) {
+        appDispatch(setAppDataDirectory(appDataDirectory))
+      }
     }
-
-    socket.on("connect", () => {
-      console.log("connected")
-      commonSlice.engineReady = true
-    })
-
-    revalidator.revalidate()
-
-    return () => {
-      socket.off("connect")
-    }
-  }, [])
+  }, [engineReady])
 
   if (!engineReady) {
     return (
-      <h1>Insert Splash Screen Here</h1>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+        <SpaceBetween
+          size="l"
+          alignItems="center"
+        >
+          <img
+            src={logo}
+            alt="logo"
+            style={{ width: "130px", height: "130px" }}
+          />
+          <Spinner size="big" />
+        </SpaceBetween>
+      </div>
     )
-  } else if (!appDataDirectory && location.pathname !== "/settings") {
+  } else if (appDataDirectory === null && location.pathname !== "/settings") {
     return (
       <Navigate
         to="/settings"
@@ -133,16 +118,15 @@ export default function MainLayout() {
             items={items}
           />
         }
-        navigationHide={!commonSlice.appDataDirectory}
+        navigationHide={appDataDirectory === null}
         navigationOpen={navigationOpen}
         onNavigationChange={(e) => {
-          setNavigationOpen(e.detail.open)
-          commonSlice.navigationOpen = e.detail.open
+          appDispatch(commonActions.updateSlice({ navigationOpen: e.detail.open }))
         }}
         content={<Outlet/>}
         breadcrumbs={<BreadCrumbs/>}
         notifications={
-          <Flashbar items={commonSlice.notifications}/>
+          <Flashbar items={prepareNotifications(notifications)}/>
         }
         toolsHide
       />

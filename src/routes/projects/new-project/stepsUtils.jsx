@@ -1,4 +1,4 @@
-import UploadPdf from "./steps/step1.jsx"
+import SelectPdf from "./steps/step1.jsx"
 import Details from "./steps/step2.jsx"
 import Advanced from "./steps/step3.jsx"
 import Review from "./steps/step4.jsx"
@@ -8,9 +8,9 @@ import { useNavigate } from "react-router-dom"
 
 export const steps = [
   {
-    title: "Upload PDF",
-    stateKey: "uploadPdf",
-    StepContent: UploadPdf,
+    title: "Open PDF",
+    stateKey: "selectPdf",
+    StepContent: SelectPdf,
   },
   {
     title: "Specify instance details",
