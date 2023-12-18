@@ -6,11 +6,13 @@ import { Channels } from "./types"
 export interface RendererElectron {
   onEnginePort: (callback: (port: number) => void) => void;
   selectDir: () => Promise<string | null>;
+  selectPdf: () => Promise<string | null>;
 }
 
 export const rendererElectron: RendererElectron = {
   onEnginePort,
   selectDir,
+  selectPdf,
 }
 
 function onEnginePort(callback: (port: number) => void) {
@@ -19,4 +21,8 @@ function onEnginePort(callback: (port: number) => void) {
 
 async function selectDir(): Promise<string | null> {
   return ipcRenderer.invoke(Channels.selectDir)
+}
+
+async function selectPdf(): Promise<string | null> {
+  return ipcRenderer.invoke(Channels.selectPdf)
 }

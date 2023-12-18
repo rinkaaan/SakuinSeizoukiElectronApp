@@ -6,8 +6,11 @@ import { ActionFunctionArgs } from "react-router-dom"
 export async function action({ request }: ActionFunctionArgs) {
   const data = await request.formData()
   const action = data.get("action")
-  if (action === "select-pdf") {
+  if (action === "open-pdf") {
     // PdfService.postPdf()
+    const path = await window.electron.selectPdf()
+    if (!path) return null
+    console.log(path)
   }
   return null
 }
