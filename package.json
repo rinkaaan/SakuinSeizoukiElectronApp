@@ -13,7 +13,8 @@
     "lint:fix": "eslint --fix --ext .ts,.tsx .",
     "open:app": "open out/索引製造機-darwin-arm64/索引製造機.app",
     "open:shell": "open out/索引製造機-darwin-arm64/索引製造機.app/Contents/MacOS/sakuinseizoukielectronapp",
-    "open:explorer": "open out/索引製造機-darwin-arm64"
+    "open:explorer": "open out/索引製造機-darwin-arm64",
+    "gen": "./scripts/gen.sh"
   },
   "keywords": [],
   "author": {

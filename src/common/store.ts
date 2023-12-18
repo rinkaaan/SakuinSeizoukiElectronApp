@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { commonReducer } from "../slices/commonSlice"
+import { newProjectReducer } from "../slices/newProjectSlice"
 
 const store = configureStore({
   reducer: {
     common: commonReducer,
+    newProject: newProjectReducer,
   },
 })
 

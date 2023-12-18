@@ -1,16 +1,18 @@
 import { Wizard } from "@cloudscape-design/components"
-import { steps, useWizard, i18nStrings } from "./stepsUtils.jsx"
+import { i18nStrings, steps, useWizard } from "./stepsUtils.jsx"
 import { ActionFunctionArgs } from "react-router-dom"
-// import { PdfService } from "../../../../openapi-client"
+import { ProjectService } from "../../../../openapi-client"
+import { appDispatch } from "../../../common/store"
+import { newProjectActions } from "../../../slices/newProjectSlice"
 
 export async function action({ request }: ActionFunctionArgs) {
   const data = await request.formData()
   const action = data.get("action")
   if (action === "open-pdf") {
-    // PdfService.postPdf()
     const path = await window.electron.selectPdf()
     if (!path) return null
-    console.log(path)
+    const openPdfOut = await ProjectService.postProjectNewPdf({ pdf_path: path })
+    appDispatch(newProjectActions.updateSlice({ openPdfOut }))
   }
   return null
 }
