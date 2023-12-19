@@ -9,12 +9,16 @@ if (require("electron-squirrel-startup")) {
 }
 
 async function createWindow() {
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    await installExtension(
-      [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS],
-      { loadExtensionOptions: { allowFileAccess: true } }
-    )
-  }
+  // if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+  //   await installExtension(
+  //     [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS],
+  //     { loadExtensionOptions: { allowFileAccess: true } }
+  //   )
+  // }
+  await installExtension(
+    [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS],
+    { loadExtensionOptions: { allowFileAccess: true } }
+  )
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
