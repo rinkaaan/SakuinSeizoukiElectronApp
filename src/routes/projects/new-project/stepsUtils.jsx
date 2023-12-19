@@ -1,36 +1,26 @@
-import SelectPdf from "./steps/step1.jsx"
-import Details from "./steps/step2.jsx"
-import Advanced from "./steps/step3.jsx"
-import Review from "./steps/step4.jsx"
-import { DEFAULT_STEP_INFO } from "./StepsConfig.jsx"
-import { useCallback, useState } from "react"
+import { Step1, Step1Validate } from "./steps/step1"
+import { Step2 } from "./steps/step2"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { commonActions, commonSelector } from "../../../slices/commonSlice"
+import { appDispatch } from "../../../common/store"
+import { newProjectActions, newProjectSelector } from "../../../slices/newProjectSlice"
 
 export const steps = [
   {
     title: "Open PDF",
-    stateKey: "selectPdf",
-    StepContent: SelectPdf,
+    StepContent: Step1,
+    validator: Step1Validate,
   },
   {
-    title: "Specify instance details",
-    stateKey: "details",
-    StepContent: Details,
-  },
-  {
-    title: "Configure settings",
-    stateKey: "advanced",
-    StepContent: Advanced,
-  },
-  {
-    title: "Review and create",
-    stateKey: "review",
-    StepContent: Review,
+    title: "Annotate page regions",
+    StepContent: Step2,
   },
 ]
 
 export const i18nStrings = {
-  submitButton: "Create DB instance",
+  submitButton: "Create book index",
   stepNumberLabel: stepNumber => `Step ${stepNumber}`,
   collapsedStepsLabel: (stepNumber, stepsCount) => `Step ${stepNumber} of ${stepsCount}`,
   cancelButton: "Cancel",
@@ -39,44 +29,50 @@ export const i18nStrings = {
 }
 
 export const useWizard = () => {
+  const { latestStepIndex } = useSelector(newProjectSelector)
   const [activeStepIndex, setActiveStepIndex] = useState(0)
-  const [stepsInfo, setStepsInfo] = useState(DEFAULT_STEP_INFO)
+  const { dirty } = useSelector(commonSelector)
   const navigate = useNavigate()
-
-  const onStepInfoChange = useCallback(
-    (stateKey, newStepState) => {
-      setStepsInfo({
-        ...stepsInfo,
-        [stateKey]: {
-          ...stepsInfo[stateKey],
-          ...newStepState,
-        },
-      })
-    },
-    [stepsInfo],
-  )
 
   const setActiveStepIndexAndCloseTools = index => {
     setActiveStepIndex(index)
+    if (index > latestStepIndex) {
+      appDispatch(newProjectActions.updateSlice({ latestStepIndex: index }))
+    }
   }
 
   const onNavigate = evt => {
-    setActiveStepIndexAndCloseTools(evt.detail.requestedStepIndex)
+    // const { requestedStepIndex, reason } = evt.detail
+    // console.log(evt)
+    // console.log(`Requested step index: ${requestedStepIndex}`)
+    // setActiveStepIndexAndCloseTools(requestedStepIndex)
+
+    // update to use validator
+    const { requestedStepIndex, reason } = evt.detail
+    const sourceStepIndex = requestedStepIndex - 1
+    if (reason === "next") {
+      if (steps[sourceStepIndex].validator()) {
+        setActiveStepIndexAndCloseTools(requestedStepIndex)
+      }
+    } else {
+      setActiveStepIndexAndCloseTools(requestedStepIndex)
+    }
   }
 
   const onCancel = () => {
-    navigate("/projects/all")
+    if (!dirty) {
+      navigate("/projects/all")
+    } else {
+      appDispatch(commonActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: "/projects/all" }))
+    }
   }
 
   const onSubmit = () => {
-    console.log(stepsInfo)
+    console.log("Submit")
   }
 
   return {
     activeStepIndex,
-    stepsInfo,
-    setActiveStepIndexAndCloseTools,
-    onStepInfoChange,
     onNavigate,
     onCancel,
     onSubmit,

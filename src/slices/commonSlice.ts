@@ -1,16 +1,19 @@
-import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
-import { createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { appDispatch, RootState } from "../common/store"
 import { OpenAPI, SettingsService } from "../../openapi-client"
 import { socketManager } from "../common/clients"
 import { FlashbarProps } from "@cloudscape-design/components"
 import { uuid } from "../common/typedUtils"
+import { newProjectActions } from "./newProjectSlice"
 
 export interface CommonState {
   navigationOpen: boolean;
   notifications: Array<FlashbarProps.MessageDefinition>;
   engineReady: boolean;
   appDataDirectory?: string | null;
+  dirty: boolean;
+  dirtyModalVisible?: boolean;
+  dirtyRedirectUrl?: string;
 }
 
 const initialState: CommonState = {
@@ -18,6 +21,9 @@ const initialState: CommonState = {
   notifications: [],
   engineReady: false,
   appDataDirectory: undefined,
+  dirty: false,
+  dirtyModalVisible: false,
+  dirtyRedirectUrl: undefined,
 }
 
 type Notification = Pick<FlashbarProps.MessageDefinition, "type" | "content">
@@ -34,16 +40,24 @@ export const commonSlice = createSlice({
         ...action.payload,
         dismissible: true,
         id: uuid(),
-        // onDismiss: () => {
-        //   state.notifications = state.notifications.filter(n => n.id !== notification.id)
-        // },
       }
       state.notifications.push(notification)
     },
     removeNotification(state, action: PayloadAction<string>) {
       state.notifications = state.notifications.filter(n => n.id !== action.payload)
     },
+    resetDirty(state) {
+      state.dirty = false
+      state.dirtyModalVisible = false
+      state.dirtyRedirectUrl = undefined
+    }
   },
+  extraReducers: builder => {
+    builder
+      .addCase(newProjectActions.updateSlice, (state, _action) => {
+        state.dirty = true
+      })
+  }
 })
 
 export function prepareNotifications(notifications: Array<FlashbarProps.MessageDefinition>) {

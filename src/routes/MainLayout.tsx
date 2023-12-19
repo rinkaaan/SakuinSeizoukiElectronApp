@@ -50,7 +50,7 @@ export default function MainLayout() {
   const matches = useMatches()
   const crumbs = getCrumbs(matches)
   const [activeHref, setActiveHref] = useState()
-  const { engineReady, navigationOpen, appDataDirectory, notifications } = useSelector(commonSelector)
+  const { engineReady, navigationOpen, appDataDirectory, notifications, dirty } = useSelector(commonSelector)
 
   useEffect(() => {
     // Go from last to first crumb, set activeHref to the first one that matches items
@@ -112,7 +112,11 @@ export default function MainLayout() {
             }}
             onFollow={e => {
               e.preventDefault()
-              navigate(e.detail.href)
+              if (!dirty) {
+                navigate(e.detail.href)
+              } else {
+                appDispatch(commonActions.updateSlice({ dirtyModalVisible: true }))
+              }
             }}
             activeHref={activeHref}
             items={items}

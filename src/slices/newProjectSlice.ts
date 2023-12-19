@@ -3,11 +3,21 @@ import { RootState } from "../common/store"
 import { OpenPdfOut } from "../../openapi-client"
 
 export interface NewProjectState {
+  latestStepIndex: number;
+
+  // step 1
   openPdfOut?: OpenPdfOut;
+  pdfPath?: string;
+  missingPdf: boolean;
 }
 
 const initialState: NewProjectState = {
+  latestStepIndex: 0,
+
+  // step 1
   openPdfOut: undefined,
+  pdfPath: undefined,
+  missingPdf: false,
 }
 
 export const newProjectSlice = createSlice({
