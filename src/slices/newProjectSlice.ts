@@ -9,7 +9,8 @@ export interface NewProjectState {
 
   // step 1
   openPdfOut?: OpenPdfOut;
-  pdfPath?: string;
+  // pdfPath?: string;
+  pdfFile?: File;
   missingPdf: boolean;
 }
 
@@ -20,7 +21,8 @@ const initialState: NewProjectState = {
 
   // step 1
   openPdfOut: undefined,
-  pdfPath: undefined,
+  // pdfPath: undefined,
+  pdfFile: undefined,
   missingPdf: false,
 }
 

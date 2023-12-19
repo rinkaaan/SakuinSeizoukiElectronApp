@@ -7,6 +7,9 @@ const store = configureStore({
     common: commonReducer,
     newProject: newProjectReducer,
   },
+  middleware: getDefaultMiddleware => getDefaultMiddleware({
+    serializableCheck: false,
+  }),
 })
 
 export type RootState = ReturnType<typeof store.getState>;
