@@ -89,7 +89,7 @@ export default function MainLayout() {
         </SpaceBetween>
       </div>
     )
-  } else if (appDataDirectory === null && location.pathname !== "/settings") {
+  } else if (appDataDirectory == null && location.pathname !== "/settings") {
     return (
       <Navigate
         to="/settings"
@@ -118,7 +118,7 @@ export default function MainLayout() {
             items={items}
           />
         }
-        navigationHide={appDataDirectory === null}
+        navigationHide={appDataDirectory == null}
         navigationOpen={navigationOpen}
         onNavigationChange={(e) => {
           appDispatch(commonActions.updateSlice({ navigationOpen: e.detail.open }))
