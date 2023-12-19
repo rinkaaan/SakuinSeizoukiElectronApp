@@ -5,6 +5,8 @@ import { Form } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { newProjectActions, newProjectSelector } from "../../../../slices/newProjectSlice"
 import store, { appDispatch } from "../../../../common/store"
+import { ProjectService } from "../../../../../openapi-client"
+import { sleep } from "../../../../common/typedUtils"
 
 export function Step1() {
   const { pdfPath, missingPdf, latestStepIndex } = useSelector(newProjectSelector)
@@ -35,12 +37,13 @@ export function Step1() {
   )
 }
 
-export function Step1Validate() {
-  console.log("Step1Validate")
-  const { openPdfOut, pdfPath } = store.getState().newProject
-  const isValid = openPdfOut && pdfPath
-  if (!isValid) {
+export async function validateStep1() {
+  const { pdfPath } = store.getState().newProject
+  if (!pdfPath) {
     appDispatch(newProjectActions.updateSlice({ missingPdf: true }))
+    return false
   }
-  return isValid
+  const openPdfOut = await ProjectService.postProjectNewPdf({ pdf_path: pdfPath })
+  appDispatch(newProjectActions.updateSlice({ openPdfOut, pdfPath }))
+  return true
 }

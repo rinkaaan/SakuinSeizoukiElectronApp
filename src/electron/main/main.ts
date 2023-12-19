@@ -16,7 +16,6 @@ async function handleSelectDir() {
     properties: ["openDirectory"],
   })
   if (!canceled) {
-    console.log(`onSelectDir: ${filePaths[0]}`)
     return filePaths[0]
   }
   return null
@@ -28,7 +27,6 @@ async function handleSelectPdf() {
     filters: [{ name: "PDF", extensions: ["pdf"] }],
   })
   if (!canceled) {
-    console.log(`onSelectPdf: ${filePaths[0]}`)
     return filePaths[0]
   }
   return null

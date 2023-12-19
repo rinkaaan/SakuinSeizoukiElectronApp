@@ -1,4 +1,4 @@
-import { Step1, Step1Validate } from "./steps/step1"
+import { Step1, validateStep1 } from "./steps/step1"
 import { Step2 } from "./steps/step2"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -11,7 +11,7 @@ export const steps = [
   {
     title: "Open PDF",
     StepContent: Step1,
-    validator: Step1Validate,
+    validate: validateStep1,
   },
   {
     title: "Annotate page regions",
@@ -41,7 +41,7 @@ export const useWizard = () => {
     }
   }
 
-  const onNavigate = evt => {
+  async function onNavigate(evt) {
     // const { requestedStepIndex, reason } = evt.detail
     // console.log(evt)
     // console.log(`Requested step index: ${requestedStepIndex}`)
@@ -51,7 +51,10 @@ export const useWizard = () => {
     const { requestedStepIndex, reason } = evt.detail
     const sourceStepIndex = requestedStepIndex - 1
     if (reason === "next") {
-      if (steps[sourceStepIndex].validator()) {
+      appDispatch(newProjectActions.updateSlice({ isLoadingNextStep: true }))
+      const isValid = await steps[sourceStepIndex].validate()
+      appDispatch(newProjectActions.updateSlice({ isLoadingNextStep: false }))
+      if (isValid) {
         setActiveStepIndexAndCloseTools(requestedStepIndex)
       }
     } else {

@@ -4,6 +4,7 @@ import { OpenPdfOut } from "../../openapi-client"
 
 export interface NewProjectState {
   latestStepIndex: number;
+  isLoadingNextStep: boolean;
 
   // step 1
   openPdfOut?: OpenPdfOut;
@@ -13,6 +14,7 @@ export interface NewProjectState {
 
 const initialState: NewProjectState = {
   latestStepIndex: 0,
+  isLoadingNextStep: false,
 
   // step 1
   openPdfOut: undefined,
