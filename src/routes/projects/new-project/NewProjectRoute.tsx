@@ -6,6 +6,7 @@ import { newProjectActions, newProjectSelector } from "../../../slices/newProjec
 import { Fragment, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { commonActions, commonSelector } from "../../../slices/commonSlice"
+import { OpenAPI } from "../../../../openapi-client"
 
 export async function action({ request }: ActionFunctionArgs) {
   const data = await request.formData()
@@ -13,7 +14,8 @@ export async function action({ request }: ActionFunctionArgs) {
   if (action === "open-pdf") {
     const pdfPath = await window.electron.selectPdf()
     if (!pdfPath) return null
-    appDispatch(newProjectActions.updateSlice({ pdfPath }))
+    const pageImage = `${OpenAPI.BASE}/project/get/pdf/page?pdf_path=${encodeURIComponent(pdfPath)}&page_number=1`
+    appDispatch(newProjectActions.updateSlice({ pdfPath, pageImage }))
   }
   return null
 }

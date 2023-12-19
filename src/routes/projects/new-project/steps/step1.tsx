@@ -8,16 +8,16 @@ import store, { appDispatch } from "../../../../common/store"
 import { ProjectService } from "../../../../../openapi-client"
 
 export function Step1() {
-  const { pdfPath, missingPdf, latestStepIndex } = useSelector(newProjectSelector)
+  const { pdfPath, missingPdf, latestStepIndex, pageImage } = useSelector(newProjectSelector)
 
   return (
     <Box margin={{ bottom: "l" }}>
-      <SpaceBetween size='l'>
+      <SpaceBetween size="l">
         <Container>
           <SpaceBetween size="s">
-            <Form method='POST'>
-              <CloudButton disabled={latestStepIndex !== 0} formAction='submit'>Select file</CloudButton>
-              <input type='hidden' name='action' value='open-pdf'/>
+            <Form method="POST">
+              <CloudButton disabled={latestStepIndex !== 0} formAction="submit">Select file</CloudButton>
+              <input type="hidden" name="action" value="open-pdf"/>
             </Form>
             {pdfPath && (
               <Alert type="success">
@@ -31,6 +31,19 @@ export function Step1() {
             )}
           </SpaceBetween>
         </Container>
+        {pageImage && (
+          <Container>
+            <img
+              src={pageImage}
+              alt="PDF preview"
+              style={{
+                width: "100%",
+                maxWidth: "500px",
+                height: "auto",
+              }}
+            />
+          </Container>
+        )}
       </SpaceBetween>
     </Box>
   )
