@@ -115,7 +115,7 @@ export default function MainLayout() {
               if (!dirty) {
                 navigate(e.detail.href)
               } else {
-                appDispatch(commonActions.updateSlice({ dirtyModalVisible: true }))
+                appDispatch(commonActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: e.detail.href }))
               }
             }}
             activeHref={activeHref}
