@@ -14,7 +14,8 @@
     "open:app": "open out/索引製造機-darwin-arm64/索引製造機.app",
     "open:shell": "open out/索引製造機-darwin-arm64/索引製造機.app/Contents/MacOS/索引製造機",
     "open:explorer": "open out/索引製造機-darwin-arm64",
-    "gen": "./scripts/gen.sh"
+    "gen": "./scripts/gen.sh",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": {
@@ -40,7 +41,8 @@
     "eslint": "^8.0.1",
     "eslint-plugin-import": "^2.25.0",
     "ts-node": "^10.0.0",
-    "typescript": "~4.5.4"
+    "typescript": "~4.5.4",
+    "husky": "^8.0.0"
   },
   "dependencies": {
     "@cloudscape-design/components": "^3.0.463",

@@ -20,5 +20,8 @@
     "@typescript-eslint/no-empty-function": "off",
     "semi": ["error", "never"],
     "quotes": ["error", "double"]
-  }
+  },
+  "ignorePatterns": [
+    "out/**/*"
+  ]
 }

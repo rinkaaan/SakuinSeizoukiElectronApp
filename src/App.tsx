@@ -1,6 +1,6 @@
 import { createHashRouter, Outlet, RouterProvider } from "react-router-dom"
 import MainLayout from "./routes/MainLayout"
-import MainLayoutError from "./routes/MainLayoutError.jsx"
+import MainLayoutError from "./routes/MainLayoutError"
 import { appDispatch } from "./common/store"
 import { initApp } from "./slices/commonSlice"
 

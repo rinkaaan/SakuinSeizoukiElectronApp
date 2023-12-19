@@ -8,25 +8,26 @@ import { useLoaderData } from "react-router-dom"
 import CloudLink from "../../../components/CloudLink"
 import { formatDate } from "../../../common/typedUtils"
 import CloudButton from "../../../components/CloudButton"
+import { Project } from "../../../../openapi-client"
 
 interface LoaderData {
-  pets: any[];
+  projects: Project[]
 }
 
 export async function loader(): Promise<LoaderData> {
   return {
-    pets: [],
+    projects: [],
   }
 }
 
 export function Component() {
-  const { pets } = useLoaderData() as LoaderData
-  const [selectedItems, setSelectedItems] = useState<any[]>([])
+  const { projects } = useLoaderData() as LoaderData
+  const [selectedItems, setSelectedItems] = useState<Project[]>([])
 
   return (
     <Fragment>
       <CloudTable
-        loading={pets == null}
+        loading={projects == null}
         onSelectionChange={({ detail }) =>
           setSelectedItems(detail.selectedItems)
         }
@@ -43,7 +44,7 @@ export function Component() {
           {
             id: "name",
             header: "Project name",
-            cell: item => <CloudLink href={`/pets/details/${item.id}`}>{item.name}</CloudLink>,
+            cell: item => <CloudLink href={`/projects/details/${item.id}`}>{item.name}</CloudLink>,
             sortingField: "name",
             isRowHeader: true,
           },
@@ -64,7 +65,7 @@ export function Component() {
             visible: true,
           },
         ]}
-        items={pets}
+        items={projects}
         loadingText="Loading projects"
         selectionType="multi"
         trackBy="id"

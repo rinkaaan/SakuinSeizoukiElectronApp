@@ -5,7 +5,7 @@ import "@cloudscape-design/global-styles/index.css"
 import store from "./common/store"
 import { Provider } from "react-redux"
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <App />
   </Provider>

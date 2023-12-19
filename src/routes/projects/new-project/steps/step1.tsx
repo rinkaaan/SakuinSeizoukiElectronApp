@@ -6,7 +6,6 @@ import { useSelector } from "react-redux"
 import { newProjectActions, newProjectSelector } from "../../../../slices/newProjectSlice"
 import store, { appDispatch } from "../../../../common/store"
 import { ProjectService } from "../../../../../openapi-client"
-import { sleep } from "../../../../common/typedUtils"
 
 export function Step1() {
   const { pdfPath, missingPdf, latestStepIndex } = useSelector(newProjectSelector)
