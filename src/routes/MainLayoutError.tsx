@@ -15,10 +15,10 @@ export default function MainLayoutError() {
     if (engineReady) {
       if (error) {
         console.error(error)
-        const errorAny = error as any
+        const errorAny = error
         let errorMessage: string
-        if (errorAny.error) {
-          errorMessage = errorAny.error.toString()
+        if (errorAny["error"]) {
+          errorMessage = errorAny["error"].toString()
         } else {
           errorMessage = errorAny.toString()
         }

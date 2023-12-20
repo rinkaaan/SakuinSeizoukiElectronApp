@@ -1,5 +1,5 @@
 import React from "react"
-import { Alert, Box, Container, FileUpload, FileUploadProps, FormField, NonCancelableCustomEvent, SpaceBetween } from "@cloudscape-design/components"
+import { Alert, Box, Container, FileUpload, FileUploadProps, FormField, Header, NonCancelableCustomEvent, SpaceBetween } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
 import { newProjectActions, newProjectSelector, openPdf } from "../../../../slices/newProjectSlice"
 import store, { appDispatch } from "../../../../common/store"
@@ -32,7 +32,7 @@ export function Step1() {
   return (
     <Box margin={{ bottom: "l" }}>
       <SpaceBetween size="l">
-        <Container>
+        <Container header={<Header>Select a PDF file</Header>}>
           <SpaceBetween size="s">
             <FormField>
               <FileUpload
@@ -53,7 +53,7 @@ export function Step1() {
                 }}
                 showFileSize
                 showFileThumbnail
-                constraintText="Select one PDF file"
+                constraintText="Only PDF files are allowed"
                 accept="application/pdf"
               />
             </FormField>
@@ -62,18 +62,20 @@ export function Step1() {
                 No file selected. Please select a file to continue.
               </Alert>
             )}
-            {pageImage && (
-              <img
-                src={pageImage}
-                alt="PDF preview"
-                style={{
-                  maxHeight: "1000px",
-                  maxWidth: "100%"
-                }}
-              />
-            )}
           </SpaceBetween>
         </Container>
+        {pageImage && (
+          <Container header={<Header>PDF preview</Header>}>
+            <img
+              src={pageImage}
+              alt="PDF preview"
+              style={{
+                maxHeight: "1000px",
+                maxWidth: "100%",
+              }}
+            />
+          </Container>
+        )}
       </SpaceBetween>
     </Box>
   )

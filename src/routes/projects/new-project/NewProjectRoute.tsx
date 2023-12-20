@@ -1,11 +1,11 @@
-import { Alert, Box, Button, Modal, SpaceBetween, Wizard } from "@cloudscape-design/components"
+import { Wizard } from "@cloudscape-design/components"
 import { i18nStrings, steps, useWizard } from "./stepsUtils"
-import { useNavigate } from "react-router-dom"
 import { appDispatch } from "../../../common/store"
 import { newProjectActions, newProjectSelector } from "../../../slices/newProjectSlice"
 import { Fragment, useEffect } from "react"
 import { useSelector } from "react-redux"
-import { commonActions, commonSelector } from "../../../slices/commonSlice"
+import { commonActions } from "../../../slices/commonSlice"
+import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
 
 export function Component() {
   const {
@@ -14,12 +14,11 @@ export function Component() {
     onCancel,
     onSubmit,
   } = useWizard()
-  const navigate = useNavigate()
-  const { dirtyModalVisible, dirtyRedirectUrl } = useSelector(commonSelector)
   const { isLoadingNextStep } = useSelector(newProjectSelector)
 
-  const wizardSteps = steps.map(({ title, StepContent }) => ({
+  const wizardSteps: WizardProps.Step[] = steps.map(({ title, StepContent }) => ({
     title,
+    description: "Previous steps cannot be modified.",
     content: (
       <StepContent />
     ),
@@ -27,6 +26,7 @@ export function Component() {
 
   useEffect(() => {
     appDispatch(newProjectActions.resetSlice())
+    appDispatch(commonActions.updateSlice({ navigationOpen: false }))
 
     return () => {
       appDispatch(commonActions.resetDirty())
@@ -44,38 +44,6 @@ export function Component() {
         onSubmit={onSubmit}
         isLoadingNextStep={isLoadingNextStep}
       />
-      <Modal
-        visible={dirtyModalVisible}
-        header="Leave page"
-        closeAriaLabel="Close modal"
-        onDismiss={() => {
-          appDispatch(commonActions.updateSlice({ dirtyModalVisible: false }))
-        }}
-        footer={
-          <Box float="right">
-            <SpaceBetween direction="horizontal" size="xs">
-              <Button
-                variant="link"
-                onClick={() => {
-                  appDispatch(commonActions.updateSlice({ dirtyModalVisible: false }))
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="primary"
-                onClick={() => navigate(dirtyRedirectUrl)}
-              >
-                Leave
-              </Button>
-            </SpaceBetween>
-          </Box>
-        }
-      >
-        <Alert type="warning" statusIconAriaLabel="Warning">
-          Are you sure that you want to leave the current page? The changes that you made won't be saved.
-        </Alert>
-      </Modal>
     </Fragment>
   )
 }

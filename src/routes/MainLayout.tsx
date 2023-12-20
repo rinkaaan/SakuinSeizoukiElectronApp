@@ -1,12 +1,13 @@
-import { AppLayout, Flashbar, SideNavigation, SideNavigationProps, SpaceBetween, Spinner } from "@cloudscape-design/components"
-import { Navigate, Outlet, useLocation, useMatches, useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { Alert, AppLayout, Box, Button, Flashbar, Modal, SideNavigation, SideNavigationProps, SpaceBetween, Spinner } from "@cloudscape-design/components"
+import { Navigate, Outlet, UIMatch, useLocation, useMatches, useNavigate } from "react-router-dom"
+import { Fragment, useEffect, useState } from "react"
 import CloudBreadcrumbGroup from "../components/CloudBreadcrumbGroup"
 import logo from "../assets/icon.png"
 import { useSelector } from "react-redux"
 import { commonActions, commonSelector, prepareNotifications, setAppDataDirectory } from "../slices/commonSlice"
 import { appDispatch } from "../common/store"
 import { OpenAPI } from "../../openapi-client"
+import { CrumbHandle } from "../App"
 
 const items: SideNavigationProps.Item[] = [
   {
@@ -21,14 +22,14 @@ const items: SideNavigationProps.Item[] = [
   },
 ]
 
-export function getCrumbs(matches) {
+export function getCrumbs(matches: UIMatch<string, CrumbHandle>[]) {
   return matches
     .filter((match) => Boolean(match.handle?.crumbs))
     .map((match) => match.handle.crumbs())
 }
 
 export function BreadCrumbs() {
-  const matches = useMatches()
+  const matches = useMatches() as UIMatch<string, CrumbHandle>[]
   const crumbs = getCrumbs(matches).map((crumb) => {
     return {
       text: crumb.crumb,
@@ -47,10 +48,10 @@ export function BreadCrumbs() {
 export default function MainLayout() {
   const location = useLocation()
   const navigate = useNavigate()
-  const matches = useMatches()
+  const matches = useMatches() as UIMatch<string, CrumbHandle>[]
   const crumbs = getCrumbs(matches)
-  const [activeHref, setActiveHref] = useState()
-  const { engineReady, navigationOpen, appDataDirectory, notifications, dirty } = useSelector(commonSelector)
+  const [activeHref, setActiveHref] = useState<string | undefined>(undefined)
+  const { engineReady, navigationOpen, appDataDirectory, notifications, dirty, dirtyModalVisible, dirtyRedirectUrl } = useSelector(commonSelector)
 
   useEffect(() => {
     // Go from last to first crumb, set activeHref to the first one that matches items
@@ -103,37 +104,71 @@ export default function MainLayout() {
     />
   } else {
     return (
-      <AppLayout
-        navigation={
-          <SideNavigation
-            header={{
-              text: "索引製造機",
-              href: "/projects/all",
-            }}
-            onFollow={e => {
-              e.preventDefault()
-              if (!dirty) {
-                navigate(e.detail.href)
-              } else {
-                appDispatch(commonActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: e.detail.href }))
-              }
-            }}
-            activeHref={activeHref}
-            items={items}
-          />
-        }
-        navigationHide={appDataDirectory == null}
-        navigationOpen={navigationOpen}
-        onNavigationChange={(e) => {
-          appDispatch(commonActions.updateSlice({ navigationOpen: e.detail.open }))
-        }}
-        content={<Outlet/>}
-        breadcrumbs={<BreadCrumbs/>}
-        notifications={
-          <Flashbar items={prepareNotifications(notifications)}/>
-        }
-        toolsHide
-      />
+      <Fragment>
+        <AppLayout
+          navigation={
+            <SideNavigation
+              header={{
+                text: "索引製造機",
+                href: "/projects/all",
+              }}
+              onFollow={e => {
+                e.preventDefault()
+                if (!dirty) {
+                  navigate(e.detail.href)
+                } else {
+                  appDispatch(commonActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: e.detail.href }))
+                }
+              }}
+              activeHref={activeHref}
+              items={items}
+            />
+          }
+          navigationHide={appDataDirectory == null}
+          navigationOpen={navigationOpen}
+          onNavigationChange={(e) => {
+            appDispatch(commonActions.updateSlice({ navigationOpen: e.detail.open }))
+          }}
+          content={<Outlet/>}
+          breadcrumbs={<BreadCrumbs/>}
+          notifications={
+            <Flashbar items={prepareNotifications(notifications)}/>
+          }
+          toolsHide
+        />
+        <Modal
+          visible={dirtyModalVisible}
+          header="Leave page"
+          closeAriaLabel="Close modal"
+          onDismiss={() => {
+            appDispatch(commonActions.updateSlice({ dirtyModalVisible: false }))
+          }}
+          footer={
+            <Box float="right">
+              <SpaceBetween direction="horizontal" size="xs">
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    appDispatch(commonActions.updateSlice({ dirtyModalVisible: false }))
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => navigate(dirtyRedirectUrl)}
+                >
+                  Leave
+                </Button>
+              </SpaceBetween>
+            </Box>
+          }
+        >
+          <Alert type="warning" statusIconAriaLabel="Warning">
+            Are you sure that you want to leave the current page? The changes that you made won't be saved.
+          </Alert>
+        </Modal>
+      </Fragment>
     )
   }
 }

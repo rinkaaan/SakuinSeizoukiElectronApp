@@ -39,7 +39,11 @@ const router = createHashRouter([
   },
 ])
 
-function createCrumb(crumb: string, path: string) {
+export interface CrumbHandle {
+  crumbs: () => { crumb: string, path: string }
+}
+
+function createCrumb(crumb: string, path: string): CrumbHandle {
   return {
     crumbs: () => {
       return {
