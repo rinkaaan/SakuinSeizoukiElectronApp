@@ -1,19 +1,30 @@
 import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useRouteError } from "react-router-dom"
 import logo from "../assets/icon.png"
 import { SpaceBetween, Spinner } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
-import { commonSelector } from "../slices/commonSlice"
+import { commonActions, commonSelector } from "../slices/commonSlice"
+import { appDispatch } from "../common/store"
 
 export default function MainLayoutError() {
   const navigate = useNavigate()
   const { engineReady } = useSelector(commonSelector)
+  const error = useRouteError()
 
   useEffect(() => {
     if (engineReady) {
+      if (error) {
+        console.error(error.toString())
+        appDispatch(
+          commonActions.addNotification({
+            type: "error",
+            content: error.toString(),
+          })
+        )
+      }
       navigate("/", { replace: true })
     }
-  }, [engineReady])
+  }, [error, engineReady])
 
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>

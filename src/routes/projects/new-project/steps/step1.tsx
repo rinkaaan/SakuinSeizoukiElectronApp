@@ -43,10 +43,8 @@ export function Step1() {
                   limitShowMore: "Show more files",
                   errorIconAriaLabel: "Error"
                 }}
-                showFileLastModified
                 showFileSize
                 showFileThumbnail
-                tokenLimit={3}
                 constraintText="Select one PDF file"
                 accept="application/pdf"
               />

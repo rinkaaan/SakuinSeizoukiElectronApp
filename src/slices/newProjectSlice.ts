@@ -9,9 +9,11 @@ export interface NewProjectState {
 
   // step 1
   openPdfOut?: OpenPdfOut;
-  // pdfPath?: string;
   pdfFile?: File;
   missingPdf: boolean;
+
+  // step 2
+  selectedPageTypeIndex: number;
 }
 
 const initialState: NewProjectState = {
@@ -21,9 +23,11 @@ const initialState: NewProjectState = {
 
   // step 1
   openPdfOut: undefined,
-  // pdfPath: undefined,
   pdfFile: undefined,
   missingPdf: false,
+
+  // step 2
+  selectedPageTypeIndex: 0,
 }
 
 export const newProjectSlice = createSlice({
