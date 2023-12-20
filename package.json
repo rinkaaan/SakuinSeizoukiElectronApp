@@ -15,7 +15,9 @@
     "open:shell": "open out/索引製造機-darwin-arm64/索引製造機.app/Contents/MacOS/索引製造機",
     "open:explorer": "open out/索引製造機-darwin-arm64",
     "gen": "./scripts/gen.sh",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "keywords": [],
   "author": {
@@ -31,6 +33,14 @@
     "@electron-forge/maker-zip": "^7.2.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
     "@electron-forge/plugin-vite": "^7.2.0",
+    "@storybook/addon-essentials": "^7.6.6",
+    "@storybook/addon-interactions": "^7.6.6",
+    "@storybook/addon-links": "^7.6.6",
+    "@storybook/addon-onboarding": "^1.0.10",
+    "@storybook/blocks": "^7.6.6",
+    "@storybook/react": "^7.6.6",
+    "@storybook/react-vite": "^7.6.6",
+    "@storybook/test": "^7.6.6",
     "@types/lodash": "^4.14.202",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
@@ -41,7 +51,9 @@
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^8.0.1",
     "eslint-plugin-import": "^2.25.0",
+    "eslint-plugin-storybook": "^0.6.15",
     "husky": "^8.0.0",
+    "storybook": "^7.6.6",
     "ts-node": "^10.0.0",
     "typescript": "~4.5.4"
   },
