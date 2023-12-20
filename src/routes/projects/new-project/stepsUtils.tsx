@@ -6,6 +6,8 @@ import { useSelector } from "react-redux"
 import { commonActions, commonSelector } from "../../../slices/commonSlice"
 import { appDispatch } from "../../../common/store"
 import { newProjectActions, newProjectSelector } from "../../../slices/newProjectSlice"
+import { NonCancelableCustomEvent } from "@cloudscape-design/components"
+import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
 
 export const steps = [
   {
@@ -21,8 +23,8 @@ export const steps = [
 
 export const i18nStrings = {
   submitButton: "Create book index",
-  stepNumberLabel: stepNumber => `Step ${stepNumber}`,
-  collapsedStepsLabel: (stepNumber, stepsCount) => `Step ${stepNumber} of ${stepsCount}`,
+  stepNumberLabel: (stepNumber: number) => `Step ${stepNumber}`,
+  collapsedStepsLabel: (stepNumber: number, stepsCount: number) => `Step ${stepNumber} of ${stepsCount}`,
   cancelButton: "Cancel",
   previousButton: "Previous",
   nextButton: "Next",
@@ -34,21 +36,15 @@ export const useWizard = () => {
   const { dirty } = useSelector(commonSelector)
   const navigate = useNavigate()
 
-  const setActiveStepIndexAndCloseTools = index => {
+  function setActiveStepIndexAndCloseTools(index: number) {
     setActiveStepIndex(index)
     if (index > latestStepIndex) {
       appDispatch(newProjectActions.updateSlice({ latestStepIndex: index }))
     }
   }
 
-  async function onNavigate(evt) {
-    // const { requestedStepIndex, reason } = evt.detail
-    // console.log(evt)
-    // console.log(`Requested step index: ${requestedStepIndex}`)
-    // setActiveStepIndexAndCloseTools(requestedStepIndex)
-
-    // update to use validator
-    const { requestedStepIndex, reason } = evt.detail
+  async function onNavigate(event: NonCancelableCustomEvent<WizardProps.NavigateDetail>) {
+    const { requestedStepIndex, reason } = event.detail
     const sourceStepIndex = requestedStepIndex - 1
     if (reason === "next") {
       appDispatch(newProjectActions.updateSlice({ isLoadingNextStep: true }))

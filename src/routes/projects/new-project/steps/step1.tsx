@@ -1,34 +1,42 @@
 import React from "react"
-import { Alert, Box, Container, FileUpload, FormField, SpaceBetween } from "@cloudscape-design/components"
+import { Alert, Box, Container, FileUpload, FileUploadProps, FormField, NonCancelableCustomEvent, SpaceBetween } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
-import { newProjectActions, newProjectSelector } from "../../../../slices/newProjectSlice"
+import { newProjectActions, newProjectSelector, openPdf } from "../../../../slices/newProjectSlice"
 import store, { appDispatch } from "../../../../common/store"
-import { OpenAPI, ProjectService } from "../../../../../openapi-client"
+import { OpenAPI } from "../../../../../openapi-client"
+import { commonActions } from "../../../../slices/commonSlice"
 
 export function Step1() {
-  const { pdfFile, missingPdf, pageImage } = useSelector(newProjectSelector)
+  const { pdfFile, missingPdf, pageImage, latestStepIndex } = useSelector(newProjectSelector)
+
+  function onChange({ detail }: NonCancelableCustomEvent<FileUploadProps.ChangeDetail>) {
+    if (latestStepIndex !== 0) {
+      appDispatch(
+        commonActions.addNotification({
+          type: "warning",
+          content: "Previous steps cannot be modified.",
+        })
+      )
+      return
+    }
+    if (!detail.value.length) {
+      appDispatch(newProjectActions.updateSlice({ pdfFile: undefined, pageImage: undefined }))
+      return
+    } else {
+      const pdfFile = detail.value[0]
+      const pageImage = `${OpenAPI.BASE}/project/get/pdf/page?pdf_path=${encodeURIComponent(pdfFile.path)}&page_number=1`
+      appDispatch(newProjectActions.updateSlice({ pdfFile, pageImage }))
+    }
+  }
 
   return (
     <Box margin={{ bottom: "l" }}>
       <SpaceBetween size="l">
         <Container>
           <SpaceBetween size="s">
-            {/*<Form method="POST">*/}
-            {/*  <CloudButton disabled={latestStepIndex !== 0} formAction="submit">Select file</CloudButton>*/}
-            {/*  <input type="hidden" name="action" value="open-pdf"/>*/}
-            {/*</Form>*/}
             <FormField>
               <FileUpload
-                onChange={({ detail }) => {
-                  if (!detail.value.length) {
-                    appDispatch(newProjectActions.updateSlice({ pdfFile: undefined, pageImage: undefined }))
-                    return
-                  } else {
-                    const pdfFile = detail.value[0]
-                    const pageImage = `${OpenAPI.BASE}/project/get/pdf/page?pdf_path=${encodeURIComponent(pdfFile.path)}&page_number=1`
-                    appDispatch(newProjectActions.updateSlice({ pdfFile, pageImage }))
-                  }
-                }}
+                onChange={onChange}
                 value={pdfFile ? [pdfFile] : []}
                 i18nStrings={{
                   uploadButtonText: e =>
@@ -54,20 +62,18 @@ export function Step1() {
                 No file selected. Please select a file to continue.
               </Alert>
             )}
+            {pageImage && (
+              <img
+                src={pageImage}
+                alt="PDF preview"
+                style={{
+                  maxHeight: "1000px",
+                  maxWidth: "100%"
+                }}
+              />
+            )}
           </SpaceBetween>
         </Container>
-        {pageImage && (
-          <Container>
-            <img
-              src={pageImage}
-              alt="PDF preview"
-              style={{
-                maxHeight: "1000px",
-                maxWidth: "100%"
-              }}
-            />
-          </Container>
-        )}
       </SpaceBetween>
     </Box>
   )
@@ -79,8 +85,6 @@ export async function validateStep1() {
     appDispatch(newProjectActions.updateSlice({ missingPdf: true }))
     return false
   }
-  const openPdfOut = await ProjectService.postProjectNewPdf({ pdf_path: pdfFile.path })
-  console.log(openPdfOut)
-  appDispatch(newProjectActions.updateSlice({ openPdfOut, pdfFile }))
+  await appDispatch(openPdf(pdfFile.path))
   return true
 }

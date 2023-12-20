@@ -1,24 +1,11 @@
 import { Alert, Box, Button, Modal, SpaceBetween, Wizard } from "@cloudscape-design/components"
-import { i18nStrings, steps, useWizard } from "./stepsUtils.jsx"
-import { ActionFunctionArgs, useNavigate } from "react-router-dom"
+import { i18nStrings, steps, useWizard } from "./stepsUtils"
+import { useNavigate } from "react-router-dom"
 import { appDispatch } from "../../../common/store"
 import { newProjectActions, newProjectSelector } from "../../../slices/newProjectSlice"
 import { Fragment, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { commonActions, commonSelector } from "../../../slices/commonSlice"
-import { OpenAPI } from "../../../../openapi-client"
-
-export async function action({ request }: ActionFunctionArgs) {
-  const data = await request.formData()
-  const action = data.get("action")
-  if (action === "open-pdf") {
-    const pdfPath = await window.electron.selectPdf()
-    if (!pdfPath) return null
-    const pageImage = `${OpenAPI.BASE}/project/get/pdf/page?pdf_path=${encodeURIComponent(pdfPath)}&page_number=1`
-    appDispatch(newProjectActions.updateSlice({ pdfPath, pageImage }))
-  }
-  return null
-}
 
 export function Component() {
   const {

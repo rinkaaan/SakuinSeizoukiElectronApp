@@ -22,7 +22,7 @@ const router = createHashRouter([
           {
             path: "new",
             lazy: () => import("./routes/projects/new-project/NewProjectRoute"),
-            handle: createCrumb("New Project", "/projects/new-project"),
+            handle: createCrumb("New Project", "/projects/new"),
           },
           {
             path: "all",

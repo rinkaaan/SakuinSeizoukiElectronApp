@@ -14,12 +14,19 @@ export default function MainLayoutError() {
   useEffect(() => {
     if (engineReady) {
       if (error) {
-        console.error(error.toString())
+        console.error(error)
+        const errorAny = error as any
+        let errorMessage: string
+        if (errorAny.error) {
+          errorMessage = errorAny.error.toString()
+        } else {
+          errorMessage = errorAny.toString()
+        }
         appDispatch(
           commonActions.addNotification({
             type: "error",
-            content: error.toString(),
-          })
+            content: errorMessage,
+          }),
         )
       }
       navigate("/", { replace: true })
