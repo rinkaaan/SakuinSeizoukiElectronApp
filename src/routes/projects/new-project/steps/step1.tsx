@@ -70,7 +70,7 @@ export function Step1() {
               src={pageImage}
               alt="PDF preview"
               style={{
-                maxHeight: "1000px",
+                maxHeight: "500px",
                 maxWidth: "100%",
               }}
             />

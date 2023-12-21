@@ -14,6 +14,7 @@ export interface CommonState {
   dirty: boolean;
   dirtyModalVisible?: boolean;
   dirtyRedirectUrl?: string;
+  lockScroll?: boolean;
 }
 
 const initialState: CommonState = {
@@ -24,6 +25,7 @@ const initialState: CommonState = {
   dirty: false,
   dirtyModalVisible: false,
   dirtyRedirectUrl: undefined,
+  lockScroll: false,
 }
 
 type Notification = Pick<FlashbarProps.MessageDefinition, "type" | "content">
@@ -56,6 +58,12 @@ export const commonSlice = createSlice({
     builder
       .addCase(newProjectActions.updateSlice, (state, _action) => {
         state.dirty = true
+      })
+      .addCase(newProjectActions.openAnnotationEditor, (state, _action) => {
+        state.lockScroll = true
+      })
+      .addCase(newProjectActions.closeAnnotationEditor, (state, _action) => {
+        state.lockScroll = false
       })
   }
 })

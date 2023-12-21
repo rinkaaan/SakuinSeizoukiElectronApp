@@ -3,6 +3,7 @@ import { RootState } from "../common/store"
 import { OpenPdfOut, ProjectService } from "../../openapi-client"
 import { SelectProps } from "@cloudscape-design/components"
 import _ from "lodash"
+import { getPage } from "../routes/projects/new-project/stepsUtils"
 
 export interface NewProjectState {
   latestStepIndex: number;
@@ -18,6 +19,9 @@ export interface NewProjectState {
   selectedPageTypeIndex: number;
   pageTypeOptions: SelectProps.Option[];
   pageTypeSamplePages: Record<number, number>;
+  pageAnnotationEditorOpen: boolean;
+  annotationEditorPageUrl?: string;
+  finishedPageTypes: Record<number, boolean>;
 }
 
 const initialState: NewProjectState = {
@@ -34,6 +38,9 @@ const initialState: NewProjectState = {
   selectedPageTypeIndex: 0,
   pageTypeOptions: [],
   pageTypeSamplePages: {},
+  pageAnnotationEditorOpen: false,
+  annotationEditorPageUrl: undefined,
+  finishedPageTypes: {},
 }
 
 export const newProjectSlice = createSlice({
@@ -50,10 +57,39 @@ export const newProjectSlice = createSlice({
     decrementPageTypeIndex: (state) => {
       state.selectedPageTypeIndex -= 1
     },
-    getNewSamplePage: (state) => {
+    getSamplePage: (state, action: PayloadAction<LoadPageType>) => {
       const { openPdfOut, pageTypeSamplePages, selectedPageTypeIndex } = state
       const { page_types } = openPdfOut
-      pageTypeSamplePages[selectedPageTypeIndex] = _.sample(page_types[selectedPageTypeIndex].page_numbers)
+      const pageType = page_types[selectedPageTypeIndex]
+      const currentPage = pageTypeSamplePages[selectedPageTypeIndex]
+      let newPage: number
+
+      if (action.payload === "next") {
+        newPage = pageType.page_numbers[pageType.page_numbers.indexOf(currentPage) + 1]
+      } else if (action.payload === "previous") {
+        newPage = pageType.page_numbers[pageType.page_numbers.indexOf(currentPage) - 1]
+      } else {
+        newPage = _.sample(pageType.page_numbers)
+      }
+      console.log("currentPage", currentPage)
+      console.log("newPage", newPage)
+
+      if (newPage && newPage != currentPage) {
+        pageTypeSamplePages[selectedPageTypeIndex] = newPage
+        state.annotationEditorPageUrl = getPage(state.pageTypeSamplePages[selectedPageTypeIndex])
+      }
+    },
+    openAnnotationEditor: (state, pageType: PayloadAction<number>) => {
+      state.selectedPageTypeIndex = pageType.payload
+      state.annotationEditorPageUrl = getPage(state.pageTypeSamplePages[pageType.payload])
+      state.pageAnnotationEditorOpen = true
+    },
+    closeAnnotationEditor: (state) => {
+      state.pageAnnotationEditorOpen = false
+    },
+    toggleFinishPageType: (state) => {
+      const pageType = state.selectedPageTypeIndex
+      state.finishedPageTypes[pageType] = !state.finishedPageTypes[pageType]
     }
   },
   extraReducers: builder => {
@@ -92,6 +128,8 @@ export const openPdf = createAsyncThunk(
     dispatch(newProjectSlice.actions.updateSlice({ openPdfOut, pageTypeSamplePages }))
   }
 )
+
+export type LoadPageType = "next" | "previous" | "random"
 
 export const newProjectReducer = newProjectSlice.reducer
 export const newProjectActions = newProjectSlice.actions

@@ -2,7 +2,8 @@ import { createHashRouter, Outlet, RouterProvider } from "react-router-dom"
 import MainLayout from "./routes/MainLayout"
 import MainLayoutError from "./routes/MainLayoutError"
 import { appDispatch } from "./common/store"
-import { initApp } from "./slices/commonSlice"
+import { commonSelector, initApp } from "./slices/commonSlice"
+import { useSelector } from "react-redux"
 
 const router = createHashRouter([
   {
@@ -55,5 +56,11 @@ function createCrumb(crumb: string, path: string): CrumbHandle {
 }
 
 export default function App() {
-  return <RouterProvider router={router}/>
+  const { lockScroll } = useSelector(commonSelector)
+
+  return (
+    <div style={lockScroll ? { height: "100%", position: "absolute", width: "100%", overflow: "hidden" } : {}}>
+      <RouterProvider router={router}/>
+    </div>
+  )
 }

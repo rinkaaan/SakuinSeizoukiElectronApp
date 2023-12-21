@@ -4,10 +4,11 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { commonActions, commonSelector } from "../../../slices/commonSlice"
-import { appDispatch } from "../../../common/store"
+import store, { appDispatch } from "../../../common/store"
 import { newProjectActions, newProjectSelector } from "../../../slices/newProjectSlice"
 import { NonCancelableCustomEvent } from "@cloudscape-design/components"
 import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
+import { OpenAPI } from "../../../../openapi-client"
 
 export const steps = [
   {
@@ -76,4 +77,17 @@ export const useWizard = () => {
     onCancel,
     onSubmit,
   }
+}
+
+export function getPage(pageNumber = 34, pdfPath = "/Users/nguylinc/Desktop/test.pdf", apiBase = "http://localhost:34200") {
+  if (!pdfPath) {
+    pdfPath = store.getState().newProject.pdfFile?.path
+    if (!pdfPath) {
+      throw new Error("pdfPath must be defined")
+    }
+  }
+  if (!OpenAPI.BASE && !apiBase) {
+    throw new Error("OpenAPI.BASE or apiBase must be defined")
+  }
+  return `${OpenAPI.BASE || apiBase}/project/get/pdf/page?pdf_path=${encodeURIComponent(pdfPath)}&page_number=${pageNumber}`
 }
