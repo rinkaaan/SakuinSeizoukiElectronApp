@@ -4,10 +4,13 @@ import { Image, Layer, Stage } from "react-konva"
 import { SpaceBetween, Spinner, TextContent } from "@cloudscape-design/components"
 import logo from "../../../assets/icon.png"
 
-export default function PageAnnotationCanvas() {
+export default function PageAnnotationCanvas({
+  imageUrl,
+}: {
+  imageUrl: string,
+}) {
   const stageRef = useRef<Konva.Stage>(null)
-  const [stageData, setStageData] = useState({ scale: 2, position: { x: 0, y: 0 } })
-  const imageUrl = "http://localhost:34200/project/get/pdf/page?pdf_path=%2FUsers%2Fnguylinc%2FDownloads%2Fjp%20book.pdf&page_number=34"
+  const [stageData, setStageData] = useState({ scale: 0.5, position: { x: 0, y: 0 } })
   const [imageObj, setImageObj] = useState(null)
 
   useEffect(() => {
@@ -99,7 +102,7 @@ export default function PageAnnotationCanvas() {
         x={stageData.position.x}
         y={stageData.position.y}
         scale={{ x: stageData.scale, y: stageData.scale }}
-        style={{ backgroundColor: "gray", position: "absolute", width: "100%", height: "100%" }}
+        style={{ backgroundColor: "gray", position: "absolute", width: "100%", height: "100%", top: 0, left: 0 }}
         onWheel={handleStageMouseWheel}
         // onMouseMove={handleStageMouseMove}
         // onMouseDown={handleStageMouseDown}
