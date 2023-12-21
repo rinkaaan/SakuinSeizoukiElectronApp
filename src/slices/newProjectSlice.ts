@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "../common/store"
 import { OpenPdfOut, ProjectService } from "../../openapi-client"
 import { SelectProps } from "@cloudscape-design/components"
-import _ from "lodash"
 import { getPage } from "../routes/projects/new-project/stepsUtils"
 
 export interface NewProjectState {
@@ -68,11 +67,7 @@ export const newProjectSlice = createSlice({
         newPage = pageType.page_numbers[pageType.page_numbers.indexOf(currentPage) + 1]
       } else if (action.payload === "previous") {
         newPage = pageType.page_numbers[pageType.page_numbers.indexOf(currentPage) - 1]
-      } else {
-        newPage = _.sample(pageType.page_numbers)
       }
-      console.log("currentPage", currentPage)
-      console.log("newPage", newPage)
 
       if (newPage && newPage != currentPage) {
         pageTypeSamplePages[selectedPageTypeIndex] = newPage
@@ -117,12 +112,12 @@ export const openPdf = createAsyncThunk(
   "newProject/openPdf",
   async (pdfPath: string, { dispatch }) => {
     const openPdfOut = await ProjectService.postProjectNewPdf({ pdf_path: pdfPath })
-    console.log("openPdfOut", openPdfOut)
+    console.debug("openPdfOut", openPdfOut)
 
     const pageTypeSamplePages: Record<number, number> = {}
     for (let i = 0; i < openPdfOut.page_types.length; i++) {
       const pageType = openPdfOut.page_types[i]
-      pageTypeSamplePages[i] = _.sample(pageType.page_numbers)
+      pageTypeSamplePages[i] = pageType.page_numbers[0]
     }
 
     dispatch(newProjectSlice.actions.updateSlice({ openPdfOut, pageTypeSamplePages }))

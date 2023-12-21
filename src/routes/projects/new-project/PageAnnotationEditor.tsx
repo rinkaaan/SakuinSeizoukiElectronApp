@@ -7,7 +7,6 @@ export default function PageAnnotationEditor({
   isOpen,
   imageUrl,
   onClose,
-  onGetRandomPage,
   onGetNextPage,
   onGetPreviousPage,
   isFinished,
@@ -18,7 +17,6 @@ export default function PageAnnotationEditor({
   isOpen: boolean,
   imageUrl: string,
   onClose: () => void,
-  onGetRandomPage: () => void,
   onGetNextPage: () => void,
   onGetPreviousPage: () => void,
   isFinished: boolean,
@@ -33,10 +31,6 @@ export default function PageAnnotationEditor({
 
   function onGetPage(type: LoadPageType) {
     switch (type) {
-      case "random":
-        setLoadingButton("random")
-        onGetRandomPage()
-        break
       case "next":
         setLoadingButton("next")
         onGetNextPage()
@@ -102,16 +96,8 @@ export default function PageAnnotationEditor({
                 >
                   Next page
                 </Button>
-                <Button
-                  iconName="refresh"
-                  ariaLabel="Get random page"
-                  onClick={() => onGetPage("random")}
-                  loading={loadingButton === "random"}
-                >
-                  Get random page
-                </Button>
               </SpaceBetween>
-              <SpaceBetween size="l" direction="horizontal">
+              <SpaceBetween size="m" direction="horizontal">
                 <Button
                   iconName="undo"
                   ariaLabel="Undo"

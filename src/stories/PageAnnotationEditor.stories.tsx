@@ -12,7 +12,6 @@ const meta: Meta<typeof PageAnnotationEditor> = {
     isOpen: true,
     imageUrl: getPage(),
     onClose: () => {},
-    onGetRandomPage: () => {},
     onGetNextPage: () => {},
     onGetPreviousPage: () => {},
     isFinished: false,

@@ -69,9 +69,6 @@ export function Step2() {
       <PageAnnotationEditor
         isOpen={pageAnnotationEditorOpen}
         imageUrl={annotationEditorPageUrl}
-        onGetRandomPage={() => {
-          appDispatch(newProjectActions.getSamplePage("random"))
-        }}
         onGetNextPage={() => {
           appDispatch(newProjectActions.getSamplePage("next"))
         }}

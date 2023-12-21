@@ -29,7 +29,7 @@ export class EngineManager {
     const enginePath = path.join(process.resourcesPath, "engine")
     const engine = exec(`${enginePath} ${port}`)
     engine.stdout?.on("data", (data) => {
-      console.log(`stdout: ${data}`)
+      console.info(`stdout: ${data}`)
     })
     engine.stderr?.on("data", (data) => {
       console.error(`stderr: ${data}`)

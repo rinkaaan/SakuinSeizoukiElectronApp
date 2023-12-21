@@ -68,7 +68,7 @@ export const useWizard = () => {
   }
 
   const onSubmit = () => {
-    console.log("Submit")
+    console.debug("Submit")
   }
 
   return {

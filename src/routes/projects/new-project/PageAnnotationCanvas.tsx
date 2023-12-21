@@ -19,7 +19,6 @@ export default function PageAnnotationCanvas({
   const isDelayed = useDelayed()
 
   useEffect(() => {
-    console.log(imageUrl)
     setLoading(true)
     // Create an image object and set its source URL
     const img = new window.Image()

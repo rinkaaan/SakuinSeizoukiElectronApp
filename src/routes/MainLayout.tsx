@@ -66,7 +66,7 @@ export default function MainLayout() {
 
   useEffect(() => {
     if (engineReady) {
-      console.log(`Connected to engine at ${OpenAPI.BASE}`)
+      console.info(`Connected to engine at ${OpenAPI.BASE}`)
       const appDataDirectory = localStorage.getItem("app-data-directory")
       if (appDataDirectory) {
         appDispatch(setAppDataDirectory(appDataDirectory))

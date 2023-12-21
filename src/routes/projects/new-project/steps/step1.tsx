@@ -1,24 +1,15 @@
 import React from "react"
-import { Alert, Box, Container, FileUpload, FileUploadProps, FormField, Header, NonCancelableCustomEvent, SpaceBetween } from "@cloudscape-design/components"
+import { Alert, Box, Container, FileUploadProps, FormField, Header, NonCancelableCustomEvent, SpaceBetween } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
 import { newProjectActions, newProjectSelector, openPdf } from "../../../../slices/newProjectSlice"
 import store, { appDispatch } from "../../../../common/store"
 import { OpenAPI } from "../../../../../openapi-client"
-import { commonActions } from "../../../../slices/commonSlice"
+import CloudFileUpload from "../../../../components/CloudFileUpload"
 
 export function Step1() {
   const { pdfFile, missingPdf, pageImage, latestStepIndex } = useSelector(newProjectSelector)
 
   function onChange({ detail }: NonCancelableCustomEvent<FileUploadProps.ChangeDetail>) {
-    if (latestStepIndex !== 0) {
-      appDispatch(
-        commonActions.addNotification({
-          type: "warning",
-          content: "Previous steps cannot be modified.",
-        })
-      )
-      return
-    }
     if (!detail.value.length) {
       appDispatch(newProjectActions.updateSlice({ pdfFile: undefined, pageImage: undefined }))
       return
@@ -35,7 +26,8 @@ export function Step1() {
         <Container header={<Header>Select a PDF file</Header>}>
           <SpaceBetween size="s">
             <FormField>
-              <FileUpload
+              <CloudFileUpload
+                disabled={latestStepIndex !== 0}
                 onChange={onChange}
                 value={pdfFile ? [pdfFile] : []}
                 i18nStrings={{
