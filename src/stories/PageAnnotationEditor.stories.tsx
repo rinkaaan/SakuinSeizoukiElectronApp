@@ -10,7 +10,7 @@ const meta: Meta<typeof PageAnnotationEditor> = {
   },
   args: {
     isOpen: true,
-    imageUrl: getPage(),
+    imageUrl: getPage(34, "/Users/nguylinc/Desktop/test.pdf"),
     onClose: () => {},
     onGetNextPage: () => {},
     onGetPreviousPage: () => {},

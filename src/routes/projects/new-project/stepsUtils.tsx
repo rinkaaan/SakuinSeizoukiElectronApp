@@ -79,12 +79,9 @@ export const useWizard = () => {
   }
 }
 
-export function getPage(pageNumber = 34, pdfPath = "/Users/nguylinc/Desktop/test.pdf", apiBase = "http://localhost:34200") {
+export function getPage(pageNumber = 34, pdfPath = store.getState().newProject.pdfFile?.path, apiBase = "http://localhost:34200") {
   if (!pdfPath) {
-    pdfPath = store.getState().newProject.pdfFile?.path
-    if (!pdfPath) {
-      throw new Error("pdfPath must be defined")
-    }
+    throw new Error("pdfPath must be defined")
   }
   if (!OpenAPI.BASE && !apiBase) {
     throw new Error("OpenAPI.BASE or apiBase must be defined")
