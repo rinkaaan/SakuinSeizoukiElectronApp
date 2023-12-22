@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react"
 import Konva from "konva"
 import { Image, Layer, Stage } from "react-konva"
 import { SpaceBetween, Spinner, TextContent } from "@cloudscape-design/components"
-import useDelayed from "../../../hooks/useDelayed"
-import useWindowSize from "../../../hooks/useWindowSize"
+import useDelayed from "../../../../hooks/useDelayed"
+import useWindowSize from "../../../../hooks/useWindowSize"
 
 export default function PageAnnotationCanvas({
   imageUrl,

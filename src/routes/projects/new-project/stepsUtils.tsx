@@ -1,5 +1,5 @@
-import { Step1, validateStep1 } from "./steps/step1"
-import { Step2 } from "./steps/step2"
+import { Step1, validateStep1 } from "./step1/Step1"
+import { Step2 } from "./step2/Step2"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"

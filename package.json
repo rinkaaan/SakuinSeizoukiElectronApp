@@ -67,6 +67,7 @@
     "portfinder": "^1.0.32",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hotkeys-hook": "^4.4.1",
     "react-konva": "^18.2.10",
     "react-redux": "^9.0.4",
     "react-router-dom": "^6.21.0",

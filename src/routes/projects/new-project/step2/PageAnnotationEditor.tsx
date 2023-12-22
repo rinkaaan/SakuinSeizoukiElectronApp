@@ -1,7 +1,8 @@
 import { AppLayout, Button, HelpPanel, SpaceBetween, TextContent } from "@cloudscape-design/components"
 import { useState } from "react"
 import PageAnnotationCanvas from "./PageAnnotationCanvas"
-import { LoadPageType } from "./newProjectSlice"
+import { LoadPageType } from "../newProjectSlice"
+import { useHotkeys } from "react-hotkeys-hook"
 
 export default function PageAnnotationEditor({
   isOpen,
@@ -26,6 +27,7 @@ export default function PageAnnotationEditor({
 }) {
   const [toolsOpen, setToolsOpen] = useState(true)
   const [loadingButton, setLoadingButton] = useState<LoadPageType | false>(false)
+  useHotkeys("esc", onClose)
 
   if (!isOpen) return null
 

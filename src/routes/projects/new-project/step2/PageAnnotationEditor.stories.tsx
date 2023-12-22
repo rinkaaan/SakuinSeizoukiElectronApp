@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import PageAnnotationEditor from "./PageAnnotationEditor"
-import { getPage } from "./stepsUtils"
+import { getPage } from "../stepsUtils"
 
 const meta: Meta<typeof PageAnnotationEditor> = {
   title: "PageAnnotationEditor",
