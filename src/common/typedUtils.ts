@@ -2,7 +2,7 @@ import { format, isToday, isYesterday, parseISO } from "date-fns"
 import { v4 } from "uuid"
 import { io, Socket } from "socket.io-client"
 import { appDispatch } from "./store"
-import { mainActions } from "../slices/mainSlice"
+import { mainActions } from "../routes/mainSlice"
 
 export function formatDate(inputDate?: string) {
   if (!inputDate) return null

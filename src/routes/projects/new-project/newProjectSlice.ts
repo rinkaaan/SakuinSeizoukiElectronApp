@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "../common/store"
-import { OpenPdfOut, ProjectService } from "../../openapi-client"
+import { RootState } from "../../../common/store"
+import { OpenPdfOut, ProjectService } from "../../../../openapi-client"
 import { SelectProps } from "@cloudscape-design/components"
-import { getPage } from "../routes/projects/new-project/stepsUtils"
+import { getPage } from "./stepsUtils"
 
 export interface NewProjectState {
   latestStepIndex: number;

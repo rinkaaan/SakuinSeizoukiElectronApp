@@ -1,6 +1,6 @@
 import { BreadcrumbGroup, BreadcrumbGroupProps } from "@cloudscape-design/components"
 import { useNavigate } from "react-router-dom"
-import { mainActions, mainSelector } from "../slices/mainSlice"
+import { mainActions, mainSelector } from "../routes/mainSlice"
 import { useSelector } from "react-redux"
 import { appDispatch } from "../common/store"
 

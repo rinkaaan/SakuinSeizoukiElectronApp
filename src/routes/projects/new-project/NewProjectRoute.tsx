@@ -1,10 +1,10 @@
 import { Wizard } from "@cloudscape-design/components"
 import { i18nStrings, steps, useWizard } from "./stepsUtils"
 import { appDispatch } from "../../../common/store"
-import { newProjectActions, newProjectSelector } from "../../../slices/newProjectSlice"
+import { newProjectActions, newProjectSelector } from "./newProjectSlice"
 import { Fragment, useEffect } from "react"
 import { useSelector } from "react-redux"
-import { mainActions } from "../../../slices/mainSlice"
+import { mainActions } from "../../mainSlice"
 import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
 
 export function Component() {

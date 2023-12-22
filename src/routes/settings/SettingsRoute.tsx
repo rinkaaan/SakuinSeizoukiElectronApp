@@ -2,7 +2,7 @@ import { Alert, Container, ContentLayout, Header, SpaceBetween, TextContent } fr
 import { ActionFunctionArgs, Form } from "react-router-dom"
 import CloudButton from "../../components/CloudButton"
 import { appDispatch } from "../../common/store"
-import { mainSelector, setAppDataDirectory } from "../../slices/mainSlice"
+import { mainSelector, setAppDataDirectory } from "../mainSlice"
 import { useSelector } from "react-redux"
 
 export async function action({ request }: ActionFunctionArgs) {

@@ -1,7 +1,7 @@
 import React, { Fragment } from "react"
 import { Box, Cards, Icon, Link, SpaceBetween, TextContent } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
-import { newProjectActions, newProjectSelector } from "../../../../slices/newProjectSlice"
+import { newProjectActions, newProjectSelector } from "../newProjectSlice"
 import PageAnnotationEditor from "../PageAnnotationEditor"
 import { appDispatch } from "../../../../common/store"
 import { getPage } from "../stepsUtils"

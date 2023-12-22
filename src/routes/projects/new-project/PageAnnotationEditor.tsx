@@ -1,7 +1,7 @@
 import { AppLayout, Button, HelpPanel, SpaceBetween, TextContent } from "@cloudscape-design/components"
 import { useState } from "react"
 import PageAnnotationCanvas from "./PageAnnotationCanvas"
-import { LoadPageType } from "../../../slices/newProjectSlice"
+import { LoadPageType } from "./newProjectSlice"
 
 export default function PageAnnotationEditor({
   isOpen,

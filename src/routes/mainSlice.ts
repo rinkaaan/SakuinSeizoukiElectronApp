@@ -4,7 +4,7 @@ import { OpenAPI, SettingsService } from "../../openapi-client"
 import { socketManager } from "../common/clients"
 import { FlashbarProps } from "@cloudscape-design/components"
 import { uuid } from "../common/typedUtils"
-import { newProjectActions } from "./newProjectSlice"
+import { newProjectActions } from "./projects/new-project/newProjectSlice"
 
 export interface MainState {
   navigationOpen: boolean;

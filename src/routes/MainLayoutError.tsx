@@ -3,7 +3,7 @@ import { useNavigate, useRouteError } from "react-router-dom"
 import logo from "../assets/icon.png"
 import { SpaceBetween, Spinner } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
-import { mainActions, mainSelector } from "../slices/mainSlice"
+import { mainActions, mainSelector } from "./mainSlice"
 import { appDispatch } from "../common/store"
 
 export default function MainLayoutError() {

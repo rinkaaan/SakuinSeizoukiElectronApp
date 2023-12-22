@@ -2,7 +2,7 @@ import { createHashRouter, Outlet, RouterProvider } from "react-router-dom"
 import MainLayout from "./routes/MainLayout"
 import MainLayoutError from "./routes/MainLayoutError"
 import { appDispatch } from "./common/store"
-import { mainSelector, initApp } from "./slices/mainSlice"
+import { mainSelector, initApp } from "./routes/mainSlice"
 import { useSelector } from "react-redux"
 
 const router = createHashRouter([

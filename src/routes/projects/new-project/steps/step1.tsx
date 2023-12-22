@@ -1,7 +1,7 @@
 import React from "react"
 import { Alert, Box, Container, FileUploadProps, FormField, Header, NonCancelableCustomEvent, SpaceBetween } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
-import { newProjectActions, newProjectSelector, openPdf } from "../../../../slices/newProjectSlice"
+import { newProjectActions, newProjectSelector, openPdf } from "../newProjectSlice"
 import store, { appDispatch } from "../../../../common/store"
 import { OpenAPI } from "../../../../../openapi-client"
 import CloudFileUpload from "../../../../components/CloudFileUpload"
