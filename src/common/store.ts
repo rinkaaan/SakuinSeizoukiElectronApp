@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit"
-import { commonReducer } from "../slices/commonSlice"
+import { mainReducer } from "../slices/mainSlice"
 import { newProjectReducer } from "../slices/newProjectSlice"
 
 const store = configureStore({
   reducer: {
-    common: commonReducer,
+    main: mainReducer,
     newProject: newProjectReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({

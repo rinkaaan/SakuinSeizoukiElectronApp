@@ -4,7 +4,7 @@ import { appDispatch } from "../../../common/store"
 import { newProjectActions, newProjectSelector } from "../../../slices/newProjectSlice"
 import { Fragment, useEffect } from "react"
 import { useSelector } from "react-redux"
-import { commonActions } from "../../../slices/commonSlice"
+import { mainActions } from "../../../slices/mainSlice"
 import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
 
 export function Component() {
@@ -26,10 +26,10 @@ export function Component() {
 
   useEffect(() => {
     appDispatch(newProjectActions.resetSlice())
-    appDispatch(commonActions.updateSlice({ navigationOpen: false }))
+    appDispatch(mainActions.updateSlice({ navigationOpen: false }))
 
     return () => {
-      appDispatch(commonActions.resetDirty())
+      appDispatch(mainActions.resetDirty())
     }
   }, [])
 

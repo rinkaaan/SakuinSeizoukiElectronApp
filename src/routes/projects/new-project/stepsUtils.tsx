@@ -3,8 +3,8 @@ import { Step2 } from "./steps/step2"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { commonActions, commonSelector } from "../../../slices/commonSlice"
-import store, { appDispatch } from "../../../common/store"
+import { mainActions, mainSelector } from "../../../slices/mainSlice"
+import { appDispatch } from "../../../common/store"
 import { newProjectActions, newProjectSelector } from "../../../slices/newProjectSlice"
 import { NonCancelableCustomEvent } from "@cloudscape-design/components"
 import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
@@ -34,7 +34,7 @@ export const i18nStrings = {
 export const useWizard = () => {
   const { latestStepIndex } = useSelector(newProjectSelector)
   const [activeStepIndex, setActiveStepIndex] = useState(0)
-  const { dirty } = useSelector(commonSelector)
+  const { dirty } = useSelector(mainSelector)
   const navigate = useNavigate()
 
   function setActiveStepIndexAndCloseTools(index: number) {
@@ -63,7 +63,7 @@ export const useWizard = () => {
     if (!dirty) {
       navigate("/projects/all")
     } else {
-      appDispatch(commonActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: "/projects/all" }))
+      appDispatch(mainActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: "/projects/all" }))
     }
   }
 
@@ -79,7 +79,15 @@ export const useWizard = () => {
   }
 }
 
-export function getPage(pageNumber = 34, pdfPath = store.getState().newProject.pdfFile?.path, apiBase = "http://localhost:34200") {
+export function getPage({
+  pageNumber,
+  pdfPath,
+  apiBase,
+}: {
+  pageNumber: number
+  pdfPath: string
+  apiBase?: string
+}) {
   if (!pdfPath) {
     throw new Error("pdfPath must be defined")
   }

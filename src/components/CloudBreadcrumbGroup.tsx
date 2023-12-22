@@ -1,12 +1,12 @@
 import { BreadcrumbGroup, BreadcrumbGroupProps } from "@cloudscape-design/components"
 import { useNavigate } from "react-router-dom"
-import { commonActions, commonSelector } from "../slices/commonSlice"
+import { mainActions, mainSelector } from "../slices/mainSlice"
 import { useSelector } from "react-redux"
 import { appDispatch } from "../common/store"
 
 export default function CloudBreadcrumbGroup(props: BreadcrumbGroupProps) {
   const navigate = useNavigate()
-  const { dirty } = useSelector(commonSelector)
+  const { dirty } = useSelector(mainSelector)
 
   return (
     <BreadcrumbGroup
@@ -18,7 +18,7 @@ export default function CloudBreadcrumbGroup(props: BreadcrumbGroupProps) {
         if (!dirty) {
           navigate(detail.href)
         } else {
-          appDispatch(commonActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: detail.href }))
+          appDispatch(mainActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: detail.href }))
         }
       }}
     />

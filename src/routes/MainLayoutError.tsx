@@ -3,12 +3,12 @@ import { useNavigate, useRouteError } from "react-router-dom"
 import logo from "../assets/icon.png"
 import { SpaceBetween, Spinner } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
-import { commonActions, commonSelector } from "../slices/commonSlice"
+import { mainActions, mainSelector } from "../slices/mainSlice"
 import { appDispatch } from "../common/store"
 
 export default function MainLayoutError() {
   const navigate = useNavigate()
-  const { engineReady } = useSelector(commonSelector)
+  const { engineReady } = useSelector(mainSelector)
   const error = useRouteError()
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function MainLayoutError() {
           errorMessage = errorAny.toString()
         }
         appDispatch(
-          commonActions.addNotification({
+          mainActions.addNotification({
             type: "error",
             content: errorMessage,
           }),

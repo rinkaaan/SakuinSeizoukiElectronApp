@@ -2,7 +2,7 @@ import { format, isToday, isYesterday, parseISO } from "date-fns"
 import { v4 } from "uuid"
 import { io, Socket } from "socket.io-client"
 import { appDispatch } from "./store"
-import { commonActions } from "../slices/commonSlice"
+import { mainActions } from "../slices/mainSlice"
 
 export function formatDate(inputDate?: string) {
   if (!inputDate) return null
@@ -34,7 +34,7 @@ export class SocketManager {
         reconnectionDelayMax: 100,
       })
       this.socket.on("connect", () => {
-        appDispatch(commonActions.updateSlice({ engineReady: true }))
+        appDispatch(mainActions.updateSlice({ engineReady: true }))
       })
     }
   }

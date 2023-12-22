@@ -6,7 +6,7 @@ import { FlashbarProps } from "@cloudscape-design/components"
 import { uuid } from "../common/typedUtils"
 import { newProjectActions } from "./newProjectSlice"
 
-export interface CommonState {
+export interface MainState {
   navigationOpen: boolean;
   notifications: Array<FlashbarProps.MessageDefinition>;
   engineReady: boolean;
@@ -17,7 +17,7 @@ export interface CommonState {
   lockScroll?: boolean;
 }
 
-const initialState: CommonState = {
+const initialState: MainState = {
   navigationOpen: true,
   notifications: [],
   engineReady: false,
@@ -30,11 +30,11 @@ const initialState: CommonState = {
 
 type Notification = Pick<FlashbarProps.MessageDefinition, "type" | "content">
 
-export const commonSlice = createSlice({
-  name: "common",
+export const mainSlice = createSlice({
+  name: "main",
   initialState,
   reducers: {
-    updateSlice: (state, action: PayloadAction<Partial<CommonState>>) => {
+    updateSlice: (state, action: PayloadAction<Partial<MainState>>) => {
       return { ...state, ...action.payload }
     },
     addNotification(state, action: PayloadAction<Notification>) {
@@ -72,13 +72,13 @@ export function prepareNotifications(notifications: Array<FlashbarProps.MessageD
   return notifications.map(n => ({
     ...n,
     onDismiss: () => {
-      appDispatch(commonActions.removeNotification(n.id))
+      appDispatch(mainActions.removeNotification(n.id))
     },
   }))
 }
 
 export const initApp = createAsyncThunk(
-  "common/initApp",
+  "main/initApp",
   async (_, { dispatch }) => {
     const enginePort = localStorage.getItem("engine-port")
     if (enginePort) {
@@ -86,25 +86,25 @@ export const initApp = createAsyncThunk(
       socketManager.connect(parseInt(enginePort))
     }
     if (socketManager.isConnected()) {
-      dispatch(commonActions.updateSlice({ engineReady: true }))
+      dispatch(mainActions.updateSlice({ engineReady: true }))
     }
   }
 )
 
 export const setAppDataDirectory = createAsyncThunk(
-  "common/setAppDataDirectory",
+  "main/setAppDataDirectory",
   async (directory: string, { dispatch }) => {
     const { valid } = await SettingsService.postSettingsAppDataDirectory({ app_data_directory: directory })
     if (valid) {
       localStorage.setItem("app-data-directory", directory)
-      dispatch(commonActions.updateSlice({ appDataDirectory: directory }))
+      dispatch(mainActions.updateSlice({ appDataDirectory: directory }))
     } else {
       localStorage.removeItem("app-data-directory")
-      dispatch(commonActions.updateSlice({ appDataDirectory: null }))
+      dispatch(mainActions.updateSlice({ appDataDirectory: null }))
     }
   }
 )
 
-export const commonReducer = commonSlice.reducer
-export const commonActions = commonSlice.actions
-export const commonSelector = (state: RootState) => state.common
+export const mainReducer = mainSlice.reducer
+export const mainActions = mainSlice.actions
+export const mainSelector = (state: RootState) => state.main

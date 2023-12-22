@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from "react"
 import CloudBreadcrumbGroup from "../components/CloudBreadcrumbGroup"
 import logo from "../assets/icon.png"
 import { useSelector } from "react-redux"
-import { commonActions, commonSelector, prepareNotifications, setAppDataDirectory } from "../slices/commonSlice"
+import { mainActions, mainSelector, prepareNotifications, setAppDataDirectory } from "../slices/mainSlice"
 import { appDispatch } from "../common/store"
 import { OpenAPI } from "../../openapi-client"
 import { CrumbHandle } from "../App"
@@ -51,7 +51,7 @@ export default function MainLayout() {
   const matches = useMatches() as UIMatch<string, CrumbHandle>[]
   const crumbs = getCrumbs(matches)
   const [activeHref, setActiveHref] = useState<string | undefined>(undefined)
-  const { engineReady, navigationOpen, appDataDirectory, notifications, dirty, dirtyModalVisible, dirtyRedirectUrl } = useSelector(commonSelector)
+  const { engineReady, navigationOpen, appDataDirectory, notifications, dirty, dirtyModalVisible, dirtyRedirectUrl } = useSelector(mainSelector)
 
   useEffect(() => {
     // Go from last to first crumb, set activeHref to the first one that matches items
@@ -117,7 +117,7 @@ export default function MainLayout() {
                 if (!dirty) {
                   navigate(e.detail.href)
                 } else {
-                  appDispatch(commonActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: e.detail.href }))
+                  appDispatch(mainActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: e.detail.href }))
                 }
               }}
               activeHref={activeHref}
@@ -127,7 +127,7 @@ export default function MainLayout() {
           navigationHide={appDataDirectory == null}
           navigationOpen={navigationOpen}
           onNavigationChange={(e) => {
-            appDispatch(commonActions.updateSlice({ navigationOpen: e.detail.open }))
+            appDispatch(mainActions.updateSlice({ navigationOpen: e.detail.open }))
           }}
           content={<Outlet/>}
           breadcrumbs={<BreadCrumbs/>}
@@ -141,7 +141,7 @@ export default function MainLayout() {
           header="Leave page"
           closeAriaLabel="Close modal"
           onDismiss={() => {
-            appDispatch(commonActions.updateSlice({ dirtyModalVisible: false }))
+            appDispatch(mainActions.updateSlice({ dirtyModalVisible: false }))
           }}
           footer={
             <Box float="right">
@@ -149,7 +149,7 @@ export default function MainLayout() {
                 <Button
                   variant="link"
                   onClick={() => {
-                    appDispatch(commonActions.updateSlice({ dirtyModalVisible: false }))
+                    appDispatch(mainActions.updateSlice({ dirtyModalVisible: false }))
                   }}
                 >
                   Cancel

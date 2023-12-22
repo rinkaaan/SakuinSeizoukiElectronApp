@@ -17,7 +17,7 @@ export interface NewProjectState {
   // step 2
   selectedPageTypeIndex: number;
   pageTypeOptions: SelectProps.Option[];
-  pageTypeSamplePages: Record<number, number>;
+  pageTypeSampleIndex: Record<number, number>;
   pageAnnotationEditorOpen: boolean;
   annotationEditorPageUrl?: string;
   finishedPageTypes: Record<number, boolean>;
@@ -36,7 +36,7 @@ const initialState: NewProjectState = {
   // step 2
   selectedPageTypeIndex: 0,
   pageTypeOptions: [],
-  pageTypeSamplePages: {},
+  pageTypeSampleIndex: {},
   pageAnnotationEditorOpen: false,
   annotationEditorPageUrl: undefined,
   finishedPageTypes: {},
@@ -56,27 +56,23 @@ export const newProjectSlice = createSlice({
     decrementPageTypeIndex: (state) => {
       state.selectedPageTypeIndex -= 1
     },
-    getSamplePage: (state, action: PayloadAction<LoadPageType>) => {
-      const { openPdfOut, pageTypeSamplePages, selectedPageTypeIndex } = state
-      const { page_types } = openPdfOut
-      const pageType = page_types[selectedPageTypeIndex]
-      const currentPage = pageTypeSamplePages[selectedPageTypeIndex]
-      let newPage: number
+    updateSamplePage: (state, action: PayloadAction<LoadPageType>) => {
+      const { pageTypeSampleIndex, selectedPageTypeIndex, openPdfOut } = state
+      let newIndex = pageTypeSampleIndex[selectedPageTypeIndex]
 
       if (action.payload === "next") {
-        newPage = pageType.page_numbers[pageType.page_numbers.indexOf(currentPage) + 1]
+        newIndex += 1
       } else if (action.payload === "previous") {
-        newPage = pageType.page_numbers[pageType.page_numbers.indexOf(currentPage) - 1]
+        newIndex -= 1
       }
 
-      if (newPage && newPage != currentPage) {
-        pageTypeSamplePages[selectedPageTypeIndex] = newPage
-        state.annotationEditorPageUrl = getPage(state.pageTypeSamplePages[selectedPageTypeIndex])
-      }
+      pageTypeSampleIndex[selectedPageTypeIndex] = newIndex
+      const pageNumber = openPdfOut?.page_types[selectedPageTypeIndex].page_numbers[newIndex]
+      state.annotationEditorPageUrl = getPage({ pageNumber, pdfPath: state.pdfFile?.path })
     },
     openAnnotationEditor: (state, pageType: PayloadAction<number>) => {
       state.selectedPageTypeIndex = pageType.payload
-      state.annotationEditorPageUrl = getPage(state.pageTypeSamplePages[pageType.payload])
+      state.annotationEditorPageUrl = getPage({ pageNumber: state.pageTypeSampleIndex[pageType.payload], pdfPath: state.pdfFile?.path })
       state.pageAnnotationEditorOpen = true
     },
     closeAnnotationEditor: (state) => {
@@ -114,13 +110,13 @@ export const openPdf = createAsyncThunk(
     const openPdfOut = await ProjectService.postProjectNewPdf({ pdf_path: pdfPath })
     console.debug("openPdfOut", openPdfOut)
 
-    const pageTypeSamplePages: Record<number, number> = {}
+    const pageTypeSampleIndex: Record<number, number> = {}
     for (let i = 0; i < openPdfOut.page_types.length; i++) {
       const pageType = openPdfOut.page_types[i]
-      pageTypeSamplePages[i] = pageType.page_numbers[0]
+      pageTypeSampleIndex[i] = pageType.page_numbers[0]
     }
 
-    dispatch(newProjectSlice.actions.updateSlice({ openPdfOut, pageTypeSamplePages }))
+    dispatch(newProjectSlice.actions.updateSlice({ openPdfOut, pageTypeSampleIndex: pageTypeSampleIndex }))
   }
 )
 

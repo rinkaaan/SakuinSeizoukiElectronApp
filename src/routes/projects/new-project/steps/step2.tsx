@@ -2,13 +2,18 @@ import React, { Fragment } from "react"
 import { Box, Cards, Icon, Link, SpaceBetween, TextContent } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
 import { newProjectActions, newProjectSelector } from "../../../../slices/newProjectSlice"
-import { getPage } from "../stepsUtils"
 import PageAnnotationEditor from "../PageAnnotationEditor"
 import { appDispatch } from "../../../../common/store"
+import { getPage } from "../stepsUtils"
 
 
 export function Step2() {
-  const { selectedPageTypeIndex, openPdfOut, pageTypeSamplePages, pageAnnotationEditorOpen, annotationEditorPageUrl, finishedPageTypes } = useSelector(newProjectSelector)
+  const { selectedPageTypeIndex, openPdfOut, pageTypeSampleIndex, pageAnnotationEditorOpen, annotationEditorPageUrl, finishedPageTypes, pdfFile } = useSelector(newProjectSelector)
+
+  function getThumbnailUrl(pageTypeIndex: number) {
+    const pageNumber = pageTypeSampleIndex[pageTypeIndex]
+    return getPage({ pageNumber, pdfPath: pdfFile.path })
+  }
 
   return (
     <Fragment>
@@ -53,7 +58,7 @@ export function Step2() {
                 {
                   header: "Sample page",
                   content: item => <img
-                    src={getPage(pageTypeSamplePages[item.type])}
+                    src={getThumbnailUrl(item.type)}
                     style={{
                       width: "100%",
                       height: "auto",
@@ -70,10 +75,10 @@ export function Step2() {
         isOpen={pageAnnotationEditorOpen}
         imageUrl={annotationEditorPageUrl}
         onGetNextPage={() => {
-          appDispatch(newProjectActions.getSamplePage("next"))
+          appDispatch(newProjectActions.updateSamplePage("next"))
         }}
         onGetPreviousPage={() => {
-          appDispatch(newProjectActions.getSamplePage("previous"))
+          appDispatch(newProjectActions.updateSamplePage("previous"))
         }}
         toggleFinishPageType={() => {
           appDispatch(newProjectActions.toggleFinishPageType())
@@ -82,7 +87,7 @@ export function Step2() {
         onClose={() => {
           appDispatch(newProjectActions.closeAnnotationEditor())
         }}
-        samplePageIndex={openPdfOut.page_types[selectedPageTypeIndex].page_numbers.indexOf(pageTypeSamplePages[selectedPageTypeIndex])}
+        samplePageIndex={pageTypeSampleIndex[selectedPageTypeIndex]}
         totalSamplePages={openPdfOut.page_types[selectedPageTypeIndex].page_numbers.length}
       />
     </Fragment>
