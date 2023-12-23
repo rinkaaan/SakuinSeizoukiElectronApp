@@ -2,7 +2,7 @@ import { Alert, AppLayout, Box, Button, Flashbar, Modal, SideNavigation, SideNav
 import { Navigate, Outlet, UIMatch, useLocation, useMatches, useNavigate } from "react-router-dom"
 import { Fragment, useEffect, useState } from "react"
 import CloudBreadcrumbGroup from "../components/CloudBreadcrumbGroup"
-import logo from "../assets/icon.png"
+import logo from "../assets/Icon.png"
 import { useSelector } from "react-redux"
 import { mainActions, mainSelector, prepareNotifications, setAppDataDirectory } from "./mainSlice"
 import { appDispatch } from "../common/store"

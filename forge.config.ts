@@ -1,17 +1,28 @@
 import type { ForgeConfig } from "@electron-forge/shared-types"
 import { MakerSquirrel } from "@electron-forge/maker-squirrel"
-import { MakerZIP } from "@electron-forge/maker-zip"
-import { MakerDeb } from "@electron-forge/maker-deb"
-import { MakerRpm } from "@electron-forge/maker-rpm"
 import { VitePlugin } from "@electron-forge/plugin-vite"
 
 const config: ForgeConfig = {
   packagerConfig: {
-    extraResource: ["binaries/engine"],
-    icon: "src/assets/icon",
+    extraResource: ["binaries/engine.exe"],
+    icon: "src/assets/Icon",
+    name: "SakuinSeizouki",
+    executableName: "SakuinSeizouki",
+    asar: true,
   },
   rebuildConfig: {},
-  makers: [new MakerSquirrel({}), new MakerZIP({}, ["darwin"]), new MakerRpm({}), new MakerDeb({})],
+  makers: [new MakerSquirrel({
+    setupExe: "SakuinSeizouki Installer.exe",
+    name: "SakuinSeizouki",
+    iconUrl: "https://raw.githubusercontent.com/rinkaaan/SakuinSeizoukiElectronApp/4a73f403e465a3bd636db48dee8241b1523323d1/src/assets/Icon.ico",
+    setupIcon: "./src/assets/Installer.ico",
+    description: "Create an index for a PDF file",
+    loadingGif: "./src/assets/Loading.gif",
+    version: "0.0.1",
+    authors: "Lincoln Nguyen",
+    exe: "SakuinSeizouki.exe",
+    noMsi: true,
+  })],
   plugins: [
     new VitePlugin({
       // `build` can specify multiple entry builds, which can be Main process, Preload scripts, Worker process, etc.

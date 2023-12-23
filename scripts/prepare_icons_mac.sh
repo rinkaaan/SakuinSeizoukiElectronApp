@@ -3,14 +3,14 @@ WORKSPACE="$WORKPLACE/SakuinSeizoukiElectronApp"
 
 (
   cd "$WORKSPACE"
-  ICON_SRC="$WORKPLACE/SakuinSeizoukiElectronApp/src/assets/icon.png"
+  ICON_SRC="$WORKPLACE/SakuinSeizoukiElectronApp/src/assets/Icon.png"
 
   rm -rf temp
-  rm -rf src/assets/icon.iconset
-  rm -rf src/assets/icon.icns
+  rm -rf src/assets/Icon.iconset
+  rm -rf src/assets/Icon.icns
 
   mkdir temp
-  mkdir src/assets/icon.iconset
+  mkdir src/assets/Icon.iconset
 
   convert "$ICON_SRC" -resize 16x16 temp/icon_16.png
   convert "$ICON_SRC" -resize 32x32 temp/icon_32.png
@@ -20,18 +20,18 @@ WORKSPACE="$WORKPLACE/SakuinSeizoukiElectronApp"
   convert "$ICON_SRC" -resize 512x512 temp/icon_512.png
   convert "$ICON_SRC" -resize 1024x1024 temp/icon_1024.png
 
-  cp temp/icon_16.png src/assets/icon.iconset/icon_16x16.png
-  cp temp/icon_32.png src/assets/icon.iconset/icon_16x16@2x.png
-  cp temp/icon_32.png src/assets/icon.iconset/icon_32x32.png
-  cp temp/icon_64.png src/assets/icon.iconset/icon_32x32@2x.png
-  cp temp/icon_128.png src/assets/icon.iconset/icon_128x128.png
-  cp temp/icon_256.png src/assets/icon.iconset/icon_128x128@2x.png
-  cp temp/icon_256.png src/assets/icon.iconset/icon_256x256.png
-  cp temp/icon_512.png src/assets/icon.iconset/icon_256x256@2x.png
-  cp temp/icon_512.png src/assets/icon.iconset/icon_512x512.png
-  cp temp/icon_1024.png src/assets/icon.iconset/icon_512x512@2x.png
+  cp temp/icon_16.png src/assets/Icon.iconset/icon_16x16.png
+  cp temp/icon_32.png src/assets/Icon.iconset/icon_16x16@2x.png
+  cp temp/icon_32.png src/assets/Icon.iconset/icon_32x32.png
+  cp temp/icon_64.png src/assets/Icon.iconset/icon_32x32@2x.png
+  cp temp/icon_128.png src/assets/Icon.iconset/icon_128x128.png
+  cp temp/icon_256.png src/assets/Icon.iconset/icon_128x128@2x.png
+  cp temp/icon_256.png src/assets/Icon.iconset/icon_256x256.png
+  cp temp/icon_512.png src/assets/Icon.iconset/icon_256x256@2x.png
+  cp temp/icon_512.png src/assets/Icon.iconset/icon_512x512.png
+  cp temp/icon_1024.png src/assets/Icon.iconset/icon_512x512@2x.png
 
-  iconutil -c icns src/assets/icon.iconset
+  iconutil -c icns src/assets/Icon.iconset
   rm -rf temp
-  rm -rf src/assets/icon.iconset
+  rm -rf src/assets/Icon.iconset
 )

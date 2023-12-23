@@ -112,8 +112,7 @@ export const openPdf = createAsyncThunk(
 
     const pageTypeSampleIndex: Record<number, number> = {}
     for (let i = 0; i < openPdfOut.page_types.length; i++) {
-      const pageType = openPdfOut.page_types[i]
-      pageTypeSampleIndex[i] = pageType.page_numbers[0]
+      pageTypeSampleIndex[i] = 0
     }
 
     dispatch(newProjectSlice.actions.updateSlice({ openPdfOut, pageTypeSampleIndex: pageTypeSampleIndex }))

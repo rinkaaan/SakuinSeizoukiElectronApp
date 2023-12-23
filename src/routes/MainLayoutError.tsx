@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useNavigate, useRouteError } from "react-router-dom"
-import logo from "../assets/icon.png"
+import logo from "../assets/Icon.png"
 import { SpaceBetween, Spinner } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
 import { mainActions, mainSelector } from "./mainSlice"

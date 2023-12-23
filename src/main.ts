@@ -2,6 +2,7 @@ import { app, BrowserWindow } from "electron"
 import path from "path"
 import { initMain } from "./electron/main/main"
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from "electron-devtools-installer"
+import { isDev } from "./electron/main/utils"
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -28,12 +29,17 @@ async function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
+    titleBarStyle: "hiddenInset",
   })
+  if (!isDev()) {
+    mainWindow.removeMenu()
+  }
+  mainWindow.setMenu(null)
   mainWindow.maximize()
   mainWindow.show()
 
   // and load the index.html of the app.
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+  if (isDev()) {
     await mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
   } else {
     await mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`))
