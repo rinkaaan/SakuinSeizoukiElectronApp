@@ -52,6 +52,9 @@ export const mainSlice = createSlice({
       state.dirty = false
       state.dirtyModalVisible = false
       state.dirtyRedirectUrl = undefined
+    },
+    resetSlice: () => {
+      return initialState
     }
   },
   extraReducers: builder => {
