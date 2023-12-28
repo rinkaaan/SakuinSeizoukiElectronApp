@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "../../../common/store"
-import { OpenPdfOut, ProjectService } from "../../../../openapi-client"
 import { SelectProps } from "@cloudscape-design/components"
 import { getPage } from "./stepsUtils"
+import { OpenPdfOut, ProjectService } from "../../../openapi-client"
+import { RootState } from "../../common/store"
 
 export interface NewProjectState {
   latestStepIndex: number;
@@ -72,7 +72,8 @@ export const newProjectSlice = createSlice({
     },
     openAnnotationEditor: (state, pageType: PayloadAction<number>) => {
       state.selectedPageTypeIndex = pageType.payload
-      state.annotationEditorPageUrl = getPage({ pageNumber: state.pageTypeSampleIndex[pageType.payload], pdfPath: state.pdfFile?.path })
+      const pageNumber = state.openPdfOut?.page_types[pageType.payload].page_numbers[state.pageTypeSampleIndex[pageType.payload]]
+      state.annotationEditorPageUrl = getPage({ pageNumber, pdfPath: state.pdfFile?.path })
       state.pageAnnotationEditorOpen = true
     },
     closeAnnotationEditor: (state) => {

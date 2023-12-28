@@ -1,9 +1,13 @@
-import { createHashRouter, Outlet, RouterProvider } from "react-router-dom"
+import { createHashRouter, Navigate, RouterProvider } from "react-router-dom"
 import MainLayout from "./routes/MainLayout"
 import MainLayoutError from "./routes/MainLayoutError"
 import { appDispatch } from "./common/store"
-import { mainSelector, initApp } from "./routes/mainSlice"
+import { initApp, mainSelector } from "./routes/mainSlice"
 import { useSelector } from "react-redux"
+import "@cloudscape-design/global-styles/index.css"
+import "./root.css"
+import { newProjectActions } from "./routes/create-index/newProjectSlice"
+import { useEffect } from "react"
 
 const router = createHashRouter([
   {
@@ -16,25 +20,24 @@ const router = createHashRouter([
     },
     children: [
       {
-        path: "projects",
-        Component: Outlet,
-        handle: createCrumb("Projects", "/projects/all"),
-        children: [
-          {
-            path: "new",
-            lazy: () => import("./routes/projects/new-project/NewProjectRoute"),
-            handle: createCrumb("New Project", "/projects/new"),
-          },
-          {
-            path: "all",
-            lazy: () => import("./routes/projects/all-projects/AllProjectsRoute"),
-          },
-        ],
+        path: "create-index",
+        lazy: () => import("./routes/create-index/CreateIndexRoute"),
+        handle: createCrumb("Create Index", "/create-index"),
       },
       {
         path: "settings",
         lazy: () => import("./routes/settings/SettingsRoute"),
         handle: createCrumb("Settings", "/settings"),
+      },
+      {
+        path: "reset",
+        Component: () => {
+          useEffect(() => {
+            appDispatch(newProjectActions.resetSlice())
+          }, [])
+
+          return <Navigate to="/create-index"/>
+        }
       }
     ],
   },

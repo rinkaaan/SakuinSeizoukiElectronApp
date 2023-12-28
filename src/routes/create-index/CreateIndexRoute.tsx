@@ -1,11 +1,11 @@
 import { Wizard } from "@cloudscape-design/components"
 import { i18nStrings, steps, useWizard } from "./stepsUtils"
-import { appDispatch } from "../../../common/store"
 import { newProjectActions, newProjectSelector } from "./newProjectSlice"
 import { Fragment, useEffect } from "react"
 import { useSelector } from "react-redux"
-import { mainActions } from "../../mainSlice"
 import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
+import { mainActions } from "../mainSlice"
+import { appDispatch } from "../../common/store"
 
 export function Component() {
   const {
@@ -26,7 +26,6 @@ export function Component() {
 
   useEffect(() => {
     appDispatch(newProjectActions.resetSlice())
-    appDispatch(mainActions.updateSlice({ navigationOpen: false }))
 
     return () => {
       appDispatch(mainActions.resetDirty())

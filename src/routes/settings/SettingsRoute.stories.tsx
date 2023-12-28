@@ -23,6 +23,7 @@ export const Primary: Story = {
   loaders: provideStoreLoaders(async () => {
     appDispatch(mainActions.updateSlice({
       appDataDirectory: "/Users/nguylinc/Desktop/test",
+      startingPath: "/create-index",
     }))
   }),
 }

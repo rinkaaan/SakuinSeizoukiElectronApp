@@ -3,12 +3,12 @@ import { Step2 } from "./step2/Step2"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { mainActions, mainSelector } from "../../mainSlice"
-import { appDispatch } from "../../../common/store"
 import { newProjectActions, newProjectSelector } from "./newProjectSlice"
 import { NonCancelableCustomEvent } from "@cloudscape-design/components"
 import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
-import { OpenAPI } from "../../../../openapi-client"
+import { mainActions, mainSelector } from "../mainSlice"
+import { appDispatch } from "../../common/store"
+import { OpenAPI } from "../../../openapi-client"
 
 export const steps = [
   {
@@ -61,9 +61,9 @@ export const useWizard = () => {
 
   const onCancel = () => {
     if (!dirty) {
-      navigate("/projects/all")
+      navigate("/reset")
     } else {
-      appDispatch(mainActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: "/projects/all" }))
+      appDispatch(mainActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: "/reset" }))
     }
   }
 

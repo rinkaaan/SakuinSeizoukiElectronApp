@@ -4,7 +4,7 @@ import { OpenAPI, SettingsService } from "../../openapi-client"
 import { socketManager } from "../common/clients"
 import { FlashbarProps } from "@cloudscape-design/components"
 import { uuid } from "../common/typedUtils"
-import { newProjectActions } from "./projects/new-project/newProjectSlice"
+import { newProjectActions } from "./create-index/newProjectSlice"
 
 export interface MainState {
   navigationOpen: boolean;
@@ -15,10 +15,11 @@ export interface MainState {
   dirtyModalVisible?: boolean;
   dirtyRedirectUrl?: string;
   lockScroll?: boolean;
+  startingPath?: string;
 }
 
 const initialState: MainState = {
-  navigationOpen: true,
+  navigationOpen: false,
   notifications: [],
   engineReady: false,
   appDataDirectory: undefined,
@@ -26,6 +27,7 @@ const initialState: MainState = {
   dirtyModalVisible: false,
   dirtyRedirectUrl: undefined,
   lockScroll: false,
+  startingPath: undefined,
 }
 
 type Notification = Pick<FlashbarProps.MessageDefinition, "type" | "content">

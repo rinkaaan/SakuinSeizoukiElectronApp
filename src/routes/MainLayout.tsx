@@ -8,12 +8,13 @@ import { mainActions, mainSelector, prepareNotifications, setAppDataDirectory } 
 import { appDispatch } from "../common/store"
 import { OpenAPI } from "../../openapi-client"
 import { CrumbHandle } from "../App"
+import { newProjectActions } from "./create-index/newProjectSlice"
 
 const items: SideNavigationProps.Item[] = [
   {
     type: "link",
-    text: "Projects",
-    href: "/projects/all",
+    text: "Create Index",
+    href: "/create-index",
   },
   {
     type: "link",
@@ -51,7 +52,13 @@ export default function MainLayout() {
   const matches = useMatches() as UIMatch<string, CrumbHandle>[]
   const crumbs = getCrumbs(matches)
   const [activeHref, setActiveHref] = useState<string | undefined>(undefined)
-  const { engineReady, navigationOpen, appDataDirectory, notifications, dirty, dirtyModalVisible, dirtyRedirectUrl } = useSelector(mainSelector)
+  const { engineReady, navigationOpen, appDataDirectory, notifications, dirty, dirtyModalVisible, dirtyRedirectUrl, startingPath } = useSelector(mainSelector)
+
+  useEffect(() => {
+    if (startingPath) {
+      navigate(startingPath)
+    }
+  }, [])
 
   useEffect(() => {
     // Go from last to first crumb, set activeHref to the first one that matches items
@@ -93,13 +100,13 @@ export default function MainLayout() {
   } else if (appDataDirectory == null && location.pathname !== "/settings") {
     return (
       <Navigate
-        to="/settings"
+        to="/create-index"
         replace={true}
       />
     )
-  } else if (["/", "/projects"].includes(location.pathname)) {
+  } else if (["/"].includes(location.pathname)) {
     return <Navigate
-      to="/projects/all"
+      to="/create-index"
       replace={true}
     />
   } else {
@@ -110,14 +117,18 @@ export default function MainLayout() {
             <SideNavigation
               header={{
                 text: "索引製造機",
-                href: "/projects/all",
+                href: "/create-index",
               }}
               onFollow={e => {
                 e.preventDefault()
                 if (!dirty) {
                   navigate(e.detail.href)
                 } else {
-                  appDispatch(mainActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl: e.detail.href }))
+                  let dirtyRedirectUrl = e.detail.href
+                  if (e.detail.href === "/create-index") {
+                    dirtyRedirectUrl = "/reset"
+                  }
+                  appDispatch(mainActions.updateSlice({ dirtyModalVisible: true, dirtyRedirectUrl }))
                 }
               }}
               activeHref={activeHref}

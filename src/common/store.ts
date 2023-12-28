@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { mainReducer } from "../routes/mainSlice"
-import { newProjectReducer } from "../routes/projects/new-project/newProjectSlice"
+import { newProjectReducer } from "../routes/create-index/newProjectSlice"
 
 const store = configureStore({
   reducer: {

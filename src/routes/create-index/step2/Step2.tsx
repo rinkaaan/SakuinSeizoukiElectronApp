@@ -3,15 +3,15 @@ import { Box, Cards, Icon, Link, SpaceBetween, TextContent } from "@cloudscape-d
 import { useSelector } from "react-redux"
 import { newProjectActions, newProjectSelector } from "../newProjectSlice"
 import PageAnnotationEditor from "./PageAnnotationEditor"
-import { appDispatch } from "../../../../common/store"
 import { getPage } from "../stepsUtils"
+import { appDispatch } from "../../../common/store"
 
 
 export function Step2() {
   const { selectedPageTypeIndex, openPdfOut, pageTypeSampleIndex, pageAnnotationEditorOpen, annotationEditorPageUrl, finishedPageTypes, pdfFile } = useSelector(newProjectSelector)
 
   function getThumbnailUrl(pageTypeIndex: number) {
-    const pageNumber = pageTypeSampleIndex[pageTypeIndex]
+    const pageNumber = openPdfOut.page_types[pageTypeIndex].page_numbers[pageTypeSampleIndex[pageTypeIndex]]
     return getPage({ pageNumber, pdfPath: pdfFile.path })
   }
 

@@ -29,7 +29,6 @@ async function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
-    titleBarStyle: "hiddenInset",
   })
   if (!isDev()) {
     mainWindow.removeMenu()
