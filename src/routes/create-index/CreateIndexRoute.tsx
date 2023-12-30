@@ -16,9 +16,9 @@ export function Component() {
   } = useWizard()
   const { isLoadingNextStep } = useSelector(newProjectSelector)
 
-  const wizardSteps: WizardProps.Step[] = steps.map(({ title, StepContent }) => ({
+  const wizardSteps: WizardProps.Step[] = steps.map(({ title, StepContent, description }) => ({
     title,
-    description: "Previous steps cannot be modified.",
+    description,
     content: (
       <StepContent />
     ),

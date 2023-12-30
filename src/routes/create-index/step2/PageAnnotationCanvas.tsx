@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 import Konva from "konva"
-import { Image, Layer, Stage } from "react-konva"
+import { Image, Layer, Rect, Stage } from "react-konva"
 import { SpaceBetween, Spinner, TextContent } from "@cloudscape-design/components"
 import useWindowSize from "../../../hooks/useWindowSize"
 import useDelayed from "../../../hooks/useDelayed"
+import { useSelector } from "react-redux"
+import { appDispatch } from "../../../common/store"
+import { currentPageTypeAnnotationsSelector, newProjectActions, newProjectSelector } from "../newProjectSlice"
 
 export default function PageAnnotationCanvas({
   imageUrl,
@@ -13,10 +16,64 @@ export default function PageAnnotationCanvas({
   setLoading: (loading: boolean) => void,
 }) {
   const stageRef = useRef<Konva.Stage>(null)
-  const [stageData, setStageData] = useState({ scale: 0.5, position: { x: 0, y: 0 } })
+  const [stageData, setStageData] = useState({ scale: 1, position: { x: 0, y: 0 } })
   const [imageObj, setImageObj] = useState(null)
   const { width, height } = useWindowSize()
   const isDelayed = useDelayed()
+  const rectangles = useSelector(currentPageTypeAnnotationsSelector)
+  const currentRectRef = useRef(null)
+  const [currentRect, setCurrentRect] = useState(null)
+  const layerRef = useRef<Konva.Layer>(null)
+  const { currentColor } = useSelector(newProjectSelector)
+
+  function getRelativePointerPosition () {
+    const mousePosition = stageRef.current.getPointerPosition()
+    const stagePosition = stageRef.current.position()
+    const stageScale = stageRef.current.scaleX()
+    const relativeMousePos = {
+      x: Math.floor((mousePosition.x - stagePosition.x) / stageScale),
+      y: Math.floor((mousePosition.y - stagePosition.y) / stageScale),
+    }
+    return relativeMousePos
+  }
+
+  function handleStageMouseDown () {
+    const { x, y } = getRelativePointerPosition()
+    currentRectRef.current = { x, y, width: 0, height: 0 }
+  }
+
+  function handleStageMouseUp () {
+    if (currentRectRef.current) {
+      const { x, y } = getRelativePointerPosition()
+      const newRect = {
+        ...currentRectRef.current,
+        width: x - currentRectRef.current.x,
+        height: y - currentRectRef.current.y,
+      }
+      appDispatch(newProjectActions.addPageTypeAnnotation(newRect))
+      currentRectRef.current = null
+      setCurrentRect(null)
+    }
+  }
+
+  function handleStageMouseMove () {
+    if (currentRectRef.current) {
+      const { x, y } = getRelativePointerPosition()
+      currentRectRef.current.width = x - currentRectRef.current.x
+      currentRectRef.current.height = y - currentRectRef.current.y
+      setCurrentRect(
+        <Rect
+          x={currentRectRef.current.x}
+          y={currentRectRef.current.y}
+          width={currentRectRef.current.width}
+          height={currentRectRef.current.height}
+          fill="transparent"
+          stroke={currentColor}
+          strokeWidth={1}
+        />
+      )
+    }
+  }
 
   useEffect(() => {
     setLoading(true)
@@ -106,17 +163,29 @@ export default function PageAnnotationCanvas({
         scale={{ x: stageData.scale, y: stageData.scale }}
         style={{ backgroundColor: "#808080", position: "absolute", width: "100%", height: "100%", top: 0, left: 0 }}
         onWheel={onMouseWheel}
-        // onMouseMove={handleStageMouseMove}
-        // onMouseDown={handleStageMouseDown}
-        // onMouseUp={handleStageMouseUp}
-        // onMouseLeave={handleStageMouseLeave}
+        onMouseDown={handleStageMouseDown}
+        onMouseUp={handleStageMouseUp}
+        onMouseMove={handleStageMouseMove}
       >
-        <Layer>
+        <Layer ref={layerRef}>
           <Image
             image={imageObj}
             x={0}
             y={0}
           />
+           {rectangles.map((rect, i) => (
+            <Rect
+              key={i}
+              x={rect.x}
+              y={rect.y}
+              width={rect.width}
+              height={rect.height}
+              strokeWidth={1}
+              fill="transparent"
+              stroke={rect.color}
+            />
+          ))}
+          {currentRect}
         </Layer>
       </Stage>
     )

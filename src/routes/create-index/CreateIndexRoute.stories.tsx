@@ -5,7 +5,7 @@ import App from "../../App"
 import { provideStoreLoaders, withStore } from "../../common/storybookUtils"
 
 const meta: Meta<typeof App> = {
-  title: "SettingsRoute",
+  title: "CreateIndexRoute",
   component: App,
   parameters: {
     layout: "fullscreen",
@@ -20,7 +20,7 @@ export const Default: Story = {
   decorators: [withStore],
   loaders: provideStoreLoaders(async () => {
     appDispatch(mainActions.updateSlice({
-      startingPath: "/settings",
+      startingPath: "/create-index",
     }))
   }),
 }

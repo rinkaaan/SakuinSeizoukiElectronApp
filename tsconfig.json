@@ -13,5 +13,5 @@
     "resolveJsonModule": true,
     "jsx": "react-jsx",
   },
-  "include": ["src"]
+  "include": ["src", "node_modules/@storybook/preview/dist/runtime.js", "node_modules/@storybook/preview/dist/runtime.js", "node_modules/@storybook/preview/dist/runtime.js"]
 }

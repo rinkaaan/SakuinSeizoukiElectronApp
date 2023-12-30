@@ -80,6 +80,9 @@ export function Step2() {
         onGetPreviousPage={() => {
           appDispatch(newProjectActions.updateSamplePage("previous"))
         }}
+        onGetSpecificPage={(pageNumber) => {
+          appDispatch(newProjectActions.updateSamplePage(pageNumber))
+        }}
         toggleFinishPageType={() => {
           appDispatch(newProjectActions.toggleFinishPageType())
         }}

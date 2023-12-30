@@ -9,16 +9,35 @@ import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
 import { mainActions, mainSelector } from "../mainSlice"
 import { appDispatch } from "../../common/store"
 import { OpenAPI } from "../../../openapi-client"
+import { Step3, validateStep3 } from "./step3/Step3"
+import { Step4 } from "./step4/Step4"
 
-export const steps = [
+interface Step {
+  title: string
+  StepContent: React.ComponentType
+  validate?: () => Promise<boolean>
+  description?: string
+}
+
+export const steps: Step[] = [
   {
     title: "Open PDF",
     StepContent: Step1,
     validate: validateStep1,
+    description: "This step cannot be modified once you proceed.",
   },
   {
     title: "Annotate page regions",
     StepContent: Step2,
+  },
+  {
+    title: "Open word list",
+    StepContent: Step3,
+    validate: validateStep3,
+  },
+  {
+    title: "Create index",
+    StepContent: Step4,
   },
 ]
 
@@ -49,11 +68,15 @@ export const useWizard = () => {
     const sourceStepIndex = requestedStepIndex - 1
     if (reason === "next") {
       appDispatch(newProjectActions.updateSlice({ isLoadingNextStep: true }))
-      const isValid = await steps[sourceStepIndex].validate()
-      appDispatch(newProjectActions.updateSlice({ isLoadingNextStep: false }))
-      if (isValid) {
+      if (steps[sourceStepIndex].validate) {
+        const isValid = await steps[sourceStepIndex].validate()
+        if (isValid) {
+          setActiveStepIndexAndCloseTools(requestedStepIndex)
+        }
+      } else {
         setActiveStepIndexAndCloseTools(requestedStepIndex)
       }
+      appDispatch(newProjectActions.updateSlice({ isLoadingNextStep: false }))
     } else {
       setActiveStepIndexAndCloseTools(requestedStepIndex)
     }

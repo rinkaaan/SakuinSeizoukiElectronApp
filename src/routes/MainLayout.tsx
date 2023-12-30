@@ -4,11 +4,10 @@ import { Fragment, useEffect, useState } from "react"
 import CloudBreadcrumbGroup from "../components/CloudBreadcrumbGroup"
 import logo from "../assets/Icon.png"
 import { useSelector } from "react-redux"
-import { mainActions, mainSelector, prepareNotifications, setAppDataDirectory } from "./mainSlice"
+import { mainActions, mainSelector, prepareNotifications } from "./mainSlice"
 import { appDispatch } from "../common/store"
 import { OpenAPI } from "../../openapi-client"
 import { CrumbHandle } from "../App"
-import { newProjectActions } from "./create-index/newProjectSlice"
 
 const items: SideNavigationProps.Item[] = [
   {
@@ -52,7 +51,7 @@ export default function MainLayout() {
   const matches = useMatches() as UIMatch<string, CrumbHandle>[]
   const crumbs = getCrumbs(matches)
   const [activeHref, setActiveHref] = useState<string | undefined>(undefined)
-  const { engineReady, navigationOpen, appDataDirectory, notifications, dirty, dirtyModalVisible, dirtyRedirectUrl, startingPath } = useSelector(mainSelector)
+  const { engineReady, navigationOpen, notifications, dirty, dirtyModalVisible, dirtyRedirectUrl, startingPath } = useSelector(mainSelector)
 
   useEffect(() => {
     if (startingPath) {
@@ -74,10 +73,6 @@ export default function MainLayout() {
   useEffect(() => {
     if (engineReady) {
       console.info(`Connected to engine at ${OpenAPI.BASE}`)
-      const appDataDirectory = localStorage.getItem("app-data-directory")
-      if (appDataDirectory) {
-        appDispatch(setAppDataDirectory(appDataDirectory))
-      }
     }
   }, [engineReady])
 
@@ -97,18 +92,8 @@ export default function MainLayout() {
         </SpaceBetween>
       </div>
     )
-  } else if (appDataDirectory == null && location.pathname !== "/settings") {
-    return (
-      <Navigate
-        to="/create-index"
-        replace={true}
-      />
-    )
-  } else if (["/"].includes(location.pathname)) {
-    return <Navigate
-      to="/create-index"
-      replace={true}
-    />
+  } else if (location.pathname === "/") {
+    return <Navigate to="/create-index" replace/>
   } else {
     return (
       <Fragment>
@@ -135,7 +120,6 @@ export default function MainLayout() {
               items={items}
             />
           }
-          navigationHide={appDataDirectory == null}
           navigationOpen={navigationOpen}
           onNavigationChange={(e) => {
             appDispatch(mainActions.updateSlice({ navigationOpen: e.detail.open }))

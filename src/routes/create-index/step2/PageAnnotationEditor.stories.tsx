@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import PageAnnotationEditor from "./PageAnnotationEditor"
 import { getPage } from "../stepsUtils"
+import { provideStoreLoaders, withRouter, withStore } from "../../../common/storybookUtils"
 
 const meta: Meta<typeof PageAnnotationEditor> = {
   title: "PageAnnotationEditor",
@@ -24,4 +25,7 @@ const meta: Meta<typeof PageAnnotationEditor> = {
 export default meta
 type Story = StoryObj<typeof PageAnnotationEditor>;
 
-export const Primary: Story = {}
+export const Primary: Story = {
+  decorators: [withStore, withRouter],
+  loaders: provideStoreLoaders(),
+}

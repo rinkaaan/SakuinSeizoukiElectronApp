@@ -1,5 +1,5 @@
 import React from "react"
-import { Alert, Box, Container, FileUploadProps, FormField, Header, NonCancelableCustomEvent, SpaceBetween } from "@cloudscape-design/components"
+import { Box, Container, FileUploadProps, FormField, Header, NonCancelableCustomEvent, SpaceBetween } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
 import { newProjectActions, newProjectSelector, openPdf } from "../newProjectSlice"
 import store, { appDispatch } from "../../../common/store"
@@ -7,14 +7,16 @@ import { OpenAPI } from "../../../../openapi-client"
 import CloudFileUpload from "../../../components/CloudFileUpload"
 
 export function Step1() {
-  const { pdfFile, missingPdf, pageImage, latestStepIndex } = useSelector(newProjectSelector)
+  const { pdfFile, errorMessages, pageImage, latestStepIndex } = useSelector(newProjectSelector)
 
   function onChange({ detail }: NonCancelableCustomEvent<FileUploadProps.ChangeDetail>) {
+    appDispatch(newProjectActions.clearErrorMessages())
     if (!detail.value.length) {
       appDispatch(newProjectActions.updateSlice({ pdfFile: undefined, pageImage: undefined }))
       return
     } else {
       const pdfFile = detail.value[0]
+      if (!pdfFile) return
       const pageImage = `${OpenAPI.BASE}/project/get/pdf/page?pdf_path=${encodeURIComponent(pdfFile.path)}&page_number=1`
       appDispatch(newProjectActions.updateSlice({ pdfFile, pageImage }))
     }
@@ -27,6 +29,7 @@ export function Step1() {
           <SpaceBetween size="s">
             <FormField>
               <CloudFileUpload
+                errorText={errorMessages["pdfFile"]}
                 disabled={latestStepIndex !== 0}
                 onChange={onChange}
                 value={pdfFile ? [pdfFile] : []}
@@ -46,14 +49,9 @@ export function Step1() {
                 showFileSize
                 showFileThumbnail
                 constraintText="Only PDF files are allowed"
-                accept="application/pdf"
+                accept=".pdf"
               />
             </FormField>
-            {missingPdf && !pdfFile && (
-              <Alert type="warning">
-                No file selected. Please select a file to continue.
-              </Alert>
-            )}
           </SpaceBetween>
         </Container>
         {pageImage && (
@@ -75,10 +73,16 @@ export function Step1() {
 
 export async function validateStep1() {
   const { pdfFile } = store.getState().newProject
+  let isValid = true
+
   if (!pdfFile) {
-    appDispatch(newProjectActions.updateSlice({ missingPdf: true }))
-    return false
+    appDispatch(newProjectActions.addMissingErrorMessage("pdfFile"))
+    isValid = false
   }
-  await appDispatch(openPdf(pdfFile.path))
-  return true
+
+  if (isValid) {
+    await appDispatch(openPdf(pdfFile.path))
+  }
+
+  return isValid
 }

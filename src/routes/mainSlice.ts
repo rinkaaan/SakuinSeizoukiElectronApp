@@ -1,16 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { appDispatch, RootState } from "../common/store"
-import { OpenAPI, SettingsService } from "../../openapi-client"
+import { OpenAPI } from "../../openapi-client"
 import { socketManager } from "../common/clients"
 import { FlashbarProps } from "@cloudscape-design/components"
 import { uuid } from "../common/typedUtils"
+import type { RootState } from "../common/reducers"
 import { newProjectActions } from "./create-index/newProjectSlice"
 
 export interface MainState {
   navigationOpen: boolean;
   notifications: Array<FlashbarProps.MessageDefinition>;
   engineReady: boolean;
-  appDataDirectory?: string | null;
   dirty: boolean;
   dirtyModalVisible?: boolean;
   dirtyRedirectUrl?: string;
@@ -22,7 +21,6 @@ const initialState: MainState = {
   navigationOpen: false,
   notifications: [],
   engineReady: false,
-  appDataDirectory: undefined,
   dirty: false,
   dirtyModalVisible: false,
   dirtyRedirectUrl: undefined,
@@ -77,7 +75,7 @@ export function prepareNotifications(notifications: Array<FlashbarProps.MessageD
   return notifications.map(n => ({
     ...n,
     onDismiss: () => {
-      appDispatch(mainActions.removeNotification(n.id))
+      // appDispatch(mainActions.removeNotification(n.id))
     },
   }))
 }
@@ -92,20 +90,6 @@ export const initApp = createAsyncThunk(
     }
     if (socketManager.isConnected()) {
       dispatch(mainActions.updateSlice({ engineReady: true }))
-    }
-  }
-)
-
-export const setAppDataDirectory = createAsyncThunk(
-  "main/setAppDataDirectory",
-  async (directory: string, { dispatch }) => {
-    const { valid } = await SettingsService.postSettingsAppDataDirectory({ app_data_directory: directory })
-    if (valid) {
-      localStorage.setItem("app-data-directory", directory)
-      dispatch(mainActions.updateSlice({ appDataDirectory: directory }))
-    } else {
-      localStorage.removeItem("app-data-directory")
-      dispatch(mainActions.updateSlice({ appDataDirectory: null }))
     }
   }
 )
