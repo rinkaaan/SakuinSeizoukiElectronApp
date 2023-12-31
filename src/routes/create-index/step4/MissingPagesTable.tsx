@@ -16,7 +16,7 @@ export function MissingPagesTable() {
     },
   )
 
-  return (
+  return createIndexOut?.missing_pages && (
     <Box margin={{ bottom: "l" }}>
       <SpaceBetween size="l">
         <Table
