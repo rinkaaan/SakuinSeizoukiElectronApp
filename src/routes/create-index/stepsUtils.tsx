@@ -1,5 +1,5 @@
 import { Step1, validateStep1 } from "./step1/Step1"
-import { Step2 } from "./step2/Step2"
+import { Step2, validateStep2 } from "./step2/Step2"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
@@ -29,6 +29,7 @@ export const steps: Step[] = [
   {
     title: "Annotate page regions",
     StepContent: Step2,
+    validate: validateStep2,
   },
   {
     title: "Open word list",

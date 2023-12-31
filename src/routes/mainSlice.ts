@@ -62,12 +62,6 @@ export const mainSlice = createSlice({
       .addCase(newProjectActions.updateSlice, (state, _action) => {
         state.dirty = true
       })
-      .addCase(newProjectActions.openAnnotationEditor, (state, _action) => {
-        state.lockScroll = true
-      })
-      .addCase(newProjectActions.closeAnnotationEditor, (state, _action) => {
-        state.lockScroll = false
-      })
   }
 })
 

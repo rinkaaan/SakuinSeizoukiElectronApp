@@ -14,7 +14,7 @@ export function Component() {
     onCancel,
     onSubmit,
   } = useWizard()
-  const { isLoadingNextStep } = useSelector(newProjectSelector)
+  const { isLoadingNextStep, pageAnnotationEditorOpen } = useSelector(newProjectSelector)
 
   const wizardSteps: WizardProps.Step[] = steps.map(({ title, StepContent, description }) => ({
     title,
@@ -31,6 +31,14 @@ export function Component() {
       appDispatch(mainActions.resetDirty())
     }
   }, [])
+
+  useEffect(() => {
+    if (!pageAnnotationEditorOpen) {
+      appDispatch(mainActions.updateSlice({ lockScroll: false }))
+    } else {
+      appDispatch(mainActions.updateSlice({ lockScroll: true }))
+    }
+  }, [pageAnnotationEditorOpen])
 
   return (
     <Fragment>

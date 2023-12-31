@@ -1,7 +1,7 @@
 import { AppLayout, Button, HelpPanel, SpaceBetween, TextContent } from "@cloudscape-design/components"
 import { useState } from "react"
 import PageAnnotationCanvas from "./PageAnnotationCanvas"
-import { currentPageTypeAnnotationTotalGroupsSelector, LoadPageType, newProjectActions, newProjectSelector } from "../newProjectSlice"
+import { currentPageTypeAnnotationTotalGroupsSelector, disableNewGroupButtonSelector, LoadPageType, newProjectActions, newProjectSelector } from "../newProjectSlice"
 import { useHotkeys } from "react-hotkeys-hook"
 import GoToPageModal from "./GoToPageModal"
 import { appDispatch } from "../../../common/store"
@@ -35,6 +35,7 @@ export default function PageAnnotationEditor({
   const [goToPageModalOpen, setGoToPageModalOpen] = useState(false)
   const { currentColor } = useSelector(newProjectSelector)
   const totalGroups = useSelector(currentPageTypeAnnotationTotalGroupsSelector)
+  const disableNewGroup = useSelector(disableNewGroupButtonSelector)
   useHotkeys("esc", onClose)
   useHotkeys(["right", "j"], () => onGetNextPage())
   useHotkeys(["left", "k"], () => onGetPreviousPage())
@@ -147,6 +148,7 @@ export default function PageAnnotationEditor({
                 iconName="add-plus"
                 ariaLabel="New group"
                 onClick={() => appDispatch(newProjectActions.incrementPageTypeAnnotationTotalGroups())}
+                disabled={disableNewGroup}
               >
                 New group
               </Button>

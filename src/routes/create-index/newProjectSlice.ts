@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { SelectProps } from "@cloudscape-design/components"
 import { getPage } from "./stepsUtils"
-import { GetWordListOut, OpenPdfOut, ProjectService } from "../../../openapi-client"
+import { CreateIndexOut, GetWordListOut, OpenPdfOut, type PageTypeDetail, ProjectService } from "../../../openapi-client"
 import { getRandomColor } from "../../common/typedUtils"
 import store from "../../common/store"
 import type { RootState } from "../../common/reducers"
@@ -42,6 +42,9 @@ export interface NewProjectState {
   endCell: string;
   sheetName: string;
   getWordListOut?: GetWordListOut;
+
+  // step4
+  createIndexOut?: CreateIndexOut;
 }
 
 const initialState: NewProjectState = {
@@ -71,6 +74,9 @@ const initialState: NewProjectState = {
   endCell: "",
   sheetName: "Sheet1",
   getWordListOut: undefined,
+
+  // step4
+  createIndexOut: undefined,
 }
 
 export const newProjectSlice = createSlice({
@@ -78,7 +84,7 @@ export const newProjectSlice = createSlice({
   initialState,
   reducers: {
     updateSlice: (state, action: PayloadAction<Partial<NewProjectState>>) => {
-      return { ...state, ...action.payload, errorMessages: {} }
+      return { ...state, ...action.payload }
     },
     resetSlice: () => initialState,
     updateSamplePage: (state, action: PayloadAction<LoadPageType>) => {
@@ -102,19 +108,21 @@ export const newProjectSlice = createSlice({
       pageTypeSampleIndex[selectedPageTypeIndex] = newIndex
     },
     openAnnotationEditor: (state, pageType: PayloadAction<number>) => {
-      // appDispatch(mainActions.updateSlice({ lockScroll: true }))
       state.selectedPageTypeIndex = pageType.payload
       const pageNumber = state.openPdfOut?.page_types[pageType.payload].page_numbers[state.pageTypeSampleIndex[pageType.payload]]
       state.annotationEditorPageUrl = getPage({ pageNumber, pdfPath: state.pdfFile?.path })
       state.pageAnnotationEditorOpen = true
     },
     closeAnnotationEditor: (state) => {
-      // appDispatch(mainActions.updateSlice({ lockScroll: false }))
       state.pageAnnotationEditorOpen = false
     },
     toggleFinishPageType: (state) => {
       const pageType = state.selectedPageTypeIndex
       state.finishedPageTypes[pageType] = !state.finishedPageTypes[pageType]
+      if (state.finishedPageTypes[pageType]) {
+        state.currentColor = getRandomColor()
+        state.pageAnnotationEditorOpen = false
+      }
     },
     clearPageTypeAnnotations: (state) => {
       const pageType = state.selectedPageTypeIndex
@@ -154,7 +162,12 @@ export const newProjectSlice = createSlice({
     },
     incrementPageTypeAnnotationTotalGroups: (state) => {
       const pageType = state.selectedPageTypeIndex
-      state.pageTypeAnnotationCurrentGroupIndex[pageType] = (state.pageTypeAnnotationCurrentGroupIndex[pageType] || 0) + 1
+
+      // // Don't increment if there are no annotations
+      const groupIndex = state.pageTypeAnnotationCurrentGroupIndex[pageType] || 0
+      // if (!state.pageTypeAnnotations[pageType].find(r => r.groupIndex === groupIndex)) return
+
+      state.pageTypeAnnotationCurrentGroupIndex[pageType] = groupIndex + 1
       state.currentColor = getRandomColor()
     },
     addErrorMessage: (state, action: PayloadAction<{ key: string, message: string }>) => {
@@ -213,6 +226,45 @@ export const getWordList = createAsyncThunk(
   }
 )
 
+export const createIndex = createAsyncThunk(
+  "newProject/createIndex",
+  async (_payload, { dispatch }) => {
+    const { openPdfOut, wordListFile, pdfFile, startCell, endCell, sheetName, pageTypeAnnotations } = store.getState().newProject
+
+    const pageTypes: Record<string, PageTypeDetail> = {}
+
+    // Add page types as keys with empty objects as values
+    for (const pageType of openPdfOut.page_types) {
+      pageTypes[pageType.type] = {
+        annotations: [],
+      }
+      // Add annotations to each page type
+      for (const rectangle of pageTypeAnnotations[pageType.type]) {
+        pageTypes[pageType.type].annotations.push({
+          width: rectangle.width,
+          height: rectangle.height,
+          group_index: rectangle.groupIndex,
+          x: rectangle.x,
+          y: rectangle.y,
+        })
+      }
+      // Add page numbers to each page type
+      pageTypes[pageType.type].page_numbers = openPdfOut.page_types[pageType.type].page_numbers
+    }
+
+    const createIndexOut = await ProjectService.postProjectCreateIndex({
+      list_path: wordListFile.path,
+      start_cell: startCell,
+      end_cell: endCell,
+      sheet_name: sheetName,
+      page_types: pageTypes,
+      pdf_path: pdfFile.path,
+    })
+    console.debug("createIndexOut", createIndexOut)
+    dispatch(newProjectActions.updateSlice({ createIndexOut }))
+  }
+)
+
 export type LoadPageType = "next" | "previous" | "random" | number
 
 export const newProjectReducer = newProjectSlice.reducer
@@ -227,4 +279,14 @@ export const currentPageTypeAnnotationsSelector = (state: RootState) => {
 export const currentPageTypeAnnotationTotalGroupsSelector = (state: RootState) => {
   const { selectedPageTypeIndex, pageTypeAnnotationCurrentGroupIndex } = state.newProject
   return (pageTypeAnnotationCurrentGroupIndex[selectedPageTypeIndex] || 0) + 1
+}
+
+export const disableNewGroupButtonSelector = (state: RootState) => {
+  const { selectedPageTypeIndex, pageTypeAnnotations, pageTypeAnnotationCurrentGroupIndex } = state.newProject
+
+  // Don't increment if there are number annotations is less than 2
+  const groupIndex = pageTypeAnnotationCurrentGroupIndex[selectedPageTypeIndex] || 0
+
+  const numberAnnotations = pageTypeAnnotations[selectedPageTypeIndex]?.filter(r => r.groupIndex === groupIndex)
+  return !numberAnnotations || numberAnnotations.length < 2
 }

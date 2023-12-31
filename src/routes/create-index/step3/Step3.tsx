@@ -2,7 +2,7 @@ import React from "react"
 import { Box, Button, Container, FileUploadProps, FormField, Header, Input, NonCancelableCustomEvent, Pagination, SpaceBetween, Table } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
 import store, { appDispatch } from "../../../common/store"
-import { getWordList, newProjectActions, newProjectSelector } from "../newProjectSlice"
+import { createIndex, getWordList, newProjectActions, newProjectSelector } from "../newProjectSlice"
 import CloudFileUpload from "../../../components/CloudFileUpload"
 import { useCollection } from "@cloudscape-design/collection-hooks"
 
@@ -75,9 +75,10 @@ export function Step3() {
               <Input
                 value={sheetName}
                 placeholder="Enter value"
-                onChange={event =>
+                onChange={event => {
+                  appDispatch(newProjectActions.clearErrorMessages())
                   appDispatch(newProjectActions.updateSlice({ sheetName: event.detail.value }))
-                }
+                }}
               />
             </FormField>
             <SpaceBetween size="l" direction="horizontal">
@@ -89,9 +90,10 @@ export function Step3() {
                 <Input
                   value={startCell}
                   placeholder="Enter value"
-                  onChange={event =>
+                  onChange={event => {
+                    appDispatch(newProjectActions.clearErrorMessages())
                     appDispatch(newProjectActions.updateSlice({ startCell: formatCellCoordinate(event.detail.value) }))
-                  }
+                  }}
                 />
               </FormField>
               <FormField
@@ -102,9 +104,10 @@ export function Step3() {
                 <Input
                   value={endCell}
                   placeholder="Enter value"
-                  onChange={event =>
+                  onChange={event => {
+                    appDispatch(newProjectActions.clearErrorMessages())
                     appDispatch(newProjectActions.updateSlice({ endCell: formatCellCoordinate(event.detail.value) }))
-                  }
+                  }}
                 />
               </FormField>
             </SpaceBetween>
@@ -120,12 +123,6 @@ export function Step3() {
               header: "Word",
               cell: item => item,
               isRowHeader: true,
-            },
-          ]}
-          columnDisplay={[
-            {
-              id: "word",
-              visible: true,
             },
           ]}
           variant="container"
@@ -164,6 +161,7 @@ async function previewWordList() {
 }
 
 export async function validateStep3() {
+  appDispatch(newProjectActions.clearErrorMessages())
   const { wordListFile, startCell, endCell, sheetName } = store.getState().newProject
   let isValid = true
 
@@ -182,6 +180,10 @@ export async function validateStep3() {
   if (!endCell) {
     appDispatch(newProjectActions.addMissingErrorMessage("endCell"))
     isValid = false
+  }
+
+  if (isValid) {
+    await appDispatch(createIndex())
   }
 
   return isValid

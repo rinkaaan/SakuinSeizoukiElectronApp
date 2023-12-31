@@ -1,14 +1,14 @@
 import React, { Fragment } from "react"
-import { Box, Cards, Icon, Link, SpaceBetween, TextContent } from "@cloudscape-design/components"
+import { Alert, Box, Cards, Icon, Link, SpaceBetween, TextContent } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
 import { newProjectActions, newProjectSelector } from "../newProjectSlice"
 import PageAnnotationEditor from "./PageAnnotationEditor"
 import { getPage } from "../stepsUtils"
-import { appDispatch } from "../../../common/store"
+import store, { appDispatch } from "../../../common/store"
 
 
 export function Step2() {
-  const { selectedPageTypeIndex, openPdfOut, pageTypeSampleIndex, pageAnnotationEditorOpen, annotationEditorPageUrl, finishedPageTypes, pdfFile } = useSelector(newProjectSelector)
+  const { selectedPageTypeIndex, openPdfOut, pageTypeSampleIndex, pageAnnotationEditorOpen, annotationEditorPageUrl, finishedPageTypes, pdfFile, errorMessages } = useSelector(newProjectSelector)
 
   function getThumbnailUrl(pageTypeIndex: number) {
     const pageNumber = openPdfOut.page_types[pageTypeIndex].page_numbers[pageTypeSampleIndex[pageTypeIndex]]
@@ -69,6 +69,14 @@ export function Step2() {
             }}
             items={openPdfOut.page_types}
           />
+          {errorMessages["pageTypes"] && (
+            <Alert type="warning">
+              {errorMessages["pageTypes"]}
+            </Alert>
+          )}
+          {/*<Alert type="warning">*/}
+          {/*  Please mark all page types as finished before continuing.*/}
+          {/*</Alert>*/}
         </SpaceBetween>
       </Box>
       <PageAnnotationEditor
@@ -95,4 +103,21 @@ export function Step2() {
       />
     </Fragment>
   )
+}
+
+export async function validateStep2() {
+  appDispatch(newProjectActions.clearErrorMessages())
+  const { finishedPageTypes, openPdfOut } = store.getState().newProject
+  let isValid = true
+
+  if (Object.values(finishedPageTypes).filter(Boolean).length !== openPdfOut.page_types.length) {
+    console.debug("Please mark all page types as finished before continuing.")
+    appDispatch(newProjectActions.addErrorMessage({
+      key: "pageTypes",
+      message: "Please mark all page types as finished before continuing.",
+    }))
+    isValid = false
+  }
+
+  return isValid
 }
