@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react"
 import { appDispatch } from "../../common/store"
 import { mainActions } from "../mainSlice"
 import App from "../../App"
-import { provideStoreLoaders, withStore } from "../../common/storybookUtils"
+import { withStore } from "../../common/storybookUtils"
+import { provideStoreLoaders } from "../../common/storybookTypedUtils"
 
 const meta: Meta<typeof App> = {
   title: "CreateIndexRoute",

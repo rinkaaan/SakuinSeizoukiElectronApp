@@ -3,7 +3,7 @@ import { useState } from "react"
 
 type CloudInputProps = Omit<InputProps, "value" | "onChange">
 
-export default function CloudInput({ autoFocus, ...props }: CloudInputProps) {
+export default function CloudInput({ ...props }: CloudInputProps) {
   const [value, setValue] = useState("")
 
   return (

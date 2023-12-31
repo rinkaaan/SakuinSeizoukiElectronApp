@@ -3,7 +3,7 @@ import { Step2, validateStep2 } from "./step2/Step2"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { newProjectActions, newProjectSelector } from "./newProjectSlice"
+import { getIndex, newProjectActions, newProjectSelector } from "./newProjectSlice"
 import { NonCancelableCustomEvent } from "@cloudscape-design/components"
 import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
 import { mainActions, mainSelector } from "../mainSlice"
@@ -43,10 +43,10 @@ export const steps: Step[] = [
 ]
 
 export const i18nStrings = {
-  submitButton: "Create book index",
+  submitButton: "Download index",
   stepNumberLabel: (stepNumber: number) => `Step ${stepNumber}`,
   collapsedStepsLabel: (stepNumber: number, stepsCount: number) => `Step ${stepNumber} of ${stepsCount}`,
-  cancelButton: "Cancel",
+  cancelButton: "Start over",
   previousButton: "Previous",
   nextButton: "Next",
 }
@@ -92,7 +92,7 @@ export const useWizard = () => {
   }
 
   const onSubmit = () => {
-    console.debug("Submit")
+    appDispatch(getIndex())
   }
 
   return {

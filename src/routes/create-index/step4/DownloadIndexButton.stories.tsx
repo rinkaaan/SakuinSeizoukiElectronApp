@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { Step4 } from "./Step4"
+import { DownloadIndexButton } from "./DownloadIndexButton"
 import { withStore } from "../../../common/storybookUtils"
 import { appDispatch } from "../../../common/store"
 import { newProjectActions } from "../newProjectSlice"
 import data from "./data.json"
 import { provideStoreLoaders } from "../../../common/storybookTypedUtils"
 
-const meta: Meta<typeof Step4> = {
-  title: "Step4",
-  component: Step4,
+const meta: Meta<typeof DownloadIndexButton> = {
+  title: "DownloadIndexButton",
+  component: DownloadIndexButton,
   parameters: {
     layout: "fullscreen",
   },
@@ -16,7 +16,7 @@ const meta: Meta<typeof Step4> = {
 }
 
 export default meta
-type Story = StoryObj<typeof Step4>;
+type Story = StoryObj<typeof DownloadIndexButton>;
 
 export const Default: Story = {
   decorators: [withStore],

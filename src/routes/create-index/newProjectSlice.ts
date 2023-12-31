@@ -1,10 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit"
 import { SelectProps } from "@cloudscape-design/components"
 import { getPage } from "./stepsUtils"
-import { CreateIndexOut, GetWordListOut, OpenPdfOut, type PageTypeDetail, ProjectService } from "../../../openapi-client"
+import { CreateIndexOut, GetWordListOut, OpenAPI, OpenPdfOut, type PageTypeDetail, ProjectService } from "../../../openapi-client"
 import { getRandomColor } from "../../common/typedUtils"
 import store from "../../common/store"
 import type { RootState } from "../../common/reducers"
+import { getActionName } from "../../common/utils"
 
 export interface Rectangle {
   x: number;
@@ -20,6 +21,7 @@ export interface NewProjectState {
   isLoadingNextStep: boolean;
   pageImage?: string;
   errorMessages: Record<string, string>;
+  isLoading: Record<string, boolean>
 
   // step 1
   openPdfOut?: OpenPdfOut;
@@ -45,6 +47,7 @@ export interface NewProjectState {
 
   // step4
   createIndexOut?: CreateIndexOut;
+  downloadLink?: string;
 }
 
 const initialState: NewProjectState = {
@@ -52,6 +55,7 @@ const initialState: NewProjectState = {
   isLoadingNextStep: false,
   pageImage: undefined,
   errorMessages: {},
+  isLoading: {},
 
   // step 1
   openPdfOut: undefined,
@@ -77,6 +81,7 @@ const initialState: NewProjectState = {
 
   // step4
   createIndexOut: undefined,
+  downloadLink: undefined,
 }
 
 export const newProjectSlice = createSlice({
@@ -154,7 +159,7 @@ export const newProjectSlice = createSlice({
       // Don't refresh if there are annotations
       const pageType = state.selectedPageTypeIndex
       const groupIndex = state.pageTypeAnnotationCurrentGroupIndex[pageType] || 0
-      if (groupIndex > 0) {
+      if (state.pageTypeAnnotations[pageType].find(r => r.groupIndex === groupIndex)) {
         return
       }
 
@@ -198,6 +203,15 @@ export const newProjectSlice = createSlice({
           pageTypeOptions,
         })
       }))
+      .addMatcher(isPending, (state, action) => {
+        state.isLoading[getActionName(action)] = true
+      })
+      .addMatcher(isRejected, (state, action) => {
+        state.isLoading[getActionName(action)] = false
+      })
+      .addMatcher(isFulfilled, (state, action) => {
+        state.isLoading[getActionName(action)] = false
+      })
   }
 })
 
@@ -205,7 +219,6 @@ export const openPdf = createAsyncThunk(
   "newProject/openPdf",
   async (pdfPath: string, { dispatch }) => {
     const openPdfOut = await ProjectService.postProjectNewPdf({ pdf_path: pdfPath })
-    console.debug("openPdfOut", openPdfOut)
 
     const pageTypeSampleIndex: Record<number, number> = {}
     for (let i = 0; i < openPdfOut.page_types.length; i++) {
@@ -221,7 +234,6 @@ export const getWordList = createAsyncThunk(
   async (_payload,{ dispatch }) => {
     const { wordListFile, startCell, endCell, sheetName } = store.getState().newProject
     const getWordListOut = await ProjectService.getProjectGetWordList(wordListFile.path, sheetName, startCell, endCell)
-    console.debug("getWordListOut", getWordListOut)
     dispatch(newProjectSlice.actions.updateSlice({ getWordListOut }))
   }
 )
@@ -235,6 +247,7 @@ export const createIndex = createAsyncThunk(
 
     // Add page types as keys with empty objects as values
     for (const pageType of openPdfOut.page_types) {
+      if (!pageTypeAnnotations[pageType.type]) continue
       pageTypes[pageType.type] = {
         annotations: [],
       }
@@ -260,8 +273,25 @@ export const createIndex = createAsyncThunk(
       page_types: pageTypes,
       pdf_path: pdfFile.path,
     })
-    console.debug("createIndexOut", createIndexOut)
     dispatch(newProjectActions.updateSlice({ createIndexOut }))
+  }
+)
+
+export const getIndex = createAsyncThunk(
+  "newProject/getIndex",
+  async (_payload) => {
+    const { createIndexOut } = store.getState().newProject
+    const index = await ProjectService.postProjectGetIndex(createIndexOut)
+    const a = document.createElement("a")
+    a.href = `${OpenAPI.BASE}${index.url}`
+    a.download = "index.xlsx"
+    a.click()
+    try {
+      URL.revokeObjectURL(index.url)
+      document.body.removeChild(a)
+    } catch (e) {
+      console.error(e)
+    }
   }
 )
 

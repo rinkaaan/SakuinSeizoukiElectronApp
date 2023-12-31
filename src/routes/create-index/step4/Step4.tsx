@@ -7,7 +7,7 @@ import { MissingPagesTable } from "./MissingPagesTable"
 import { IndexTable } from "./IndexTable"
 
 export function Step4() {
-  const { createIndexOut, latestStepIndex } = useSelector(newProjectSelector)
+  const { createIndexOut } = useSelector(newProjectSelector)
 
   return (
     <Box margin={{ bottom: "l" }}>

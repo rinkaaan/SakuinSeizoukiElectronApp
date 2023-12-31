@@ -7,7 +7,7 @@ import CloudFileUpload from "../../../components/CloudFileUpload"
 import { useCollection } from "@cloudscape-design/collection-hooks"
 
 export function Step3() {
-  const { errorMessages, wordListFile, latestStepIndex, sheetName, startCell, endCell, getWordListOut } = useSelector(newProjectSelector)
+  const { errorMessages, wordListFile, isLoading, sheetName, startCell, endCell, getWordListOut } = useSelector(newProjectSelector)
   const { items, paginationProps, collectionProps } = useCollection(
     getWordListOut?.word_list || [],
     {
@@ -133,7 +133,11 @@ export function Step3() {
               color="inherit"
             >
               <SpaceBetween size="m">
-                <Button onClick={previewWordList}>Click to preview word list</Button>
+                <Button
+                  onClick={previewWordList}
+                  disabled={isLoading["getWordList"]}
+                  loading={isLoading["getWordList"]}
+                >Click to preview word list</Button>
               </SpaceBetween>
             </Box>
           }
@@ -143,6 +147,8 @@ export function Step3() {
                 <Button
                   iconName="refresh"
                   onClick={previewWordList}
+                  disabled={isLoading["getWordList"]}
+                  loading={isLoading["getWordList"]}
                 />
               }
             >
@@ -156,11 +162,11 @@ export function Step3() {
 }
 
 async function previewWordList() {
-  await validateStep3()
+  await validateStep3(true)
   await appDispatch(getWordList())
 }
 
-export async function validateStep3() {
+export async function validateStep3(skipCreateIndex = false) {
   appDispatch(newProjectActions.clearErrorMessages())
   const { wordListFile, startCell, endCell, sheetName } = store.getState().newProject
   let isValid = true
@@ -182,7 +188,7 @@ export async function validateStep3() {
     isValid = false
   }
 
-  if (isValid) {
+  if (isValid && !skipCreateIndex) {
     await appDispatch(createIndex())
   }
 

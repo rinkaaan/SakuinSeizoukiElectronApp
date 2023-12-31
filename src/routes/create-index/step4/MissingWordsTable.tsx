@@ -1,5 +1,5 @@
 import React from "react"
-import { Alert, Box, Header, Pagination, SpaceBetween, Table } from "@cloudscape-design/components"
+import { Box, Header, Pagination, SpaceBetween, Table } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
 import { newProjectSelector } from "../newProjectSlice"
 import { useCollection } from "@cloudscape-design/collection-hooks"

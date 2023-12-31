@@ -5,7 +5,6 @@ import { appDispatch } from "./common/store"
 import { initApp, mainSelector } from "./routes/mainSlice"
 import { useSelector } from "react-redux"
 import "@cloudscape-design/global-styles/index.css"
-import "./root.css"
 import { newProjectActions } from "./routes/create-index/newProjectSlice"
 import { useEffect } from "react"
 

@@ -111,7 +111,6 @@ export async function validateStep2() {
   let isValid = true
 
   if (Object.values(finishedPageTypes).filter(Boolean).length !== openPdfOut.page_types.length) {
-    console.debug("Please mark all page types as finished before continuing.")
     appDispatch(newProjectActions.addErrorMessage({
       key: "pageTypes",
       message: "Please mark all page types as finished before continuing.",

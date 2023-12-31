@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { Step3 } from "./Step3"
-import { provideStoreLoaders, withStore } from "../../../common/storybookUtils"
+import { withStore } from "../../../common/storybookUtils"
 import { appDispatch } from "../../../common/store"
 import { newProjectActions } from "../newProjectSlice"
+import { provideStoreLoaders } from "../../../common/storybookTypedUtils"
 
 const meta: Meta<typeof Step3> = {
   title: "Step3",
