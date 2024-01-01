@@ -7,6 +7,7 @@ import { useSelector } from "react-redux"
 import "@cloudscape-design/global-styles/index.css"
 import { newProjectActions } from "./routes/create-index/newProjectSlice"
 import { useEffect } from "react"
+import "./app.css"
 
 const router = createHashRouter([
   {

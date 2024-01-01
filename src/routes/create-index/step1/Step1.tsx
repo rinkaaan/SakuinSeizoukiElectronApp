@@ -48,7 +48,7 @@ export function Step1() {
                 }}
                 showFileSize
                 showFileThumbnail
-                constraintText="Only PDF files are allowed"
+                constraintText="You can also drag and drop the file here"
                 accept=".pdf"
               />
             </FormField>

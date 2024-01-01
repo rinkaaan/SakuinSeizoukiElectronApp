@@ -64,7 +64,7 @@ export function Step3() {
                 }}
                 showFileSize
                 showFileThumbnail
-                constraintText="Only XLSX files are allowed"
+                constraintText="You can also drag and drop the file here"
                 accept=".xlsx"
               />
             </FormField>

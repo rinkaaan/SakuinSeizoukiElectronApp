@@ -33,7 +33,6 @@ async function createWindow() {
   if (!isDev()) {
     mainWindow.removeMenu()
   }
-  mainWindow.setMenu(null)
   mainWindow.maximize()
   mainWindow.show()
 

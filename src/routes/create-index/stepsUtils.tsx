@@ -37,7 +37,7 @@ export const steps: Step[] = [
     validate: validateStep3,
   },
   {
-    title: "Create index",
+    title: "Download index",
     StepContent: Step4,
   },
 ]
