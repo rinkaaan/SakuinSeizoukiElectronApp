@@ -11,7 +11,7 @@ export function Component() {
       <SpaceBetween size="l">
         <Container header={<Header variant="h2">About</Header>}>
           <TextContent>
-          <p>Version 0.1.0</p>
+          <p>Version 1.0.0</p>
           </TextContent>
         </Container>
       </SpaceBetween>

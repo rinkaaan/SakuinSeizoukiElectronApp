@@ -18,7 +18,7 @@ const config: ForgeConfig = {
     setupIcon: "./src/assets/Installer.ico",
     description: "Create an index for a PDF file",
     loadingGif: "./src/assets/Loading.gif",
-    version: "0.0.1",
+    version: "1.0.0",
     authors: "Lincoln Nguyen",
     exe: "SakuinSeizouki.exe",
     noMsi: true,
