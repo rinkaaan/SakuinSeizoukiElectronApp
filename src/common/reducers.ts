@@ -1,10 +1,10 @@
 import { combineReducers } from "@reduxjs/toolkit"
 import { mainReducer } from "../routes/mainSlice"
-import { newProjectReducer } from "../routes/create-index/newProjectSlice"
+import { createIndexReducer } from "../routes/create-index/createIndexSlice"
 
 export const reducers = combineReducers({
   main: mainReducer,
-  newProject: newProjectReducer,
+  createIndex: createIndexReducer,
 })
 
 export type RootState = ReturnType<typeof reducers>

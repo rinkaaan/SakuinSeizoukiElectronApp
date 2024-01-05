@@ -2,12 +2,12 @@ import React from "react"
 import { Box, Button, Container, FileUploadProps, FormField, Header, Input, NonCancelableCustomEvent, Pagination, SpaceBetween, Table } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
 import store, { appDispatch } from "../../../common/store"
-import { createIndex, getWordList, newProjectActions, newProjectSelector } from "../newProjectSlice"
+import { createIndex, getWordList, createIndexActions, createIndexSelector } from "../createIndexSlice"
 import CloudFileUpload from "../../../components/CloudFileUpload"
 import { useCollection } from "@cloudscape-design/collection-hooks"
 
 export function Step3() {
-  const { errorMessages, wordListFile, isLoading, sheetName, startCell, endCell, getWordListOut } = useSelector(newProjectSelector)
+  const { errorMessages, wordListFile, isLoading, sheetName, startCell, endCell, getWordListOut } = useSelector(createIndexSelector)
   const { items, paginationProps, collectionProps } = useCollection(
     getWordListOut?.word_list || [],
     {
@@ -19,14 +19,14 @@ export function Step3() {
   )
 
   function onChange({ detail }: NonCancelableCustomEvent<FileUploadProps.ChangeDetail>) {
-    appDispatch(newProjectActions.clearErrorMessages())
+    appDispatch(createIndexActions.clearErrorMessages())
     if (!detail.value.length) {
-      appDispatch(newProjectActions.updateSlice({ wordListFile: undefined, pageImage: undefined }))
+      appDispatch(createIndexActions.updateSlice({ wordListFile: undefined, pageImage: undefined }))
       return
     } else {
       const wordListFile = detail.value[0]
       if (!wordListFile) return
-      appDispatch(newProjectActions.updateSlice({ wordListFile }))
+      appDispatch(createIndexActions.updateSlice({ wordListFile }))
     }
   }
 
@@ -76,8 +76,8 @@ export function Step3() {
                 value={sheetName}
                 placeholder="Enter value"
                 onChange={event => {
-                  appDispatch(newProjectActions.clearErrorMessages())
-                  appDispatch(newProjectActions.updateSlice({ sheetName: event.detail.value }))
+                  appDispatch(createIndexActions.clearErrorMessages())
+                  appDispatch(createIndexActions.updateSlice({ sheetName: event.detail.value }))
                 }}
               />
             </FormField>
@@ -91,8 +91,8 @@ export function Step3() {
                   value={startCell}
                   placeholder="Enter value"
                   onChange={event => {
-                    appDispatch(newProjectActions.clearErrorMessages())
-                    appDispatch(newProjectActions.updateSlice({ startCell: formatCellCoordinate(event.detail.value) }))
+                    appDispatch(createIndexActions.clearErrorMessages())
+                    appDispatch(createIndexActions.updateSlice({ startCell: formatCellCoordinate(event.detail.value) }))
                   }}
                 />
               </FormField>
@@ -105,8 +105,8 @@ export function Step3() {
                   value={endCell}
                   placeholder="Enter value"
                   onChange={event => {
-                    appDispatch(newProjectActions.clearErrorMessages())
-                    appDispatch(newProjectActions.updateSlice({ endCell: formatCellCoordinate(event.detail.value) }))
+                    appDispatch(createIndexActions.clearErrorMessages())
+                    appDispatch(createIndexActions.updateSlice({ endCell: formatCellCoordinate(event.detail.value) }))
                   }}
                 />
               </FormField>
@@ -168,24 +168,24 @@ async function previewWordList() {
 }
 
 export async function validateStep3(skipCreateIndex = false) {
-  appDispatch(newProjectActions.clearErrorMessages())
-  const { wordListFile, startCell, endCell, sheetName } = store.getState().newProject
+  appDispatch(createIndexActions.clearErrorMessages())
+  const { wordListFile, startCell, endCell, sheetName } = store.getState().createIndex
   let isValid = true
 
   if (!wordListFile) {
-    appDispatch(newProjectActions.addMissingErrorMessage("wordListFile"))
+    appDispatch(createIndexActions.addMissingErrorMessage("wordListFile"))
     isValid = false
   }
   if (!sheetName) {
-    appDispatch(newProjectActions.addMissingErrorMessage("sheetName"))
+    appDispatch(createIndexActions.addMissingErrorMessage("sheetName"))
     isValid = false
   }
   if (!startCell) {
-    appDispatch(newProjectActions.addMissingErrorMessage("startCell"))
+    appDispatch(createIndexActions.addMissingErrorMessage("startCell"))
     isValid = false
   }
   if (!endCell) {
-    appDispatch(newProjectActions.addMissingErrorMessage("endCell"))
+    appDispatch(createIndexActions.addMissingErrorMessage("endCell"))
     isValid = false
   }
 

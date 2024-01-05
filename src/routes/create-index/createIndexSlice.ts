@@ -84,8 +84,8 @@ const initialState: NewProjectState = {
   downloadLink: undefined,
 }
 
-export const newProjectSlice = createSlice({
-  name: "newProject",
+export const createIndexSlice = createSlice({
+  name: "createIndex",
   initialState,
   reducers: {
     updateSlice: (state, action: PayloadAction<Partial<NewProjectState>>) => {
@@ -205,7 +205,7 @@ export const newProjectSlice = createSlice({
 })
 
 export const getPdfPageTypes = createAsyncThunk(
-  "newProject/getPdfPageTypes",
+  "createIndex/getPdfPageTypes",
   async (pdfPath: string, { dispatch }) => {
     const getPageTypesOut = await PdfService.getPdfPageTypes(pdfPath)
 
@@ -214,23 +214,23 @@ export const getPdfPageTypes = createAsyncThunk(
       pageTypeSampleIndex[i] = getPageTypesOut.page_types[i].page_numbers.length - 1
     }
 
-    dispatch(newProjectSlice.actions.updateSlice({ getPageTypesOut, pageTypeSampleIndex: pageTypeSampleIndex }))
+    dispatch(createIndexSlice.actions.updateSlice({ getPageTypesOut, pageTypeSampleIndex: pageTypeSampleIndex }))
   }
 )
 
 export const getWordList = createAsyncThunk(
-  "newProject/getWordList",
+  "createIndex/getWordList",
   async (_payload,{ dispatch }) => {
-    const { wordListFile, startCell, endCell, sheetName } = store.getState().newProject
+    const { wordListFile, startCell, endCell, sheetName } = store.getState().createIndex
     const getWordListOut = await WordListService.getWordList(wordListFile.path, sheetName, startCell, endCell)
-    dispatch(newProjectSlice.actions.updateSlice({ getWordListOut }))
+    dispatch(createIndexSlice.actions.updateSlice({ getWordListOut }))
   }
 )
 
 export const createIndex = createAsyncThunk(
-  "newProject/createIndex",
+  "createIndex/createIndex",
   async (_payload, { dispatch }) => {
-    const { getPageTypesOut, wordListFile, pdfFile, startCell, endCell, sheetName, pageTypeAnnotations } = store.getState().newProject
+    const { getPageTypesOut, wordListFile, pdfFile, startCell, endCell, sheetName, pageTypeAnnotations } = store.getState().createIndex
 
     const pageTypes: Record<string, PageTypeDetail> = {}
 
@@ -262,14 +262,14 @@ export const createIndex = createAsyncThunk(
       page_types: pageTypes,
       pdf_path: pdfFile.path,
     })
-    dispatch(newProjectActions.updateSlice({ createIndexOut }))
+    dispatch(createIndexActions.updateSlice({ createIndexOut }))
   }
 )
 
 export const getIndex = createAsyncThunk(
-  "newProject/getIndex",
+  "createIndex/getIndex",
   async (_payload) => {
-    const { createIndexOut } = store.getState().newProject
+    const { createIndexOut } = store.getState().createIndex
     const index = await IndexService.postIndexGet(createIndexOut)
     const a = document.createElement("a")
     a.href = `${OpenAPI.BASE}${index.url}`
@@ -286,22 +286,22 @@ export const getIndex = createAsyncThunk(
 
 export type LoadPageType = "next" | "previous" | "random" | number
 
-export const newProjectReducer = newProjectSlice.reducer
-export const newProjectActions = newProjectSlice.actions
-export const newProjectSelector = (state: RootState) => state.newProject
+export const createIndexReducer = createIndexSlice.reducer
+export const createIndexActions = createIndexSlice.actions
+export const createIndexSelector = (state: RootState) => state.createIndex
 
 export const currentPageTypeAnnotationsSelector = (state: RootState) => {
-  const { selectedPageTypeIndex, pageTypeAnnotations } = state.newProject
+  const { selectedPageTypeIndex, pageTypeAnnotations } = state.createIndex
   return pageTypeAnnotations[selectedPageTypeIndex] || []
 }
 
 export const currentPageTypeAnnotationTotalGroupsSelector = (state: RootState) => {
-  const { selectedPageTypeIndex, pageTypeAnnotationCurrentGroupIndex } = state.newProject
+  const { selectedPageTypeIndex, pageTypeAnnotationCurrentGroupIndex } = state.createIndex
   return (pageTypeAnnotationCurrentGroupIndex[selectedPageTypeIndex] || 0) + 1
 }
 
 export const disableNewGroupButtonSelector = (state: RootState) => {
-  const { selectedPageTypeIndex, pageTypeAnnotations, pageTypeAnnotationCurrentGroupIndex } = state.newProject
+  const { selectedPageTypeIndex, pageTypeAnnotations, pageTypeAnnotationCurrentGroupIndex } = state.createIndex
 
   // Don't increment if there are number annotations is less than 2
   const groupIndex = pageTypeAnnotationCurrentGroupIndex[selectedPageTypeIndex] || 0
@@ -311,7 +311,7 @@ export const disableNewGroupButtonSelector = (state: RootState) => {
 }
 
 export const disableRefreshColorSelector = (state: RootState) => {
-  const { selectedPageTypeIndex, pageTypeAnnotations, pageTypeAnnotationCurrentGroupIndex } = state.newProject
+  const { selectedPageTypeIndex, pageTypeAnnotations, pageTypeAnnotationCurrentGroupIndex } = state.createIndex
 
   // Don't refresh if there are annotations
   const groupIndex = pageTypeAnnotationCurrentGroupIndex[selectedPageTypeIndex] || 0

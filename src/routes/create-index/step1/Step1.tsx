@@ -1,24 +1,24 @@
 import React from "react"
 import { Box, Container, FileUploadProps, FormField, Header, NonCancelableCustomEvent, SpaceBetween } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
-import { newProjectActions, newProjectSelector, getPdfPageTypes } from "../newProjectSlice"
+import { createIndexActions, createIndexSelector, getPdfPageTypes } from "../createIndexSlice"
 import store, { appDispatch } from "../../../common/store"
 import { OpenAPI } from "../../../../openapi-client"
 import CloudFileUpload from "../../../components/CloudFileUpload"
 
 export function Step1() {
-  const { pdfFile, errorMessages, pageImage, latestStepIndex } = useSelector(newProjectSelector)
+  const { pdfFile, errorMessages, pageImage, latestStepIndex } = useSelector(createIndexSelector)
 
   function onChange({ detail }: NonCancelableCustomEvent<FileUploadProps.ChangeDetail>) {
-    appDispatch(newProjectActions.clearErrorMessages())
+    appDispatch(createIndexActions.clearErrorMessages())
     if (!detail.value.length) {
-      appDispatch(newProjectActions.updateSlice({ pdfFile: undefined, pageImage: undefined }))
+      appDispatch(createIndexActions.updateSlice({ pdfFile: undefined, pageImage: undefined }))
       return
     } else {
       const pdfFile = detail.value[0]
       if (!pdfFile) return
       const pageImage = `${OpenAPI.BASE}/pdf/page-image?pdf_path=${encodeURIComponent(pdfFile.path)}&page_number=1`
-      appDispatch(newProjectActions.updateSlice({ pdfFile, pageImage }))
+      appDispatch(createIndexActions.updateSlice({ pdfFile, pageImage }))
     }
   }
 
@@ -72,11 +72,11 @@ export function Step1() {
 }
 
 export async function validateStep1() {
-  const { pdfFile } = store.getState().newProject
+  const { pdfFile } = store.getState().createIndex
   let isValid = true
 
   if (!pdfFile) {
-    appDispatch(newProjectActions.addMissingErrorMessage("pdfFile"))
+    appDispatch(createIndexActions.addMissingErrorMessage("pdfFile"))
     isValid = false
   }
 

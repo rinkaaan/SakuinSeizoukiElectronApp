@@ -1,6 +1,6 @@
 import React from "react"
 import { Button } from "@cloudscape-design/components"
-import { getIndex } from "../newProjectSlice"
+import { getIndex } from "../createIndexSlice"
 import { appDispatch } from "../../../common/store"
 
 export function DownloadIndexButton() {

@@ -1,7 +1,7 @@
 import { AppLayout, Button, HelpPanel, SpaceBetween, TextContent } from "@cloudscape-design/components"
 import { useState } from "react"
 import PageAnnotationCanvas from "./PageAnnotationCanvas"
-import { currentPageTypeAnnotationTotalGroupsSelector, disableNewGroupButtonSelector, disableRefreshColorSelector, LoadPageType, newProjectActions, newProjectSelector } from "../newProjectSlice"
+import { currentPageTypeAnnotationTotalGroupsSelector, disableNewGroupButtonSelector, disableRefreshColorSelector, LoadPageType, createIndexActions, createIndexSelector } from "../createIndexSlice"
 import { useHotkeys } from "react-hotkeys-hook"
 import GoToPageModal from "./GoToPageModal"
 import { appDispatch } from "../../../common/store"
@@ -33,7 +33,7 @@ export default function PageAnnotationEditor({
   const [toolsOpen, setToolsOpen] = useState(true)
   const [loadingButton, setLoadingButton] = useState<LoadPageType | false>(false)
   const [goToPageModalOpen, setGoToPageModalOpen] = useState(false)
-  const { currentColor } = useSelector(newProjectSelector)
+  const { currentColor } = useSelector(createIndexSelector)
   const totalGroups = useSelector(currentPageTypeAnnotationTotalGroupsSelector)
   const disableNewGroup = useSelector(disableNewGroupButtonSelector)
   const disableRefreshColor = useSelector(disableRefreshColorSelector)
@@ -142,14 +142,14 @@ export default function PageAnnotationEditor({
                     pointerEvents: disableRefreshColor ? "none" : "auto",
                   }}
                   onClick={() => {
-                    appDispatch(newProjectActions.refreshColor())
+                    appDispatch(createIndexActions.refreshColor())
                   }}
                 />
               </SpaceBetween>
               <Button
                 iconName="add-plus"
                 ariaLabel="New group"
-                onClick={() => appDispatch(newProjectActions.incrementPageTypeAnnotationTotalGroups())}
+                onClick={() => appDispatch(createIndexActions.incrementPageTypeAnnotationTotalGroups())}
                 disabled={disableNewGroup}
               >
                 New group
@@ -158,7 +158,7 @@ export default function PageAnnotationEditor({
                 iconName="close"
                 ariaLabel="Clear annotations"
                 onClick={() => {
-                  appDispatch(newProjectActions.clearPageTypeAnnotations())
+                  appDispatch(createIndexActions.clearPageTypeAnnotations())
                 }}
               >
                 Clear annotations

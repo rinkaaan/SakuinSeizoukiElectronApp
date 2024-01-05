@@ -4,7 +4,7 @@ import { socketManager } from "../common/clients"
 import { FlashbarProps } from "@cloudscape-design/components"
 import { uuid } from "../common/typedUtils"
 import type { RootState } from "../common/reducers"
-import { newProjectActions } from "./create-index/newProjectSlice"
+import { createIndexActions } from "./create-index/createIndexSlice"
 
 export interface MainState {
   navigationOpen: boolean;
@@ -59,7 +59,7 @@ export const mainSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(newProjectActions.updateSlice, (state, _action) => {
+      .addCase(createIndexActions.updateSlice, (state, _action) => {
         state.dirty = true
       })
   }

@@ -3,7 +3,7 @@ import { Step2, validateStep2 } from "./step2/Step2"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { getIndex, newProjectActions, newProjectSelector } from "./newProjectSlice"
+import { getIndex, createIndexActions, createIndexSelector } from "./createIndexSlice"
 import { NonCancelableCustomEvent } from "@cloudscape-design/components"
 import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
 import { mainActions, mainSelector } from "../mainSlice"
@@ -52,7 +52,7 @@ export const i18nStrings = {
 }
 
 export const useWizard = () => {
-  const { latestStepIndex } = useSelector(newProjectSelector)
+  const { latestStepIndex } = useSelector(createIndexSelector)
   const [activeStepIndex, setActiveStepIndex] = useState(0)
   const { dirty } = useSelector(mainSelector)
   const navigate = useNavigate()
@@ -60,7 +60,7 @@ export const useWizard = () => {
   function setActiveStepIndexAndCloseTools(index: number) {
     setActiveStepIndex(index)
     if (index > latestStepIndex) {
-      appDispatch(newProjectActions.updateSlice({ latestStepIndex: index }))
+      appDispatch(createIndexActions.updateSlice({ latestStepIndex: index }))
     }
   }
 
@@ -68,7 +68,7 @@ export const useWizard = () => {
     const { requestedStepIndex, reason } = event.detail
     const sourceStepIndex = requestedStepIndex - 1
     if (reason === "next") {
-      appDispatch(newProjectActions.updateSlice({ isLoadingNextStep: true }))
+      appDispatch(createIndexActions.updateSlice({ isLoadingNextStep: true }))
       if (steps[sourceStepIndex].validate) {
         const isValid = await steps[sourceStepIndex].validate()
         if (isValid) {
@@ -77,7 +77,7 @@ export const useWizard = () => {
       } else {
         setActiveStepIndexAndCloseTools(requestedStepIndex)
       }
-      appDispatch(newProjectActions.updateSlice({ isLoadingNextStep: false }))
+      appDispatch(createIndexActions.updateSlice({ isLoadingNextStep: false }))
     } else {
       setActiveStepIndexAndCloseTools(requestedStepIndex)
     }

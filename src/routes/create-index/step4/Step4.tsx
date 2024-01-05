@@ -1,13 +1,13 @@
 import React from "react"
 import { Alert, Box, SpaceBetween } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
-import { newProjectSelector } from "../newProjectSlice"
+import { createIndexSelector } from "../createIndexSlice"
 import { MissingWordsTable } from "./MissingWordsTable"
 import { MissingPagesTable } from "./MissingPagesTable"
 import { IndexTable } from "./IndexTable"
 
 export function Step4() {
-  const { createIndexOut } = useSelector(newProjectSelector)
+  const { createIndexOut } = useSelector(createIndexSelector)
 
   return (
     <Box margin={{ bottom: "l" }}>

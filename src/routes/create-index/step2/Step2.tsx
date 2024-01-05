@@ -1,14 +1,14 @@
 import React, { Fragment } from "react"
 import { Alert, Box, Cards, Icon, Link, SpaceBetween, TextContent } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
-import { newProjectActions, newProjectSelector } from "../newProjectSlice"
+import { createIndexActions, createIndexSelector } from "../createIndexSlice"
 import PageAnnotationEditor from "./PageAnnotationEditor"
 import { getPage } from "../stepsUtils"
 import store, { appDispatch } from "../../../common/store"
 
 
 export function Step2() {
-  const { selectedPageTypeIndex, getPageTypesOut, pageTypeSampleIndex, pageAnnotationEditorOpen, annotationEditorPageUrl, finishedPageTypes, pdfFile, errorMessages } = useSelector(newProjectSelector)
+  const { selectedPageTypeIndex, getPageTypesOut, pageTypeSampleIndex, pageAnnotationEditorOpen, annotationEditorPageUrl, finishedPageTypes, pdfFile, errorMessages } = useSelector(createIndexSelector)
 
   function getThumbnailUrl(pageTypeIndex: number) {
     const pageNumber = getPageTypesOut.page_types[pageTypeIndex].page_numbers[pageTypeSampleIndex[pageTypeIndex]]
@@ -30,7 +30,7 @@ export function Step2() {
                     href="#"
                     onFollow={(e) => {
                       e.preventDefault()
-                      appDispatch(newProjectActions.openAnnotationEditor(item.type))
+                      appDispatch(createIndexActions.openAnnotationEditor(item.type))
                     }}
                     fontSize="heading-m"
                   >
@@ -83,20 +83,20 @@ export function Step2() {
         isOpen={pageAnnotationEditorOpen}
         imageUrl={annotationEditorPageUrl}
         onGetNextPage={() => {
-          appDispatch(newProjectActions.updateSamplePage("next"))
+          appDispatch(createIndexActions.updateSamplePage("next"))
         }}
         onGetPreviousPage={() => {
-          appDispatch(newProjectActions.updateSamplePage("previous"))
+          appDispatch(createIndexActions.updateSamplePage("previous"))
         }}
         onGetSpecificPage={(pageNumber) => {
-          appDispatch(newProjectActions.updateSamplePage(pageNumber))
+          appDispatch(createIndexActions.updateSamplePage(pageNumber))
         }}
         toggleFinishPageType={() => {
-          appDispatch(newProjectActions.toggleFinishPageType())
+          appDispatch(createIndexActions.toggleFinishPageType())
         }}
         isFinished={finishedPageTypes[selectedPageTypeIndex]}
         onClose={() => {
-          appDispatch(newProjectActions.closeAnnotationEditor())
+          appDispatch(createIndexActions.closeAnnotationEditor())
         }}
         samplePageIndex={pageTypeSampleIndex[selectedPageTypeIndex]}
         totalSamplePages={getPageTypesOut.page_types[selectedPageTypeIndex].page_numbers.length}
@@ -106,12 +106,12 @@ export function Step2() {
 }
 
 export async function validateStep2() {
-  appDispatch(newProjectActions.clearErrorMessages())
-  const { finishedPageTypes, getPageTypesOut } = store.getState().newProject
+  appDispatch(createIndexActions.clearErrorMessages())
+  const { finishedPageTypes, getPageTypesOut } = store.getState().createIndex
   let isValid = true
 
   if (Object.values(finishedPageTypes).filter(Boolean).length !== getPageTypesOut.page_types.length) {
-    appDispatch(newProjectActions.addErrorMessage({
+    appDispatch(createIndexActions.addErrorMessage({
       key: "pageTypes",
       message: "Please mark all page types as finished before continuing.",
     }))

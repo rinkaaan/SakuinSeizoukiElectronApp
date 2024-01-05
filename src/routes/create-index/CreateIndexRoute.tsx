@@ -1,6 +1,6 @@
 import { Wizard } from "@cloudscape-design/components"
 import { i18nStrings, steps, useWizard } from "./stepsUtils"
-import { newProjectActions, newProjectSelector } from "./newProjectSlice"
+import { createIndexActions, createIndexSelector } from "./createIndexSlice"
 import { Fragment, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
@@ -14,7 +14,7 @@ export function Component() {
     onCancel,
     onSubmit,
   } = useWizard()
-  const { isLoadingNextStep, pageAnnotationEditorOpen } = useSelector(newProjectSelector)
+  const { isLoadingNextStep, pageAnnotationEditorOpen } = useSelector(createIndexSelector)
 
   const wizardSteps: WizardProps.Step[] = steps.map(({ title, StepContent, description }) => ({
     title,
@@ -25,7 +25,7 @@ export function Component() {
   }))
 
   useEffect(() => {
-    appDispatch(newProjectActions.resetSlice())
+    appDispatch(createIndexActions.resetSlice())
 
     return () => {
       appDispatch(mainActions.resetDirty())

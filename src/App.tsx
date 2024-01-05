@@ -5,7 +5,7 @@ import { appDispatch } from "./common/store"
 import { initApp, mainSelector } from "./routes/mainSlice"
 import { useSelector } from "react-redux"
 import "@cloudscape-design/global-styles/index.css"
-import { newProjectActions } from "./routes/create-index/newProjectSlice"
+import { createIndexActions } from "./routes/create-index/createIndexSlice"
 import { useEffect } from "react"
 import "./app.css"
 
@@ -33,7 +33,7 @@ const router = createHashRouter([
         path: "reset",
         Component: () => {
           useEffect(() => {
-            appDispatch(newProjectActions.resetSlice())
+            appDispatch(createIndexActions.resetSlice())
           }, [])
 
           return <Navigate to="/create-index"/>

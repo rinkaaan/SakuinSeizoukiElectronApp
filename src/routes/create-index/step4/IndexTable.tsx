@@ -1,11 +1,11 @@
 import React from "react"
 import { Box, Header, Pagination, SpaceBetween, Table } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
-import { newProjectSelector } from "../newProjectSlice"
+import { createIndexSelector } from "../createIndexSlice"
 import { useCollection } from "@cloudscape-design/collection-hooks"
 
 export function IndexTable() {
-  const { createIndexOut } = useSelector(newProjectSelector)
+  const { createIndexOut } = useSelector(createIndexSelector)
   const wordPages = createIndexOut?.word_pages || []
   const { items, paginationProps, collectionProps } = useCollection(
     wordPages,

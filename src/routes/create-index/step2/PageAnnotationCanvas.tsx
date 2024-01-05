@@ -6,7 +6,7 @@ import useWindowSize from "../../../hooks/useWindowSize"
 import useDelayed from "../../../hooks/useDelayed"
 import { useSelector } from "react-redux"
 import { appDispatch } from "../../../common/store"
-import { currentPageTypeAnnotationsSelector, newProjectActions, newProjectSelector } from "../newProjectSlice"
+import { currentPageTypeAnnotationsSelector, createIndexActions, createIndexSelector } from "../createIndexSlice"
 
 export default function PageAnnotationCanvas({
   imageUrl,
@@ -24,7 +24,7 @@ export default function PageAnnotationCanvas({
   const currentRectRef = useRef(null)
   const [currentRect, setCurrentRect] = useState(null)
   const layerRef = useRef<Konva.Layer>(null)
-  const { currentColor } = useSelector(newProjectSelector)
+  const { currentColor } = useSelector(createIndexSelector)
 
   function getRelativePointerPosition () {
     const mousePosition = stageRef.current.getPointerPosition()
@@ -50,7 +50,7 @@ export default function PageAnnotationCanvas({
         width: x - currentRectRef.current.x,
         height: y - currentRectRef.current.y,
       }
-      appDispatch(newProjectActions.addPageTypeAnnotation(newRect))
+      appDispatch(createIndexActions.addPageTypeAnnotation(newRect))
       currentRectRef.current = null
       setCurrentRect(null)
     }
