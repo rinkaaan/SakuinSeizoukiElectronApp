@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit"
 import { SelectProps } from "@cloudscape-design/components"
 import { getPage } from "./stepsUtils"
-import { CreateIndexOut, GetPageTypesOut, GetWordListOut, OpenAPI, type PageTypeDetail, PdfService, ProjectService } from "../../../openapi-client"
+import { CreateIndexOut, GetPageTypesOut, GetWordListOut, OpenAPI, type PageTypeDetail, PdfService, ProjectService, WordListService } from "../../../openapi-client"
 import { getRandomColor } from "../../common/typedUtils"
 import store from "../../common/store"
 import type { RootState } from "../../common/reducers"
@@ -222,7 +222,7 @@ export const getWordList = createAsyncThunk(
   "newProject/getWordList",
   async (_payload,{ dispatch }) => {
     const { wordListFile, startCell, endCell, sheetName } = store.getState().newProject
-    const getWordListOut = await ProjectService.getProjectGetWordList(wordListFile.path, sheetName, startCell, endCell)
+    const getWordListOut = await WordListService.getWordList(wordListFile.path, sheetName, startCell, endCell)
     dispatch(newProjectSlice.actions.updateSlice({ getWordListOut }))
   }
 )
