@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit"
 import { SelectProps } from "@cloudscape-design/components"
 import { getPage } from "./stepsUtils"
-import { CreateIndexOut, GetWordListOut, OpenAPI, OpenPdfOut, type PageTypeDetail, ProjectService } from "../../../openapi-client"
+import { CreateIndexOut, GetPageTypesOut, GetWordListOut, OpenAPI, type PageTypeDetail, PdfService, ProjectService } from "../../../openapi-client"
 import { getRandomColor } from "../../common/typedUtils"
-import store from "../../common/store"
+import store, { appDispatch } from "../../common/store"
 import type { RootState } from "../../common/reducers"
 import { getActionName } from "../../common/utils"
 
@@ -24,7 +24,7 @@ export interface NewProjectState {
   isLoading: Record<string, boolean>
 
   // step 1
-  openPdfOut?: OpenPdfOut;
+  openPdfOut?: GetPageTypesOut;
   pdfFile?: File;
 
   // step 2
@@ -218,7 +218,7 @@ export const newProjectSlice = createSlice({
 export const openPdf = createAsyncThunk(
   "newProject/openPdf",
   async (pdfPath: string, { dispatch }) => {
-    const openPdfOut = await ProjectService.postProjectNewPdf({ pdf_path: pdfPath })
+    const openPdfOut = await PdfService.getPdfPageTypes(pdfPath)
 
     const pageTypeSampleIndex: Record<number, number> = {}
     for (let i = 0; i < openPdfOut.page_types.length; i++) {

@@ -17,7 +17,7 @@ export function Step1() {
     } else {
       const pdfFile = detail.value[0]
       if (!pdfFile) return
-      const pageImage = `${OpenAPI.BASE}/project/get/pdf/page?pdf_path=${encodeURIComponent(pdfFile.path)}&page_number=1`
+      const pageImage = `${OpenAPI.BASE}/pdf/page-image?pdf_path=${encodeURIComponent(pdfFile.path)}&page_number=1`
       appDispatch(newProjectActions.updateSlice({ pdfFile, pageImage }))
     }
   }

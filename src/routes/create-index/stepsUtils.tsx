@@ -118,5 +118,5 @@ export function getPage({
   if (!OpenAPI.BASE && !apiBase) {
     throw new Error("OpenAPI.BASE or apiBase must be defined")
   }
-  return `${OpenAPI.BASE || apiBase}/project/get/pdf/page?pdf_path=${encodeURIComponent(pdfPath)}&page_number=${pageNumber}`
+  return `${OpenAPI.BASE || apiBase}/pdf/page-image?pdf_path=${encodeURIComponent(pdfPath)}&page_number=${pageNumber}`
 }
