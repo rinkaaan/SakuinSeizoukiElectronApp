@@ -73,48 +73,58 @@ export default function PageAnnotationEditor({
         }}
         tools={
           <HelpPanel
-            header={<h2>Annotation Editor</h2>}
+            // header={<h2>Annotation Editor</h2>}
+            header={<h2>注釈エディター</h2>}
             footer={
               <SpaceBetween
                 size="s"
                 direction="horizontal"
               >
-                <Button onClick={onClose}>Close</Button>
+                {/*<Button onClick={onClose}>Close</Button>*/}
+                <Button onClick={onClose}>閉じる</Button>
                 <Button
                   variant="primary"
                   onClick={toggleFinishPageType}
                 >
-                  {isFinished ? "Unfinish" : "Finish"}
+                  {/*{isFinished ? "Unfinish" : "Finish"}*/}
+                  {isFinished ? "未完了" : "完了"}
                 </Button>
               </SpaceBetween>
             }
           >
             <SpaceBetween size="l">
-              <TextContent>Page {samplePageIndex + 1} of {totalSamplePages}</TextContent>
+              {/*<TextContent>Page {samplePageIndex + 1} of {totalSamplePages}</TextContent>*/}
+              <TextContent>ページ {samplePageIndex + 1} / {totalSamplePages}</TextContent>
               <Button
                 iconName="angle-left"
-                ariaLabel="Previous page"
+                // ariaLabel="Previous page"
+                ariaLabel="前のページ"
                 onClick={() => onGetPage("previous")}
                 loading={loadingButton === "previous"}
                 disabled={samplePageIndex === 0}
               >
-                Previous page
+                {/*Previous page*/}
+                前のページ
               </Button>
               <Button
                 iconName="angle-right"
-                ariaLabel="Next page"
+                // ariaLabel="Next page"
+                ariaLabel="次のページ"
                 onClick={() => onGetPage("next")}
                 loading={loadingButton === "next"}
                 disabled={samplePageIndex === totalSamplePages - 1}
               >
-                Next page
+                {/*Next page*/}
+                次のページ
               </Button>
               <Button
                 iconName="angle-right-double"
-                ariaLabel="Go to page"
+                // ariaLabel="Go to page"
+                ariaLabel="ページへ移動"
                 onClick={() => setGoToPageModalOpen(true)}
               >
-                Go to page
+                {/*Go to page*/}
+                ページへ移動
               </Button>
               {/*<SpaceBetween size="m" direction="horizontal">*/}
               {/*  <Button*/}
@@ -131,7 +141,8 @@ export default function PageAnnotationEditor({
               {/*  </Button>*/}
               {/*</SpaceBetween>*/}
               <SpaceBetween size="s" direction="horizontal" alignItems="center">
-                <TextContent>Group {totalGroups}</TextContent>
+                {/*<TextContent>Group {totalGroups}</TextContent>*/}
+                <TextContent>グループ {totalGroups}</TextContent>
                 <div
                   style={{
                     backgroundColor: currentColor,
@@ -148,20 +159,24 @@ export default function PageAnnotationEditor({
               </SpaceBetween>
               <Button
                 iconName="add-plus"
-                ariaLabel="New group"
+                // ariaLabel="New group"
+                ariaLabel="新しいグループ"
                 onClick={() => appDispatch(createIndexActions.incrementPageTypeAnnotationTotalGroups())}
                 disabled={disableNewGroup}
               >
-                New group
+                {/*New group*/}
+                新しいグループ
               </Button>
               <Button
                 iconName="close"
-                ariaLabel="Clear annotations"
+                // ariaLabel="Clear annotations"
+                ariaLabel="注釈をクリア"
                 onClick={() => {
                   appDispatch(createIndexActions.clearPageTypeAnnotations())
                 }}
               >
-                Clear annotations
+                {/*Clear annotations*/}
+                注釈をクリア
               </Button>
             </SpaceBetween>
           </HelpPanel>

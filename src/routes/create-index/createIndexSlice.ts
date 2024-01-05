@@ -168,7 +168,8 @@ export const createIndexSlice = createSlice({
       state.errorMessages[action.payload.key] = action.payload.message
     },
     addMissingErrorMessage: (state, action: PayloadAction<string>) => {
-      state.errorMessages[action.payload] = "Required"
+      // state.errorMessages[action.payload] = "Required"
+      state.errorMessages[action.payload] = "必須です"
     },
     clearErrorMessages: (state) => {
       state.errorMessages = {}

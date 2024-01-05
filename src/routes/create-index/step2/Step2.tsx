@@ -20,7 +20,8 @@ export function Step2() {
       <Box margin={{ bottom: "l" }}>
         <SpaceBetween size="m">
           <TextContent>
-            <p>Annotate the text and page number regions for each PDF page type.</p>
+            {/*<p>Please annotate the text and page number regions for each PDF page type.</p>*/}
+            <p>各PDFページタイプのテキストとページ番号の領域に注釈を付けてください。</p>
           </TextContent>
           <Cards
             cardDefinition={{
@@ -34,29 +35,34 @@ export function Step2() {
                     }}
                     fontSize="heading-m"
                   >
-                    {`Type ${item.type + 1}`}
+                    {/*{`Type ${item.type + 1}`}*/}
+                    {`タイプ ${item.type + 1}`}
                   </Link>
                   {finishedPageTypes[item.type] && <Icon variant="success" size="medium" name="status-positive" />}
                 </SpaceBetween>
               ),
               sections: [
                 {
-                  header: "Total pages",
+                  // header: "Total pages",
+                  header: "ページ数",
                   content: item => item.page_numbers.length,
                   width: 33,
                 },
                 {
-                  header: "Page width",
+                  // header: "Page width",
+                  header: "ページ幅",
                   content: item => `${item.width} px`,
                   width: 33,
                 },
                 {
-                  header: "Page height",
+                  // header: "Page height",
+                  header: "ページ高さ",
                   content: item => `${item.height} px`,
                   width: 33,
                 },
                 {
-                  header: "Sample page",
+                  // header: "Sample page",
+                  header: "サンプルページ",
                   content: item => <img
                     src={getThumbnailUrl(item.type)}
                     style={{
@@ -113,7 +119,8 @@ export async function validateStep2() {
   if (Object.values(finishedPageTypes).filter(Boolean).length !== getPageTypesOut.page_types.length) {
     appDispatch(createIndexActions.addErrorMessage({
       key: "pageTypes",
-      message: "Please mark all page types as finished before continuing.",
+      // message: "Please mark all page types as finished before continuing.",
+      message: "続行する前に、すべてのページタイプを完了としてマークしてください。",
     }))
     isValid = false
   }

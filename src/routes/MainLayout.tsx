@@ -12,12 +12,14 @@ import { CrumbHandle } from "../App"
 const items: SideNavigationProps.Item[] = [
   {
     type: "link",
-    text: "Create Index",
+    // text: "Create Index",
+    text: "索引を作成",
     href: "/create-index",
   },
   {
     type: "link",
-    text: "Settings",
+    // text: "Settings",
+    text: "設定",
     href: "/settings",
   },
 ]
@@ -133,8 +135,10 @@ export default function MainLayout() {
         />
         <Modal
           visible={dirtyModalVisible}
-          header="Leave page"
-          closeAriaLabel="Close modal"
+          // header="Leave page"
+          header="ページを離れる"
+          // closeAriaLabel="Close modal"
+          closeAriaLabel="モーダルを閉じる"
           onDismiss={() => {
             appDispatch(mainActions.updateSlice({ dirtyModalVisible: false }))
           }}
@@ -147,20 +151,23 @@ export default function MainLayout() {
                     appDispatch(mainActions.updateSlice({ dirtyModalVisible: false }))
                   }}
                 >
-                  Cancel
+                  {/*Cancel*/}
+                  キャンセル
                 </Button>
                 <Button
                   variant="primary"
                   onClick={() => navigate(dirtyRedirectUrl)}
                 >
-                  Leave
+                  {/*Leave*/}
+                  離れる
                 </Button>
               </SpaceBetween>
             </Box>
           }
         >
           <Alert type="warning" statusIconAriaLabel="Warning">
-            Are you sure that you want to leave the current page? The changes that you made won't be saved.
+            {/*Are you sure that you want to leave the current page? The changes that you made won't be saved.*/}
+            現在のページを離れてもよろしいですか？変更内容は保存されません。
           </Alert>
         </Modal>
       </Fragment>

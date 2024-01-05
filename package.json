@@ -12,6 +12,8 @@
     "lint": "eslint --ext .ts,.tsx .",
     "lint:fix": "eslint --fix --ext .ts,.tsx .",
     "open:app": "open out/SakuinSeizouki-darwin-arm64/SakuinSeizouki.app",
+    "open:app-mac-make": "open out/make/zip/darwin/arm64",
+    "open:app-mac-package": "open out/SakuinSeizouki-darwin-arm64",
     "open:shell": "open out/SakuinSeizouki-darwin-arm64/SakuinSeizouki.app/Contents/MacOS/SakuinSeizouki",
     "open:explorer": "open out/SakuinSeizouki-darwin-arm64",
     "open:app-windows-make": "cd ./out/make/squirrel.windows/x64 && start .",

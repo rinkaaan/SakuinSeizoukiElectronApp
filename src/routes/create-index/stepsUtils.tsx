@@ -21,34 +21,44 @@ interface Step {
 
 export const steps: Step[] = [
   {
-    title: "Open PDF",
+    // title: "Open PDF",
+    title: "PDFを開く",
     StepContent: Step1,
     validate: validateStep1,
-    description: "This step cannot be modified once you proceed.",
+    // description: "This step cannot be modified once you proceed.",
+    description: "このステップは、進行すると変更できなくなります。",
   },
   {
-    title: "Annotate page regions",
+    // title: "Annotate page regions",
+    title: "ページ領域を注釈",
     StepContent: Step2,
     validate: validateStep2,
   },
   {
-    title: "Open word list",
+    // title: "Open word list",
+    title: "単語リストを開く",
     StepContent: Step3,
     validate: validateStep3,
   },
   {
-    title: "Download index",
+    // title: "Download index",
+    title: "索引をダウンロード",
     StepContent: Step4,
   },
 ]
 
 export const i18nStrings = {
-  submitButton: "Download index",
+  // submitButton: "Download index",
+  submitButton: "索引をダウンロード",
   stepNumberLabel: (stepNumber: number) => `Step ${stepNumber}`,
-  collapsedStepsLabel: (stepNumber: number, stepsCount: number) => `Step ${stepNumber} of ${stepsCount}`,
-  cancelButton: "Start over",
-  previousButton: "Previous",
-  nextButton: "Next",
+  // collapsedStepsLabel: (stepNumber: number, stepsCount: number) => `Step ${stepNumber} of ${stepsCount}`,
+  collapsedStepsLabel: (stepNumber: number, stepsCount: number) => `${stepNumber} / ${stepsCount}`,
+  // cancelButton: "Start over",
+  cancelButton: "最初からやり直す",
+  // previousButton: "Previous",
+  previousButton: "前へ",
+  // nextButton: "Next",
+  nextButton: "次へ",
 }
 
 export const useWizard = () => {

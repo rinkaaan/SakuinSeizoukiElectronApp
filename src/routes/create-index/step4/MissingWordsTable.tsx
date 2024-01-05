@@ -27,7 +27,8 @@ export function MissingWordsTable() {
           columnDefinitions={[
             {
               id: "word",
-              header: "Word",
+              // header: "Word",
+              header: "言葉",
               cell: item => item,
               isRowHeader: true,
             },
@@ -40,13 +41,15 @@ export function MissingWordsTable() {
               color="inherit"
             >
               <SpaceBetween size="m">
-                <b>No words missing. All words have at least one page.</b>
+                {/*<b>No words missing. All words have at least one page.</b>*/}
+                <b>単語の欠落がない。すべての単語に少なくとも1ページがある。</b>
               </SpaceBetween>
             </Box>
           }
           header={
             <Header counter={`(${missingWords.length})`}>
-              Missing words
+              {/*Missing words*/}
+              見つからない言葉
             </Header>
           }
         />

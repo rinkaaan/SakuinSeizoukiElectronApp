@@ -14,13 +14,15 @@ export function Step4() {
       <SpaceBetween size="l">
         {createIndexOut?.missing_words && (
           <Alert type="warning" statusIconAriaLabel="Warning">
-            No pages were found for the words below.
+            {/*No pages were found for the words below.*/}
+            以下の単語に該当するページは見つかりませんでした。
           </Alert>
         )}
         <MissingWordsTable />
         {createIndexOut?.missing_pages && (
           <Alert type="warning" statusIconAriaLabel="Warning">
-            No pages were found for the page numbers below.
+            {/*No pages were found for the page numbers below.*/}
+            以下のページ番号に該当するページは見つかりませんでした。
           </Alert>
         )}
         <MissingPagesTable />

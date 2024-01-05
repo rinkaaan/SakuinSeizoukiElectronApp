@@ -41,7 +41,8 @@ export function Step3() {
   return (
     <Box margin={{ bottom: "l" }}>
       <SpaceBetween size="l">
-        <Container header={<Header>Select an XLSX file</Header>}>
+        {/*<Container header={<Header>Select an XLSX file</Header>}>*/}
+        <Container header={<Header>XLSXファイルを選択</Header>}>
           <SpaceBetween size="s">
             <FormField>
               <CloudFileUpload
@@ -50,31 +51,41 @@ export function Step3() {
                 onChange={onChange}
                 value={wordListFile ? [wordListFile] : []}
                 i18nStrings={{
+                  // uploadButtonText: e =>
+                  //   e ? "Choose files" : "Choose file",
                   uploadButtonText: e =>
-                    e ? "Choose files" : "Choose file",
+                    e ? "ファイルを選択" : "ファイルを選択",
                   dropzoneText: e =>
                     e
-                      ? "Drop files to upload"
-                      : "Drop file to upload",
+                      ? "ファイルをドロップ"
+                      : "ファイルをドロップ",
+                  // removeFileAriaLabel: e =>
+                  //   `Remove file ${e + 1}`,
                   removeFileAriaLabel: e =>
-                    `Remove file ${e + 1}`,
-                  limitShowFewer: "Show fewer files",
-                  limitShowMore: "Show more files",
-                  errorIconAriaLabel: "Error"
+                    `ファイル ${e + 1} を削除`,
+                  // limitShowFewer: "Show fewer files",
+                  limitShowFewer: "ファイルを少なく表示",
+                  // limitShowMore: "Show more files",
+                  limitShowMore: "ファイルを多く表示",
+                  // errorIconAriaLabel: "Error"
+                  errorIconAriaLabel: "エラー"
                 }}
                 showFileSize
                 showFileThumbnail
-                constraintText="You can also drag and drop the file here"
+                // constraintText="You can also drag and drop the file here"
+                constraintText="ここにファイルをドラッグ＆ドロップすることもできます"
                 accept=".xlsx"
               />
             </FormField>
             <FormField
-              label="Sheet name"
+              // label="Sheet name"
+              label="シート名"
               errorText={errorMessages["sheetName"]}
             >
               <Input
                 value={sheetName}
-                placeholder="Enter value"
+                // placeholder="Enter value"
+                placeholder="値を入力してください"
                 onChange={event => {
                   appDispatch(createIndexActions.clearErrorMessages())
                   appDispatch(createIndexActions.updateSlice({ sheetName: event.detail.value }))
@@ -83,13 +94,15 @@ export function Step3() {
             </FormField>
             <SpaceBetween size="l" direction="horizontal">
               <FormField
-                label="Start cell"
+                // label="Start cell"
+                label="開始セル"
                 errorText={errorMessages["startCell"]}
                 stretch={true}
               >
                 <Input
                   value={startCell}
-                  placeholder="Enter value"
+                  // placeholder="Enter value"
+                  placeholder="値を入力してください"
                   onChange={event => {
                     appDispatch(createIndexActions.clearErrorMessages())
                     appDispatch(createIndexActions.updateSlice({ startCell: formatCellCoordinate(event.detail.value) }))
@@ -97,13 +110,15 @@ export function Step3() {
                 />
               </FormField>
               <FormField
-                label="End cell"
+                // label="End cell"
+                label="終了セル"
                 errorText={errorMessages["endCell"]}
                 stretch={true}
               >
                 <Input
                   value={endCell}
-                  placeholder="Enter value"
+                  // placeholder="Enter value"
+                  placeholder="値を入力してください"
                   onChange={event => {
                     appDispatch(createIndexActions.clearErrorMessages())
                     appDispatch(createIndexActions.updateSlice({ endCell: formatCellCoordinate(event.detail.value) }))
@@ -120,7 +135,8 @@ export function Step3() {
           columnDefinitions={[
             {
               id: "word",
-              header: "Word",
+              // header: "Word",
+              header: "単語",
               cell: item => item,
               isRowHeader: true,
             },
@@ -137,7 +153,8 @@ export function Step3() {
                   onClick={previewWordList}
                   disabled={isLoading["getWordList"]}
                   loading={isLoading["getWordList"]}
-                >Click to preview word list</Button>
+                >単語リストのプレビューをクリック</Button>
+                {/*>Click to preview word list</Button>*/}
               </SpaceBetween>
             </Box>
           }
@@ -153,7 +170,8 @@ export function Step3() {
               }
               counter={`(${getWordListOut?.word_list?.length || 0})`}
             >
-              Word list
+              {/*Word list*/}
+              単語リスト
             </Header>
           }
         />

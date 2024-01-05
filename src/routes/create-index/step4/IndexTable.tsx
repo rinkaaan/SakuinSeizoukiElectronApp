@@ -27,13 +27,15 @@ export function IndexTable() {
           columnDefinitions={[
             {
               id: "word",
-              header: "Word",
+              // header: "Word",
+              header: "言葉",
               cell: item => item.word,
               isRowHeader: true,
             },
             {
               id: "pages",
-              header: "Pages",
+              // header: "Pages",
+              header: "ページ",
               cell: item => item.pages.join(", "),
               width: "100%",
             },
@@ -46,13 +48,15 @@ export function IndexTable() {
               color="inherit"
             >
               <SpaceBetween size="m">
-                <b>No words</b>
+                {/*<b>No words</b>*/}
+                <b>単語が見つかりません</b>
               </SpaceBetween>
             </Box>
           }
           header={
             <Header counter={`(${wordPages.length})`}>
-              Index
+              {/*Index*/}
+              索引
             </Header>
           }
         />

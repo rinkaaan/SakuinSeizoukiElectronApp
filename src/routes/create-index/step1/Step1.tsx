@@ -25,7 +25,8 @@ export function Step1() {
   return (
     <Box margin={{ bottom: "l" }}>
       <SpaceBetween size="l">
-        <Container header={<Header>Select a PDF file</Header>}>
+        {/*<Container header={<Header>Select a PDF file</Header>}>*/}
+        <Container header={<Header>PDFファイルを選択</Header>}>
           <SpaceBetween size="s">
             <FormField>
               <CloudFileUpload
@@ -34,28 +35,41 @@ export function Step1() {
                 onChange={onChange}
                 value={pdfFile ? [pdfFile] : []}
                 i18nStrings={{
+                  // uploadButtonText: e =>
+                  //   e ? "Choose files" : "Choose file",
                   uploadButtonText: e =>
-                    e ? "Choose files" : "Choose file",
+                    e ? "ファイルを選択" : "ファイルを選択",
+                  // dropzoneText: e =>
+                  //   e
+                  //     ? "Drop files"
+                  //     : "Drop file",
                   dropzoneText: e =>
                     e
-                      ? "Drop files to upload"
-                      : "Drop file to upload",
+                      ? "ファイルをドロップ"
+                      : "ファイルをドロップ",
+                  // removeFileAriaLabel: e =>
+                  //   `Remove file ${e + 1}`,
                   removeFileAriaLabel: e =>
-                    `Remove file ${e + 1}`,
-                  limitShowFewer: "Show fewer files",
-                  limitShowMore: "Show more files",
-                  errorIconAriaLabel: "Error"
+                    `ファイル ${e + 1} を削除`,
+                  // limitShowFewer: "Show fewer files",
+                  limitShowFewer: "ファイルを少なく表示",
+                  // limitShowMore: "Show more files",
+                  limitShowMore: "ファイルを多く表示",
+                  // errorIconAriaLabel: "Error"
+                  errorIconAriaLabel: "エラー"
                 }}
                 showFileSize
                 showFileThumbnail
-                constraintText="You can also drag and drop the file here"
+                // constraintText="You can also drag and drop the file here"
+                constraintText="ここにファイルをドラッグ＆ドロップすることもできます"
                 accept=".pdf"
               />
             </FormField>
           </SpaceBetween>
         </Container>
         {pageImage && (
-          <Container header={<Header>PDF preview</Header>}>
+          // <Container header={<Header>PDF preview</Header>}>
+          <Container header={<Header>PDFプレビュー</Header>}>
             <img
               src={pageImage}
               alt="PDF preview"

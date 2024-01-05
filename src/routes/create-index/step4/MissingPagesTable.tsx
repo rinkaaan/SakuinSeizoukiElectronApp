@@ -27,7 +27,8 @@ export function MissingPagesTable() {
           columnDefinitions={[
             {
               id: "page",
-              header: "Page number",
+              // header: "Page number",
+              header: "ページ",
               cell: item => item,
               isRowHeader: true,
             },
@@ -40,13 +41,15 @@ export function MissingPagesTable() {
               color="inherit"
             >
               <SpaceBetween size="m">
-                <b>No pages missing.</b>
+                {/*<b>No pages missing.</b>*/}
+                <b>ページの欠落はない。</b>
               </SpaceBetween>
             </Box>
           }
           header={
             <Header counter={`(${missingPages.length})`}>
-              Missing pages
+              {/*Missing pages*/}
+              見つからないページ
             </Header>
           }
         />
