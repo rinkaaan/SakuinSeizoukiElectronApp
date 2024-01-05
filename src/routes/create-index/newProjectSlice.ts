@@ -156,22 +156,11 @@ export const newProjectSlice = createSlice({
       state.pageTypeAnnotations[pageType] = newAnnotations
     },
     refreshColor: (state) => {
-      // Don't refresh if there are annotations
-      const pageType = state.selectedPageTypeIndex
-      const groupIndex = state.pageTypeAnnotationCurrentGroupIndex[pageType] || 0
-      if (state.pageTypeAnnotations[pageType].find(r => r.groupIndex === groupIndex)) {
-        return
-      }
-
       state.currentColor = getRandomColor()
     },
     incrementPageTypeAnnotationTotalGroups: (state) => {
       const pageType = state.selectedPageTypeIndex
-
-      // // Don't increment if there are no annotations
       const groupIndex = state.pageTypeAnnotationCurrentGroupIndex[pageType] || 0
-      // if (!state.pageTypeAnnotations[pageType].find(r => r.groupIndex === groupIndex)) return
-
       state.pageTypeAnnotationCurrentGroupIndex[pageType] = groupIndex + 1
       state.currentColor = getRandomColor()
     },
@@ -319,4 +308,13 @@ export const disableNewGroupButtonSelector = (state: RootState) => {
 
   const numberAnnotations = pageTypeAnnotations[selectedPageTypeIndex]?.filter(r => r.groupIndex === groupIndex)
   return !numberAnnotations || numberAnnotations.length < 2
+}
+
+export const disableRefreshColorSelector = (state: RootState) => {
+  const { selectedPageTypeIndex, pageTypeAnnotations, pageTypeAnnotationCurrentGroupIndex } = state.newProject
+
+  // Don't refresh if there are annotations
+  const groupIndex = pageTypeAnnotationCurrentGroupIndex[selectedPageTypeIndex] || 0
+  const numberAnnotations = pageTypeAnnotations[selectedPageTypeIndex]?.filter(r => r.groupIndex === groupIndex)
+  return numberAnnotations && numberAnnotations.length > 0
 }

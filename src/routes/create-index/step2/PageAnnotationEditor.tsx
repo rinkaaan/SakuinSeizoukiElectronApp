@@ -1,7 +1,7 @@
 import { AppLayout, Button, HelpPanel, SpaceBetween, TextContent } from "@cloudscape-design/components"
 import { useState } from "react"
 import PageAnnotationCanvas from "./PageAnnotationCanvas"
-import { currentPageTypeAnnotationTotalGroupsSelector, disableNewGroupButtonSelector, LoadPageType, newProjectActions, newProjectSelector } from "../newProjectSlice"
+import { currentPageTypeAnnotationTotalGroupsSelector, disableNewGroupButtonSelector, disableRefreshColorSelector, LoadPageType, newProjectActions, newProjectSelector } from "../newProjectSlice"
 import { useHotkeys } from "react-hotkeys-hook"
 import GoToPageModal from "./GoToPageModal"
 import { appDispatch } from "../../../common/store"
@@ -36,6 +36,7 @@ export default function PageAnnotationEditor({
   const { currentColor } = useSelector(newProjectSelector)
   const totalGroups = useSelector(currentPageTypeAnnotationTotalGroupsSelector)
   const disableNewGroup = useSelector(disableNewGroupButtonSelector)
+  const disableRefreshColor = useSelector(disableRefreshColorSelector)
   useHotkeys("esc", onClose)
   useHotkeys(["right", "j"], () => onGetNextPage())
   useHotkeys(["left", "k"], () => onGetPreviousPage())
@@ -137,7 +138,8 @@ export default function PageAnnotationEditor({
                     height: "30px",
                     width: "30px",
                     borderRadius: "3px",
-                    cursor: "pointer",
+                    cursor: disableRefreshColor ? "not-allowed" : "pointer",
+                    pointerEvents: disableRefreshColor ? "none" : "auto",
                   }}
                   onClick={() => {
                     appDispatch(newProjectActions.refreshColor())

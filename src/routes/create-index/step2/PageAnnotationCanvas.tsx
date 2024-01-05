@@ -161,7 +161,7 @@ export default function PageAnnotationCanvas({
         x={stageData.position.x}
         y={stageData.position.y}
         scale={{ x: stageData.scale, y: stageData.scale }}
-        style={{ backgroundColor: "#808080", position: "absolute", width: "100%", height: "100%", top: 0, left: 0 }}
+        style={{ backgroundColor: "#808080", position: "absolute", width: "100%", height: "100%", top: 0, left: 0, cursor: "crosshair" }}
         onWheel={onMouseWheel}
         onMouseDown={handleStageMouseDown}
         onMouseUp={handleStageMouseUp}
