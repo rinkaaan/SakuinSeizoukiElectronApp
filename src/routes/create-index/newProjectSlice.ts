@@ -3,7 +3,7 @@ import { SelectProps } from "@cloudscape-design/components"
 import { getPage } from "./stepsUtils"
 import { CreateIndexOut, GetPageTypesOut, GetWordListOut, OpenAPI, type PageTypeDetail, PdfService, ProjectService } from "../../../openapi-client"
 import { getRandomColor } from "../../common/typedUtils"
-import store, { appDispatch } from "../../common/store"
+import store from "../../common/store"
 import type { RootState } from "../../common/reducers"
 import { getActionName } from "../../common/utils"
 

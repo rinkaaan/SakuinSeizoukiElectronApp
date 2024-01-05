@@ -1,4 +1,4 @@
 WORKPLACE="$HOME/workplace/SakuinSeizouki"
 
 mkdir -p "$WORKPLACE/SakuinSeizoukiElectronApp/binaries"
-ln -sf "$WORKPLACE/SakuinSeizoukiApi/dist/engine" "$WORKPLACE/SakuinSeizoukiElectronApp/binaries/engine"
+cp -f "$WORKPLACE/SakuinSeizoukiApi/dist/engine" "$WORKPLACE/SakuinSeizoukiElectronApp/binaries/engine"
