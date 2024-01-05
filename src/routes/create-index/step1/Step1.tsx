@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Container, FileUploadProps, FormField, Header, NonCancelableCustomEvent, SpaceBetween } from "@cloudscape-design/components"
 import { useSelector } from "react-redux"
-import { newProjectActions, newProjectSelector, openPdf } from "../newProjectSlice"
+import { newProjectActions, newProjectSelector, getPdfPageTypes } from "../newProjectSlice"
 import store, { appDispatch } from "../../../common/store"
 import { OpenAPI } from "../../../../openapi-client"
 import CloudFileUpload from "../../../components/CloudFileUpload"
@@ -81,7 +81,7 @@ export async function validateStep1() {
   }
 
   if (isValid) {
-    await appDispatch(openPdf(pdfFile.path))
+    await appDispatch(getPdfPageTypes(pdfFile.path))
   }
 
   return isValid

@@ -8,10 +8,10 @@ import store, { appDispatch } from "../../../common/store"
 
 
 export function Step2() {
-  const { selectedPageTypeIndex, openPdfOut, pageTypeSampleIndex, pageAnnotationEditorOpen, annotationEditorPageUrl, finishedPageTypes, pdfFile, errorMessages } = useSelector(newProjectSelector)
+  const { selectedPageTypeIndex, getPageTypesOut, pageTypeSampleIndex, pageAnnotationEditorOpen, annotationEditorPageUrl, finishedPageTypes, pdfFile, errorMessages } = useSelector(newProjectSelector)
 
   function getThumbnailUrl(pageTypeIndex: number) {
-    const pageNumber = openPdfOut.page_types[pageTypeIndex].page_numbers[pageTypeSampleIndex[pageTypeIndex]]
+    const pageNumber = getPageTypesOut.page_types[pageTypeIndex].page_numbers[pageTypeSampleIndex[pageTypeIndex]]
     return getPage({ pageNumber, pdfPath: pdfFile.path })
   }
 
@@ -67,7 +67,7 @@ export function Step2() {
                 },
               ],
             }}
-            items={openPdfOut.page_types}
+            items={getPageTypesOut.page_types}
           />
           {errorMessages["pageTypes"] && (
             <Alert type="warning">
@@ -99,7 +99,7 @@ export function Step2() {
           appDispatch(newProjectActions.closeAnnotationEditor())
         }}
         samplePageIndex={pageTypeSampleIndex[selectedPageTypeIndex]}
-        totalSamplePages={openPdfOut.page_types[selectedPageTypeIndex].page_numbers.length}
+        totalSamplePages={getPageTypesOut.page_types[selectedPageTypeIndex].page_numbers.length}
       />
     </Fragment>
   )
@@ -107,10 +107,10 @@ export function Step2() {
 
 export async function validateStep2() {
   appDispatch(newProjectActions.clearErrorMessages())
-  const { finishedPageTypes, openPdfOut } = store.getState().newProject
+  const { finishedPageTypes, getPageTypesOut } = store.getState().newProject
   let isValid = true
 
-  if (Object.values(finishedPageTypes).filter(Boolean).length !== openPdfOut.page_types.length) {
+  if (Object.values(finishedPageTypes).filter(Boolean).length !== getPageTypesOut.page_types.length) {
     appDispatch(newProjectActions.addErrorMessage({
       key: "pageTypes",
       message: "Please mark all page types as finished before continuing.",

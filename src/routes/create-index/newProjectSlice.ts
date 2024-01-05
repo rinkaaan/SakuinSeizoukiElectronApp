@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit"
 import { SelectProps } from "@cloudscape-design/components"
 import { getPage } from "./stepsUtils"
-import { CreateIndexOut, GetPageTypesOut, GetWordListOut, OpenAPI, type PageTypeDetail, PdfService, ProjectService, WordListService } from "../../../openapi-client"
+import { CreateIndexOut, GetPageTypesOut, GetWordListOut, IndexService, OpenAPI, PageTypeDetail, PdfService, WordListService } from "../../../openapi-client"
 import { getRandomColor } from "../../common/typedUtils"
 import store from "../../common/store"
 import type { RootState } from "../../common/reducers"
@@ -24,7 +24,7 @@ export interface NewProjectState {
   isLoading: Record<string, boolean>
 
   // step 1
-  openPdfOut?: GetPageTypesOut;
+  getPageTypesOut?: GetPageTypesOut;
   pdfFile?: File;
 
   // step 2
@@ -58,7 +58,7 @@ const initialState: NewProjectState = {
   isLoading: {},
 
   // step 1
-  openPdfOut: undefined,
+  getPageTypesOut: undefined,
   pdfFile: undefined,
 
   // step 2
@@ -93,7 +93,7 @@ export const newProjectSlice = createSlice({
     },
     resetSlice: () => initialState,
     updateSamplePage: (state, action: PayloadAction<LoadPageType>) => {
-      const { pageTypeSampleIndex, selectedPageTypeIndex, openPdfOut } = state
+      const { pageTypeSampleIndex, selectedPageTypeIndex, getPageTypesOut } = state
       let newIndex = pageTypeSampleIndex[selectedPageTypeIndex]
 
       if (action.payload === "next") {
@@ -104,17 +104,17 @@ export const newProjectSlice = createSlice({
         newIndex = action.payload - 1
       }
 
-      if (newIndex < 0 || newIndex >= openPdfOut?.page_types[selectedPageTypeIndex].page_numbers.length) {
+      if (newIndex < 0 || newIndex >= getPageTypesOut?.page_types[selectedPageTypeIndex].page_numbers.length) {
         return
       }
 
-      const pageNumber = openPdfOut?.page_types[selectedPageTypeIndex].page_numbers[newIndex]
+      const pageNumber = getPageTypesOut?.page_types[selectedPageTypeIndex].page_numbers[newIndex]
       state.annotationEditorPageUrl = getPage({ pageNumber, pdfPath: state.pdfFile?.path })
       pageTypeSampleIndex[selectedPageTypeIndex] = newIndex
     },
     openAnnotationEditor: (state, pageType: PayloadAction<number>) => {
       state.selectedPageTypeIndex = pageType.payload
-      const pageNumber = state.openPdfOut?.page_types[pageType.payload].page_numbers[state.pageTypeSampleIndex[pageType.payload]]
+      const pageNumber = state.getPageTypesOut?.page_types[pageType.payload].page_numbers[state.pageTypeSampleIndex[pageType.payload]]
       state.annotationEditorPageUrl = getPage({ pageNumber, pdfPath: state.pdfFile?.path })
       state.pageAnnotationEditorOpen = true
     },
@@ -176,11 +176,11 @@ export const newProjectSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(openPdf.fulfilled, (state => {
-        const { openPdfOut } = state
+      .addCase(getPdfPageTypes.fulfilled, (state => {
+        const { getPageTypesOut } = state
         const pageTypeOptions: SelectProps.Option[] = []
 
-        for (let i = 0; i < openPdfOut.page_types.length; i++) {
+        for (let i = 0; i < getPageTypesOut.page_types.length; i++) {
           pageTypeOptions.push({
             label: `Type ${i + 1}`,
             value: (i + 1).toString(),
@@ -204,17 +204,17 @@ export const newProjectSlice = createSlice({
   }
 })
 
-export const openPdf = createAsyncThunk(
-  "newProject/openPdf",
+export const getPdfPageTypes = createAsyncThunk(
+  "newProject/getPdfPageTypes",
   async (pdfPath: string, { dispatch }) => {
-    const openPdfOut = await PdfService.getPdfPageTypes(pdfPath)
+    const getPageTypesOut = await PdfService.getPdfPageTypes(pdfPath)
 
     const pageTypeSampleIndex: Record<number, number> = {}
-    for (let i = 0; i < openPdfOut.page_types.length; i++) {
-      pageTypeSampleIndex[i] = openPdfOut.page_types[i].page_numbers.length - 1
+    for (let i = 0; i < getPageTypesOut.page_types.length; i++) {
+      pageTypeSampleIndex[i] = getPageTypesOut.page_types[i].page_numbers.length - 1
     }
 
-    dispatch(newProjectSlice.actions.updateSlice({ openPdfOut, pageTypeSampleIndex: pageTypeSampleIndex }))
+    dispatch(newProjectSlice.actions.updateSlice({ getPageTypesOut, pageTypeSampleIndex: pageTypeSampleIndex }))
   }
 )
 
@@ -230,12 +230,12 @@ export const getWordList = createAsyncThunk(
 export const createIndex = createAsyncThunk(
   "newProject/createIndex",
   async (_payload, { dispatch }) => {
-    const { openPdfOut, wordListFile, pdfFile, startCell, endCell, sheetName, pageTypeAnnotations } = store.getState().newProject
+    const { getPageTypesOut, wordListFile, pdfFile, startCell, endCell, sheetName, pageTypeAnnotations } = store.getState().newProject
 
     const pageTypes: Record<string, PageTypeDetail> = {}
 
     // Add page types as keys with empty objects as values
-    for (const pageType of openPdfOut.page_types) {
+    for (const pageType of getPageTypesOut.page_types) {
       if (!pageTypeAnnotations[pageType.type]) continue
       pageTypes[pageType.type] = {
         annotations: [],
@@ -251,10 +251,10 @@ export const createIndex = createAsyncThunk(
         })
       }
       // Add page numbers to each page type
-      pageTypes[pageType.type].page_numbers = openPdfOut.page_types[pageType.type].page_numbers
+      pageTypes[pageType.type].page_numbers = getPageTypesOut.page_types[pageType.type].page_numbers
     }
 
-    const createIndexOut = await ProjectService.postProjectCreateIndex({
+    const createIndexOut = await IndexService.postIndexCreate({
       list_path: wordListFile.path,
       start_cell: startCell,
       end_cell: endCell,
@@ -270,7 +270,7 @@ export const getIndex = createAsyncThunk(
   "newProject/getIndex",
   async (_payload) => {
     const { createIndexOut } = store.getState().newProject
-    const index = await ProjectService.postProjectGetIndex(createIndexOut)
+    const index = await IndexService.postIndexGet(createIndexOut)
     const a = document.createElement("a")
     a.href = `${OpenAPI.BASE}${index.url}`
     a.download = "index.xlsx"
