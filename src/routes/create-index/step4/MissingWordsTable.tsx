@@ -6,8 +6,9 @@ import { useCollection } from "@cloudscape-design/collection-hooks"
 
 export function MissingWordsTable() {
   const { createIndexOut } = useSelector(newProjectSelector)
+  const missingWords = createIndexOut?.missing_words || []
   const { items, paginationProps, collectionProps } = useCollection(
-    createIndexOut?.missing_words || [],
+    missingWords,
     {
       filtering: {},
       pagination: { pageSize: 10 },
@@ -44,7 +45,7 @@ export function MissingWordsTable() {
             </Box>
           }
           header={
-            <Header>
+            <Header counter={`(${missingWords.length})`}>
               Missing words
             </Header>
           }

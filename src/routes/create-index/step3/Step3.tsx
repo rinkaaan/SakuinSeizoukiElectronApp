@@ -151,6 +151,7 @@ export function Step3() {
                   loading={isLoading["getWordList"]}
                 />
               }
+              counter={`(${getWordListOut?.word_list?.length || 0})`}
             >
               Word list
             </Header>

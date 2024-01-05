@@ -6,8 +6,9 @@ import { useCollection } from "@cloudscape-design/collection-hooks"
 
 export function MissingPagesTable() {
   const { createIndexOut } = useSelector(newProjectSelector)
+  const missingPages = createIndexOut?.missing_pages || []
   const { items, paginationProps, collectionProps } = useCollection(
-    createIndexOut?.missing_pages || [],
+    missingPages,
     {
       filtering: {},
       pagination: { pageSize: 10 },
@@ -44,7 +45,7 @@ export function MissingPagesTable() {
             </Box>
           }
           header={
-            <Header>
+            <Header counter={`(${missingPages.length})`}>
               Missing pages
             </Header>
           }

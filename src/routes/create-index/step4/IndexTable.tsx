@@ -6,8 +6,9 @@ import { useCollection } from "@cloudscape-design/collection-hooks"
 
 export function IndexTable() {
   const { createIndexOut } = useSelector(newProjectSelector)
+  const wordPages = createIndexOut?.word_pages || []
   const { items, paginationProps, collectionProps } = useCollection(
-    createIndexOut?.word_pages || [],
+    wordPages,
     {
       filtering: {},
       pagination: { pageSize: 10 },
@@ -50,7 +51,7 @@ export function IndexTable() {
             </Box>
           }
           header={
-            <Header>
+            <Header counter={`(${wordPages.length})`}>
               Index
             </Header>
           }
