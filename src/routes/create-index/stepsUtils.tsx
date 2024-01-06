@@ -52,7 +52,7 @@ export const i18nStrings = {
   submitButton: "索引をダウンロード",
   stepNumberLabel: (stepNumber: number) => `Step ${stepNumber}`,
   // collapsedStepsLabel: (stepNumber: number, stepsCount: number) => `Step ${stepNumber} of ${stepsCount}`,
-  collapsedStepsLabel: (stepNumber: number, stepsCount: number) => `${stepNumber} / ${stepsCount}`,
+  collapsedStepsLabel: (stepNumber: number, stepsCount: number) => `ステップ ${stepNumber} / ${stepsCount}`,
   // cancelButton: "Start over",
   cancelButton: "最初からやり直す",
   // previousButton: "Previous",
