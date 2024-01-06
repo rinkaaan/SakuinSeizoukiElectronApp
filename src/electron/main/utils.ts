@@ -15,9 +15,9 @@ export async function sendFreePort() {
   const window = BrowserWindow.getFocusedWindow()
   let flaskPort: number
   if (isDev()) {
-    flaskPort = await portFinder.getPortPromise()
-    engineManager.initEngine(flaskPort)
-    // flaskPort = 34200
+    // flaskPort = await portFinder.getPortPromise()
+    // engineManager.initEngine(flaskPort)
+    flaskPort = 34200
   } else {
     flaskPort = await portFinder.getPortPromise()
     engineManager.initEngine(flaskPort)

@@ -5,4 +5,5 @@ export const Channels = {
   // renderer -> main
   selectDir: "utils:selectDir",
   selectPdf: "project:selectPdf",
+  downloadFile: "project:downloadFile",
 }

@@ -3,12 +3,12 @@ import { Step2, validateStep2 } from "./step2/Step2"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { getIndex, createIndexActions, createIndexSelector } from "./createIndexSlice"
+import { createIndexActions, createIndexSelector } from "./createIndexSlice"
 import { NonCancelableCustomEvent } from "@cloudscape-design/components"
 import { WizardProps } from "@cloudscape-design/components/wizard/interfaces"
 import { mainActions, mainSelector } from "../mainSlice"
 import { appDispatch } from "../../common/store"
-import { OpenAPI } from "../../../openapi-client"
+import { OpenAPI, TempService } from "../../../openapi-client"
 import { Step3, validateStep3 } from "./step3/Step3"
 import { Step4 } from "./step4/Step4"
 
@@ -101,8 +101,9 @@ export const useWizard = () => {
     }
   }
 
-  const onSubmit = () => {
-    appDispatch(getIndex())
+  async function onSubmit() {
+    const path = await window.electron.downloadFile("索引.xlsx", "索引をダウンロード", "Microsoft Excel Worksheet (*.xlsx)", ["xlsx"])
+    await TempService.postTempSaveFile("索引.xlsx", path)
   }
 
   return {

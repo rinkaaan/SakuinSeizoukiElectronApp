@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit"
 import { SelectProps } from "@cloudscape-design/components"
 import { getPage } from "./stepsUtils"
-import { CreateIndexOut, GetPageTypesOut, GetWordListOut, IndexService, OpenAPI, PageTypeDetail, PdfService, WordListService } from "../../../openapi-client"
+import { CreateIndexOut, GetPageTypesOut, GetWordListOut, IndexService, PageTypeDetail, PdfService, WordListService } from "../../../openapi-client"
 import { getRandomColor } from "../../common/typedUtils"
 import store from "../../common/store"
 import type { RootState } from "../../common/reducers"
@@ -264,24 +264,6 @@ export const createIndex = createAsyncThunk(
       pdf_path: pdfFile.path,
     })
     dispatch(createIndexActions.updateSlice({ createIndexOut }))
-  }
-)
-
-export const getIndex = createAsyncThunk(
-  "createIndex/getIndex",
-  async (_payload) => {
-    const { createIndexOut } = store.getState().createIndex
-    const index = await IndexService.postIndexGet(createIndexOut)
-    const a = document.createElement("a")
-    a.href = `${OpenAPI.BASE}${index.url}`
-    a.download = "index.xlsx"
-    a.click()
-    try {
-      URL.revokeObjectURL(index.url)
-      document.body.removeChild(a)
-    } catch (e) {
-      console.error(e)
-    }
   }
 )
 
